@@ -7,6 +7,15 @@ Paul Gsell
 Samuel Darras
 Oussama Bourasse
 
+
+Pour lancer le backend : 
+- Creation de la base de donnée
+```
+    cd backend/scripts
+    docker compose up -d
+    node init_db.js
+```
+
 Pour lancer le backend : 
 - Se placer dans le dossier backend
 - Lancer la commande `npm install`
