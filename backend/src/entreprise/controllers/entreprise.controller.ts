@@ -25,4 +25,5 @@ export class EntrepriseController {
   async delete(@Param('id') id: string): Promise<void> {
     return this.entrepriseService.delete(id);
   }
+
 }
