@@ -11,12 +11,14 @@ export class AppController {
   getHello(): string {
 
     /*
-      Test the pappers scraping
+      
+    //Test the pappers scraping
       this._pappersService.scrap("bati-france-57-851900654")
       .then((data)=>{
         console.log(data)
       })
     */
+    
    
     return this.appService.getHello();
   }

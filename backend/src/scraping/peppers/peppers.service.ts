@@ -15,9 +15,8 @@ export class PeppersService {
     private _UrlPappers = "https://www.pappers.fr/entreprise";
 
     constructor(){
-
     }
-
+    
     async scrap(idEntreprise:string ) :  Promise<EntrepriseEntity>  {
         
         const browser = await puppeteer.launch({ headless: false }); 
@@ -54,6 +53,7 @@ export class PeppersService {
             representative.lastName =lastName;            
             representative.position = dirigeantElement.find('.qualite').text().trim();;
             representative.age = parseInt(dirigeantElement.find('.age-siren span').text().trim());
+            representative.employmentStartDate = $('span.age-siren').text().trim();
             entreprise.representatives = [...entreprise.representatives,representative];
             
             return Promise.resolve(entreprise);
