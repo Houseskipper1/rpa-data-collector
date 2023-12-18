@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EntrepriseDao } from '../dao/entreprise-dao';
 import { EntrepriseEntity } from '../entities/entreprise.entity';
 
+import { EntrepriseSchema } from '../schema/entreprise.schema';
 @Injectable()
 export class EntrepriseService {
   constructor(private readonly entrepriseDao: EntrepriseDao) {}
@@ -20,5 +21,15 @@ export class EntrepriseService {
 
   async delete(id: string): Promise<void> {
     return this.entrepriseDao.delete(id);
+  }
+  async create(entreprise: EntrepriseSchema): Promise<EntrepriseEntity> {
+    return await this.entrepriseDao.save(entreprise);
+  }
+  async findBySiren(siren: string): Promise<EntrepriseEntity | null> {
+    return this.entrepriseDao.findBySiren(siren );
+  }
+
+  async findBySiret(siret: string): Promise<EntrepriseEntity | null> {
+    return this.entrepriseDao.findBySiret(siret);
   }
 }
