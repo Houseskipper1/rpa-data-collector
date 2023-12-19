@@ -1,4 +1,4 @@
-export class TrustpilotReviewEntity {
+export class EntrepriseReviewEntity {
   reviewId: string;
   user: string;
   title: string;

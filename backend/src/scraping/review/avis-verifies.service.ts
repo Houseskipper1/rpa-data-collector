@@ -52,4 +52,9 @@ fetchReviews(websiteUrl)
   });
 
 // Exemple d'utilisation:
-// node .\src\reviews\avis-verifies.service.ts arthur-bonnet.com
+
+// windows 
+// node .\src\scraping\review\avis-verifies.service.ts arthur-bonnet.com
+
+// Linux && mac
+// node ./src/scraping/review/avis-verifies.service.ts arthur-bonnet.com

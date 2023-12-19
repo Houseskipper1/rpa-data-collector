@@ -4,7 +4,7 @@ import { EntrepriseController } from './entreprise/controllers/entreprise.contro
 import { EntrepriseModule } from './entreprise/entreprise.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BanService } from './api/ban/ban.service';
-import { PeppersService } from './scraping/peppers/peppers.service';
+import { PappersService } from './scraping/entreprise/pappers.service';
 import { ConfigModule } from '@nestjs/config';
 import { SireneService } from './api/sirene/sirene.service';
 import { AppController } from './app.controller';
@@ -16,6 +16,6 @@ import { AppController } from './app.controller';
     ConfigModule.forRoot(),
   ],
   controllers: [EntrepriseController, AppController],
-  providers: [AppService, BanService, PeppersService, SireneService],
+  providers: [AppService, BanService, PappersService, SireneService],
 })
 export class AppModule {}
