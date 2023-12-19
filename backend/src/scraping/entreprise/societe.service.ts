@@ -29,6 +29,8 @@ export class SocieteService {
     entreprise.siren = await page.evaluate((el) => el.textContent, siren);
     const siret = await page.waitForSelector('#siret_number > span');
     entreprise.siret = await page.evaluate((el) => el.textContent, siret);
+    const dateCreation = await page.waitForSelector('td ::-p-text(Date création entreprise)');
+    entreprise.dateCreation = await page.evaluate((el) => el.nextElementSibling.firstElementChild.firstElementChild.textContent, dateCreation);
 
     await browser.close();
 
