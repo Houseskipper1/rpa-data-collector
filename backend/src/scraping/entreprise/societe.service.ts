@@ -21,21 +21,19 @@ export class SocieteService {
     const page = await browser.newPage();
     await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36");
     await page.setViewport({ width: 1366, height: 768});
-    console.log(`${this._url}${this._entreprisesData[0]}.html`);
     await page.goto(`${this._url}${this._entreprisesData[0]}.html`);
     
-    entreprise.name = await this.getTdEval(page, 'Noms commerciaux');
+    const nomCommercial = await page.waitForSelector('td ::-p-text(Noms commerciaux)');
+    entreprise.name = await page.evaluate((el) => el.nextElementSibling.textContent, nomCommercial);
+    const siren = await page.waitForSelector('#siren_number > span');
+    entreprise.siren = await page.evaluate((el) => el.textContent, siren);
+    const siret = await page.waitForSelector('#siret_number > span');
+    entreprise.siret = await page.evaluate((el) => el.textContent, siret);
 
     await browser.close();
 
     return entreprise;
   }
 
-  async getTdEval(page, texteRecherche: string) : Promise<string> {
-    return await page.$$eval('td', (tds: Element[], texteRecherche: string) => {
-      const td = tds.find(td => (td as HTMLElement).innerText.includes(texteRecherche));
-      return td ? (td as HTMLElement).nextElementSibling.innerHTML : null;
-    }, texteRecherche);
-  }
 
 }
