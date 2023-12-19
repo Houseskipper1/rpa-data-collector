@@ -1,5 +1,5 @@
-import { Exclude, Expose, Type } from 'class-transformer';
 import { EntrepriseRepresentativeEntity } from './entreprise.representative.entity';
+import { Exclude, Expose, Type } from 'class-transformer';
 
 
 @Exclude()
@@ -15,7 +15,11 @@ export class EntrepriseEntity {
     @Expose()
     @Type(() => String)
     siret: string;
-    
+
+    @Expose()  
+    @Type(() => String)
+    name: string;
+
     @Expose()
     @Type(() => String)
     dateCreation: string;
@@ -36,3 +40,4 @@ export class EntrepriseEntity {
     @Type(() => EntrepriseRepresentativeEntity)
     representatives: EntrepriseRepresentativeEntity[];
 }
+
