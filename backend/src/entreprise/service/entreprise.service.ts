@@ -3,7 +3,6 @@ import { EntrepriseDao } from '../dao/entreprise-dao';
 import { EntrepriseEntity } from '../entities/entreprise.entity';
 import { EntrepriseSchema } from '../schema/entreprise.schema';
 
-
 @Injectable()
 export class EntrepriseService {
   constructor(private readonly entrepriseDao: EntrepriseDao) {}
@@ -16,29 +15,34 @@ export class EntrepriseService {
     return this.entrepriseDao.findAll();
   }
 
-  async update(id: string, updatedEntreprise: Partial<EntrepriseEntity>): Promise<EntrepriseEntity | null> {
+  async update(
+    id: string,
+    updatedEntreprise: Partial<EntrepriseEntity>,
+  ): Promise<EntrepriseEntity | null> {
     return this.entrepriseDao.update(id, updatedEntreprise);
   }
 
   async delete(id: string): Promise<void> {
     return this.entrepriseDao.delete(id);
   }
-  async create(entreprise: EntrepriseSchema): Promise<EntrepriseEntity> {
+
+  async create(entreprise: EntrepriseEntity): Promise<EntrepriseEntity> {
     return await this.entrepriseDao.save(entreprise);
   }
+
   async findBySiren(siren: string): Promise<EntrepriseEntity | null> {
-    return this.entrepriseDao.findBySiren(siren );
+    return this.entrepriseDao.findBySiren(siren);
   }
 
   async findBySiret(siret: string): Promise<EntrepriseEntity | null> {
     return this.entrepriseDao.findBySiret(siret);
   }
 
-  async exportToCSV(): Promise<string> {  
-
-      return new Promise(async (resolve, reject) => {  
-        let csvData = ''
-        const headerRow = [
+  async exportToCSV(): Promise<string> {
+    return new Promise(async (resolve, reject) => {
+      let csvData = '';
+      const headerRow =
+        [
           'id',
           'siren',
           'siret',
@@ -51,30 +55,31 @@ export class EntrepriseService {
           'representativeLastName',
           'representativePosition',
           'representativeAge',
-      ].join(",") + "\n";
+        ].join(',') + '\n';
 
       csvData += headerRow;
       const dataStatic = await this.findAll();
       dataStatic.forEach((data) => {
-          const representative = data.representatives[0];
-          const rowData = [
-              data.id,
-              data.siren,
-              data.siret,
-              data.name,
-              data.dateCreation,
-              data.yearsInExistence,
-              data.effective,
-              data.dateConfirmationEffectif,
-              representative.firstName,
-              representative.lastName,
-              representative.position,
-              representative.age,
-          ].join(",") + "\n";
+        const representative = data.representatives[0];
+        const rowData =
+          [
+            data.id,
+            data.siren,
+            data.siret,
+            data.name,
+            data.dateCreation,
+            data.yearsInExistence,
+            data.effective,
+            data.dateConfirmationEffectif,
+            representative.firstName,
+            representative.lastName,
+            representative.position,
+            representative.age,
+          ].join(',') + '\n';
 
-          csvData += rowData;
+        csvData += rowData;
       });
-      resolve (csvData);
+      resolve(csvData);
     });
   }
 }
