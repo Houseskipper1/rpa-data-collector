@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { EntrepriseDao } from '../dao/entreprise-dao';
 import { EntrepriseEntity } from '../entities/entreprise.entity';
-
 import { EntrepriseSchema } from '../schema/entreprise.schema';
+
+
 @Injectable()
 export class EntrepriseService {
   constructor(private readonly entrepriseDao: EntrepriseDao) {}
@@ -31,5 +32,49 @@ export class EntrepriseService {
 
   async findBySiret(siret: string): Promise<EntrepriseEntity | null> {
     return this.entrepriseDao.findBySiret(siret);
+  }
+
+  async exportToCSV(): Promise<string> {  
+
+      return new Promise(async (resolve, reject) => {  
+        let csvData = ''
+        const headerRow = [
+          'id',
+          'siren',
+          'siret',
+          'name',
+          'dateCreation',
+          'yearsInExistence',
+          'effective',
+          'dateConfirmationEffectif',
+          'representativeFirstName',
+          'representativeLastName',
+          'representativePosition',
+          'representativeAge',
+      ].join(",") + "\n";
+
+      csvData += headerRow;
+      const dataStatic = await this.findAll();
+      dataStatic.forEach((data) => {
+          const representative = data.representatives[0];
+          const rowData = [
+              data.id,
+              data.siren,
+              data.siret,
+              data.name,
+              data.dateCreation,
+              data.yearsInExistence,
+              data.effective,
+              data.dateConfirmationEffectif,
+              representative.firstName,
+              representative.lastName,
+              representative.position,
+              representative.age,
+          ].join(",") + "\n";
+
+          csvData += rowData;
+      });
+      resolve (csvData);
+    });
   }
 }

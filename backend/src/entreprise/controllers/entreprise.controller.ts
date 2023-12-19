@@ -1,11 +1,11 @@
-import { Controller, Get, Param, Put, Body, Delete, Post } from '@nestjs/common';
+import { Controller, Get, Param, Put, Body, Delete, Post, Res } from '@nestjs/common';
 import { EntrepriseService } from '../service/entreprise.service';
 import { EntrepriseEntity } from '../entities/entreprise.entity';
 import { EntrepriseSchema } from '../schema/entreprise.schema';
 
 @Controller('entreprise')
 export class EntrepriseController {
-  constructor(private readonly entrepriseService: EntrepriseService) {}
+  constructor(private entrepriseService: EntrepriseService) {}
 
   @Get(':id')
   async findById(@Param('id') id: string): Promise<EntrepriseEntity | null> {

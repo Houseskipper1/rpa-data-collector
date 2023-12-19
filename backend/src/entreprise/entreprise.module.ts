@@ -18,4 +18,5 @@ import { EntrepriseDao } from './dao/entreprise-dao';
   providers: [EntrepriseService, EntrepriseDao],
   exports: [EntrepriseService, EntrepriseDao],
 })
+
 export class EntrepriseModule {}
