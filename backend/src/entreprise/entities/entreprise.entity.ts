@@ -2,7 +2,7 @@ import { EntrepriseRepresentativeEntity } from './entreprise.representative.enti
 import { Exclude, Expose, Type } from 'class-transformer';
 
 
-
+@Exclude()
 export class EntrepriseEntity {
     @Expose()  
     @Type(() => String)
