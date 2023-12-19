@@ -24,14 +24,14 @@ export class SocieteService {
     console.log(`${this._url}${this._entreprisesData[0]}.html`);
     await page.goto(`${this._url}${this._entreprisesData[0]}.html`);
     
-    entreprise.name = this.getTdEval(page, 'Noms commerciaux');
+    entreprise.name = await this.getTdEval(page, 'Noms commerciaux');
 
     await browser.close();
 
     return entreprise;
   }
 
-  async getTdEval(page, texteRecherche: string) {
+  async getTdEval(page, texteRecherche: string) : Promise<string> {
     return await page.$$eval('td', (tds: Element[], texteRecherche: string) => {
       const td = tds.find(td => (td as HTMLElement).innerText.includes(texteRecherche));
       return td ? (td as HTMLElement).nextElementSibling.innerHTML : null;
