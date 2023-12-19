@@ -15,7 +15,7 @@ async function runSetup() {
     } catch (err) {
       console.error('Error during setup:', err);
     } finally {
-      await client.close(); 
+      await client.close();
     }
 }
  
