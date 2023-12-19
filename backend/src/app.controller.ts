@@ -5,9 +5,10 @@ import { Readable } from 'stream';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService,
-              private readonly entrepriseService : EntrepriseService) {
-              }
+  constructor(
+    private readonly appService: AppService,
+    private readonly entrepriseService: EntrepriseService,
+  ) {}
 
   @Get()
   getHello(): string {
@@ -15,20 +16,17 @@ export class AppController {
   }
 
   @Get('CSVExport')
-  @Header('Content-Type','text/plain')
+  @Header('Content-Type', 'text/plain')
   @Header('Content-Disposition', 'attachment; filename=entrepriseData.csv')
   async getFile(@Res() res) {
     try {
-      const csvData = await this.entrepriseService.exportToCSV(); 
+      const csvData = await this.entrepriseService.exportToCSV();
       const textStream = new Readable();
       textStream.push(csvData);
-      textStream.push(null); 
+      textStream.push(null);
       textStream.pipe(res);
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }
   }
-
-
-  
 }

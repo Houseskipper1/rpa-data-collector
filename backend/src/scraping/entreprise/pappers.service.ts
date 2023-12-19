@@ -3,85 +3,86 @@ import * as puppeteer from 'puppeteer';
 import * as cheerio from 'cheerio';
 import { EntrepriseEntity } from 'src/entreprise/entities/entreprise.entity';
 import { EntrepriseRepresentativeEntity } from 'src/entreprise/entities/entreprise.representative.entity';
+import { EntrepriseDao } from 'src/entreprise/dao/entreprise-dao';
 
 @Injectable()
 export class PappersService {
-  private _entreprisesData: string[] = [
-    'sarl-favata-338411101',
-    'bati-france-57-851900654',
-    'lenninger-arthur-918347071',
-  ];
   private _UrlPappers = 'https://www.pappers.fr/entreprise';
 
-  constructor() {}
+  constructor(private entrepriseDao: EntrepriseDao) {}
 
-  async scrap(idEntreprise: string): Promise<EntrepriseEntity> {
+  async scrap(ids: string): Promise<EntrepriseEntity> {
+    const idsEntreprise = ids.split(',');
     const browser = await puppeteer.launch({ headless: false });
-    const page = await browser.newPage();
-    try {
-      await page.goto(`${this._UrlPappers}/${idEntreprise}`, {
-        waitUntil: 'domcontentloaded',
-      });
-      await page.waitForSelector(
-        'div#resume .table-container table tr:nth-child(4) td',
-      );
-      const pageContent = await page.content();
-      const $ = cheerio.load(pageContent);
-      let entreprise: EntrepriseEntity = new EntrepriseEntity();
-      let representative: EntrepriseRepresentativeEntity =
-        new EntrepriseRepresentativeEntity();
+    for (let idEntreprise of idsEntreprise) {
+      const page = await browser.newPage();
+      try {
+        await page.goto(`${this._UrlPappers}/${idEntreprise}`, {
+          waitUntil: 'domcontentloaded',
+        });
+        await page.waitForSelector(
+          'div#resume .table-container table tr:nth-child(4) td',
+        );
+        const pageContent = await page.content();
+        const $ = cheerio.load(pageContent);
+        let entreprise: EntrepriseEntity = new EntrepriseEntity();
+        let representative: EntrepriseRepresentativeEntity =
+          new EntrepriseRepresentativeEntity();
 
-      //identity information
-      const siretRow = $('div div table tr:contains("SIRET (siège)")');
-      entreprise.siret = siretRow.find('td').text().trim();
+        const siretRow = $('div div table tr:contains("SIRET (siège)")');
+        entreprise.siret = siretRow.find('td').text().trim();
 
-      const sirenRow = $('div div table tr:contains("SIREN")');
-      entreprise.siren = sirenRow.find('td').text().trim();
-      entreprise.name = $('h1.big-text').text().trim();
+        const sirenRow = $('div div table tr:contains("SIREN")');
+        entreprise.siren = sirenRow.find('td').text().trim();
+        entreprise.name = $('h1.big-text').text().trim();
 
-      entreprise.dateCreation = $(
-        'div#resume .table-container table tr:nth-child(4) td',
-      )
-        .text()
-        .trim();
-      entreprise.yearsInExistence = this.computeYearsSinceCreation(
-        entreprise.dateCreation,
-      );
+        entreprise.dateCreation = $(
+          'div#resume .table-container table tr:nth-child(4) td',
+        )
+          .text()
+          .trim();
+        entreprise.yearsInExistence = this.computeYearsSinceCreation(
+          entreprise.dateCreation,
+        );
 
-      const effectiveInfo = $(
-        'div#resume .table-container table tr:contains("Effectif") td',
-      )
-        .text()
-        .trim();
-      const { salarieRange, year } = this.extractDataFromString(effectiveInfo);
-      entreprise.effective = salarieRange;
-      entreprise.dateConfirmationEffectif = year;
+        const effectiveInfo = $(
+          'div#resume .table-container table tr:contains("Effectif") td',
+        )
+          .text()
+          .trim();
+        const { salarieRange, year } =
+          this.extractDataFromString(effectiveInfo);
+        entreprise.effective = salarieRange;
+        entreprise.dateConfirmationEffectif = year;
 
-      entreprise.representatives = [];
+        entreprise.representatives = [];
 
-      const dirigeantElement = $('section#dirigeants .dirigeant');
-      const { firstName, lastName } = this.separateLastNameFirstName(
-        dirigeantElement.find('.nom a').text().trim(),
-      );
-      representative.firstName = firstName;
-      representative.lastName = lastName;
-      representative.position = dirigeantElement.find('.qualite').text().trim();
-      representative.age = parseInt(
-        dirigeantElement.find('.age-siren span').text().trim(),
-      );
-      representative.employmentStartDate = $('span.age-siren').text().trim();
-      entreprise.representatives = [
-        ...entreprise.representatives,
-        representative,
-      ];
+        const dirigeantElement = $('section#dirigeants .dirigeant');
+        const { firstName, lastName } = this.separateLastNameFirstName(
+          dirigeantElement.find('.nom a').text().trim(),
+        );
+        representative.firstName = firstName;
+        representative.lastName = lastName;
+        representative.position = dirigeantElement
+          .find('.qualite')
+          .text()
+          .trim();
+        const age = parseInt(dirigeantElement.find('.age-siren').text().trim());
+        representative.age = isNaN(age) ? 0 : age;
+        representative.employmentStartDate = $('span.age-siren').text().trim();
+        entreprise.representatives = [
+          ...entreprise.representatives,
+          representative,
+        ];
 
-      return Promise.resolve(entreprise);
-    } catch (error) {
-      console.error('Error during scraping:', error);
-      return Promise.reject(error);
-    } finally {
-      await browser.close();
+        const savedEntity = await this.entrepriseDao.save(entreprise);
+        console.log('Entity saved:', savedEntity);
+      } catch (error) {
+        console.error('Error during scraping:', error);
+        return Promise.reject(error);
+      }
     }
+    await browser.close();
   }
 
   private computeYearsSinceCreation(creationDate: string) {

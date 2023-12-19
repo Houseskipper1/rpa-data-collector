@@ -53,7 +53,7 @@ fetchReviews(websiteUrl)
 
 // Exemple d'utilisation:
 
-// windows 
+// windows
 // node .\src\scraping\review\avis-verifies.service.ts arthur-bonnet.com
 
 // Linux && mac
