@@ -5,11 +5,13 @@ import { data } from 'cheerio/lib/api/attributes';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService,private _pappersService : PeppersService) {}
+  constructor(
+    private readonly appService: AppService,
+    private _pappersService: PeppersService,
+  ) {}
 
   @Get()
   getHello(): string {
-
     /*
       
     //Test the pappers scraping
@@ -18,8 +20,7 @@ export class AppController {
         console.log(data)
       })
     */
-    
-   
+
     return this.appService.getHello();
   }
 }

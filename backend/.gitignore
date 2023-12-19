@@ -34,3 +34,4 @@ yarn.lock
 .vscode/launch.json
 .vscode/extensions.json
 /ressources/sirene/*
+yarn.lock
