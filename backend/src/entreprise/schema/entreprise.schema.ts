@@ -16,7 +16,7 @@ export class EntrepriseSchema extends Document {
 
   @Prop({ required: true })
   name: string;
-  
+
   @Prop({ required: true })
   dateCreation: string;
 
@@ -30,7 +30,8 @@ export class EntrepriseSchema extends Document {
   dateConfirmationEffectif: string;
 
   @Prop({ type: [EntrepriseRepresentativeEntitySchema] })
-  representatives: EntrepriseRepresentativeEntity[]; 
+  representatives: EntrepriseRepresentativeEntity[];
 }
 
-export const EntrepriseEntitySchema = SchemaFactory.createForClass(EntrepriseSchema);
+export const EntrepriseEntitySchema =
+  SchemaFactory.createForClass(EntrepriseSchema);

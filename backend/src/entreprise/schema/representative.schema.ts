@@ -3,17 +3,18 @@ import { Document } from 'mongoose';
 
 @Schema()
 export class EntrepriseRepresentativeEntity extends Document {
-  @Prop({ required: true })
+  @Prop({ required: false })
   firstName: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   lastName: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   age: number;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   position: string;
 }
 
-export const EntrepriseRepresentativeEntitySchema = SchemaFactory.createForClass(EntrepriseRepresentativeEntity);
+export const EntrepriseRepresentativeEntitySchema =
+  SchemaFactory.createForClass(EntrepriseRepresentativeEntity);
