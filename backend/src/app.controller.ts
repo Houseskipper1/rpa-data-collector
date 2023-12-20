@@ -1,5 +1,8 @@
 import { Controller, Get, Header, Res } from '@nestjs/common';
 import { AppService } from './app.service';
+import { PappersService } from './scraping/entreprise/pappers.service';
+import { data } from 'cheerio/lib/api/attributes';
+import { SocieteService } from './scraping/entreprise/societe.service';
 import { EntrepriseService } from './entreprise/service/entreprise.service';
 import { Readable } from 'stream';
 
@@ -7,6 +10,7 @@ import { Readable } from 'stream';
 export class AppController {
   constructor(
     private readonly appService: AppService,
+    private _pappersService: PappersService,
     private readonly entrepriseService: EntrepriseService,
   ) {}
 
@@ -15,6 +19,11 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  // get societe 
+  @Get('societe')
+  getSociete(): any {
+    return this._societeService.fetch();
+    
   @Get('CSVExport')
   @Header('Content-Type', 'text/plain')
   @Header('Content-Disposition', 'attachment; filename=entrepriseData.csv')

@@ -8,6 +8,7 @@ import { PappersService } from './scraping/entreprise/pappers.service';
 import { ConfigModule } from '@nestjs/config';
 import { SireneService } from './api/sirene/sirene.service';
 import { AppController } from './app.controller';
+import { SocieteService } from './scraping/entreprise/societe.service';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { AppController } from './app.controller';
     ConfigModule.forRoot(),
   ],
   controllers: [EntrepriseController, AppController],
-  providers: [AppService, BanService, PappersService, SireneService],
+  providers: [AppService, BanService, PappersService, SireneService, SocieteService],
 })
 export class AppModule {}
