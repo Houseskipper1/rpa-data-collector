@@ -12,6 +12,7 @@ export class AppController {
     private readonly appService: AppService,
     private _pappersService: PappersService,
     private readonly entrepriseService: EntrepriseService,
+    private _societeService: SocieteService
   ) {}
 
   @Get()
@@ -23,6 +24,7 @@ export class AppController {
   @Get('societe')
   getSociete(): any {
     return this._societeService.fetch();
+  }
     
   @Get('CSVExport')
   @Header('Content-Type', 'text/plain')
