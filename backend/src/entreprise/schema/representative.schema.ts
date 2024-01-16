@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema()
-export class EntrepriseRepresentativeEntity extends Document {
+export class Representative extends Document {
   @Prop({ required: false })
   firstName: string;
 
@@ -16,5 +16,5 @@ export class EntrepriseRepresentativeEntity extends Document {
   position: string;
 }
 
-export const EntrepriseRepresentativeEntitySchema =
-  SchemaFactory.createForClass(EntrepriseRepresentativeEntity);
+export const RepresentativeSchema =
+SchemaFactory.createForClass(Representative);

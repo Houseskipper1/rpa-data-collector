@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EntrepriseDao } from '../dao/entreprise-dao';
 import { EntrepriseEntity } from '../entities/entreprise.entity';
-import { EntrepriseSchema } from '../schema/entreprise.schema';
 
 @Injectable()
 export class EntrepriseService {
