@@ -81,9 +81,9 @@ export class PappersService {
         // Extract information of the leader      
         const firstLeaderElement = $('section#dirigeants .dirigeant').first();
         const leaderName = firstLeaderElement.find('.nom a').text().trim();
-        //const { firstName, lastName } = this.separateLastNameFirstName(leaderName);
-        representative.firstName = leaderName;
-        representative.lastName = leaderName;
+        const { firstName, lastName } = this.separateLastNameFirstName(leaderName);
+        representative.firstName = firstName;
+        representative.lastName = lastName;
         representative.position = firstLeaderElement.find('.qualite').text().trim();
         const age = parseInt(firstLeaderElement.find('.age-siren span').eq(0).text().trim());
         representative.age = isNaN(age) ? 0 : age;

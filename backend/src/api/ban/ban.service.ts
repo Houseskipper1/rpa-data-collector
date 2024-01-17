@@ -8,7 +8,6 @@ export type Position = {
 }
 
 
-
 @Injectable()
 export class BanService {
     async findByAddress(address: String): Promise<Position> {
@@ -34,7 +33,7 @@ export class BanService {
           const coordinates = res.data.features[0].geometry.coordinates;
           const context = res.data.features[0].properties.context;
           const postcode = res.data.features[0].properties.postcode;
-          const street = res.data.features[0].properties.street; // This line seems like an error. You might want to replace it with res.data.features[0].properties.street
+          const street = res.data.features[0].properties.street;
           const city = res.data.features[0].properties.city;    
           const contextParts = context.split(', ');
       
