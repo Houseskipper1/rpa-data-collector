@@ -81,4 +81,18 @@ export class EntrepriseService {
       resolve(csvData);
     });
   }
+
+  
+  async exportToJSON(): Promise<string> {
+    return new Promise(async (resolve, reject) => {
+      const jsonData = [];
+      const dataStatic = await this.findAll();
+      dataStatic.forEach((data) => {        
+        jsonData.push(data);
+      });
+      const jsonString = JSON.stringify(jsonData, null, 2);
+      resolve(jsonString);
+    });
+  }
+  
 }
