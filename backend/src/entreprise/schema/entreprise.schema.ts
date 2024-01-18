@@ -1,10 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { EntrepriseRepresentativeEntity } from '../entities/entreprise.representative.entity';
-import { EntrepriseRepresentativeEntitySchema } from './representative.schema';
+import { RepresentativeSchema } from './representative.schema';
+import { LocationSchema } from './location.schema';
+import { LocationEntrepriseEntity } from '../entities/entreprise.location.entity';
+import { FinanceSchema } from './finance.schema';
+import { FinanceEntrepriseEntity } from '../entities/entreprise.Finance.entity';
 
 @Schema({ collection: 'entreprise' })
-export class EntrepriseSchema extends Document {
+export class Entreprise extends Document {
   @Prop({ required: false })
   id: string;
 
@@ -29,9 +33,19 @@ export class EntrepriseSchema extends Document {
   @Prop({ required: true })
   dateConfirmationEffectif: string;
 
-  @Prop({ type: [EntrepriseRepresentativeEntitySchema] })
+  @Prop({ type: [RepresentativeSchema] })
   representatives: EntrepriseRepresentativeEntity[];
+
+
+  @Prop({ type: [LocationSchema] })
+  location: LocationEntrepriseEntity;
+
+
+  @Prop({ type: [FinanceSchema] })
+  financeDetails: FinanceEntrepriseEntity[];
+
+
 }
 
-export const EntrepriseEntitySchema =
-  SchemaFactory.createForClass(EntrepriseSchema);
+export const EntrepriseSchema =
+  SchemaFactory.createForClass(Entreprise);

@@ -1,3 +1,5 @@
+import { FinanceEntrepriseEntity } from './entreprise.Finance.entity';
+import { LocationEntrepriseEntity } from './entreprise.location.entity';
 import { EntrepriseRepresentativeEntity } from './entreprise.representative.entity';
 import { Exclude, Expose, Type } from 'class-transformer';
 
@@ -38,4 +40,13 @@ export class EntrepriseEntity {
   @Expose()
   @Type(() => EntrepriseRepresentativeEntity)
   representatives: EntrepriseRepresentativeEntity[];
+
+  @Expose()
+  @Type(() => LocationEntrepriseEntity)
+  location: LocationEntrepriseEntity;
+  
+  @Expose()
+  @Type(() => FinanceEntrepriseEntity)
+  financeDetails: FinanceEntrepriseEntity[];
+  
 }
