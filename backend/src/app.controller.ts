@@ -1,10 +1,11 @@
-import { Controller, Get, Header, Res } from '@nestjs/common';
+import { Controller, Get, Header, Query, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { PappersService } from './scraping/entreprise/pappers.service';
 import { data } from 'cheerio/lib/api/attributes';
 import { SocieteService } from './scraping/entreprise/societe.service';
 import { EntrepriseService } from './entreprise/service/entreprise.service';
 import { Readable } from 'stream';
+import { BanService } from './api/ban/ban.service';
 
 @Controller()
 export class AppController {
@@ -12,6 +13,7 @@ export class AppController {
     private readonly appService: AppService,
     private _pappersService: PappersService,
     private readonly entrepriseService: EntrepriseService,
+    private readonly banService: BanService,
     private _societeService: SocieteService
   ) {}
 
@@ -39,5 +41,13 @@ export class AppController {
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }
+  }
+
+  @Get("/search")
+  async searchInRadius(@Query() query: any) {
+    let lat = query.lat;
+    let lon = query.lon;
+    let radius = query.radius;
+    return this.banService.getInRadius({lat, long: lon}, radius);
   }
 }
