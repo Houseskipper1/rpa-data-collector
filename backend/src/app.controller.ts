@@ -5,6 +5,7 @@ import { data } from 'cheerio/lib/api/attributes';
 import { SocieteService } from './scraping/entreprise/societe.service';
 import { EntrepriseService } from './entreprise/service/entreprise.service';
 import { Readable } from 'stream';
+import { BanService } from './api/ban/ban.service';
 
 @Controller()
 export class AppController {
@@ -12,6 +13,7 @@ export class AppController {
     private readonly appService: AppService,
     private _pappersService: PappersService,
     private readonly entrepriseService: EntrepriseService,
+    private readonly banService: BanService,
     private _societeService: SocieteService
   ) {}
 
@@ -41,6 +43,14 @@ export class AppController {
     }
   }
 
+
+  @Get("/search")
+  async searchInRadius(@Query() query: any) {
+    let lat = query.lat;
+    let lon = query.lon;
+    let radius = query.radius;
+    return this.banService.getInRadius({lat, long: lon}, radius);
+
   @Get('jsonExport')
   @Header('Content-Type', 'text/plain')
   async getFileJson(@Query('filename') filename: string, @Res() res) {
@@ -58,5 +68,6 @@ export class AppController {
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }
+
   }
 }
