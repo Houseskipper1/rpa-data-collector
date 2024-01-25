@@ -29,7 +29,7 @@ export class LocationEntrepriseEntity {
   @Expose()
   @Type(() => String)
   country: string;
-  
+
   @Expose()
   @Type(() => String)
   interventionZone: string;
@@ -41,5 +41,4 @@ export class LocationEntrepriseEntity {
   @Expose()
   @Type(() => Number)
   latitude: number;
-
 }

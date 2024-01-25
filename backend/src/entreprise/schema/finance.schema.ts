@@ -36,5 +36,4 @@ export class Finance extends Document {
   netMargin: String;
 }
 
-export const FinanceSchema =
-  SchemaFactory.createForClass(Finance);
+export const FinanceSchema = SchemaFactory.createForClass(Finance);

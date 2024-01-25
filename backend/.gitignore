@@ -38,3 +38,4 @@ yarn.lock
 .vscode/extensions.json
 /ressources/sirene/*
 yarn.lock
+package-lock.json

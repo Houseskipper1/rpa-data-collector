@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Header, HttpStatus, Post, Put, Query, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Header,
+  HttpStatus,
+  Post,
+  Put,
+  Query,
+  Res,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { PappersService } from './scraping/entreprise/pappers.service';
 import { data } from 'cheerio/lib/api/attributes';
@@ -28,7 +38,7 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  // get societe 
+  // get societe
   @Put('societe')
   async getSociete(
     @Body() entreprisesIdsDto: EntreprisesIdsDto,
@@ -42,8 +52,8 @@ export class AppController {
   }
 
   @Put('sirene')
-  async scrapSirenes(@Body() scrapSirenesDto: ScrapSirenesDto){
-      return this._sireneService.getEntreprisesAPI(scrapSirenesDto.entreprises);
+  async scrapSirenes(@Body() scrapSirenesDto: ScrapSirenesDto) {
+    return this._sireneService.getEntreprisesAPI(scrapSirenesDto.entreprises);
   }
 
   @Get('CSVExport')
@@ -61,12 +71,12 @@ export class AppController {
     }
   }
 
-  @Get("/search")
+  @Get('/search')
   async searchInRadius(@Query() query: any) {
     let lat = query.lat;
     let lon = query.lon;
     let radius = query.radius;
-    return this.banService.getInRadius({lat, long: lon}, radius);
+    return this.banService.getInRadius({ lat, long: lon }, radius);
   }
 
   @Get('jsonExport')
@@ -78,7 +88,10 @@ export class AppController {
       if (!finalFilename.toLowerCase().endsWith('.json')) {
         finalFilename += '.json';
       }
-      res.setHeader('Content-Disposition', `attachment; filename=${finalFilename}`);
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename=${finalFilename}`,
+      );
       const textStream = new Readable();
       textStream.push(jsonData);
       textStream.push(null);
@@ -86,6 +99,5 @@ export class AppController {
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }
-
   }
 }

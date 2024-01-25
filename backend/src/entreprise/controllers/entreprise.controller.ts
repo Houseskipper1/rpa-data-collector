@@ -64,7 +64,6 @@ export class EntrepriseController {
 
   @Put('scraping/pappers')
   async scrappingPappers(@Body() data: any): Promise<void> {
-    // TODO créer un DTO
     this.pappersService.scrap(data.ids);
   }
 }

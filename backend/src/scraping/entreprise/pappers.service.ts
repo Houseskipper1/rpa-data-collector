@@ -12,7 +12,10 @@ import { FinanceEntrepriseEntity } from 'src/entreprise/entities/entreprise.Fina
 export class PappersService {
   private _UrlPappers = 'https://www.pappers.fr/entreprise';
 
-  constructor(private entrepriseDao: EntrepriseDao,private _banService : BanService) {}
+  constructor(
+    private entrepriseDao: EntrepriseDao,
+    private _banService: BanService,
+  ) {}
 
   async scrap(ids: string): Promise<EntrepriseEntity> {
     const idsEntreprise = ids.split(',');
@@ -57,20 +60,27 @@ export class PappersService {
           this.extractDataFromString(effectiveInfo);
         entreprise.effective = salarieRange;
         entreprise.dateConfirmationEffectif = year;
-          
 
         //extract address
-        const adresseElement = $('div.entreprise-page .table-container table tr th:contains("Adresse") + td');
-        
+        const adresseElement = $(
+          'div.entreprise-page .table-container table tr th:contains("Adresse") + td',
+        );
+
         // Extrait l'adresse
         const adresseEntreprise = adresseElement.text().trim();
         let location = {} as LocationEntrepriseEntity;
 
         try {
-          const result = await this._banService.findCompletedLocationByAddress(adresseEntreprise);
+          const result =
+            await this._banService.findCompletedLocationByAddress(
+              adresseEntreprise,
+            );
           location = result;
         } catch (error) {
-          console.error("Une erreur s'est produite lors de la recherche de l'adresse.", error);
+          console.error(
+            "Une erreur s'est produite lors de la recherche de l'adresse.",
+            error,
+          );
         }
         entreprise.location = location;
 
@@ -78,26 +88,38 @@ export class PappersService {
         entreprise.representatives = [];
         // Select the first .dirigeant element
 
-        // Extract information of the leader      
+        // Extract information of the leader
         const firstLeaderElement = $('section#dirigeants .dirigeant').first();
         const leaderName = firstLeaderElement.find('.nom a').text().trim();
-        const { firstName, lastName } = this.separateLastNameFirstName(leaderName);
+        const { firstName, lastName } =
+          this.separateLastNameFirstName(leaderName);
         representative.firstName = firstName;
         representative.lastName = lastName;
-        representative.position = firstLeaderElement.find('.qualite').text().trim();
-        const age = parseInt(firstLeaderElement.find('.age-siren span').eq(0).text().trim());
+        representative.position = firstLeaderElement
+          .find('.qualite')
+          .text()
+          .trim();
+        const age = parseInt(
+          firstLeaderElement.find('.age-siren span').eq(0).text().trim(),
+        );
         representative.age = isNaN(age) ? 0 : age;
-        representative.employmentStartDate = firstLeaderElement.find('.age-siren span.age-siren').text().trim();
-        
+        representative.employmentStartDate = firstLeaderElement
+          .find('.age-siren span.age-siren')
+          .text()
+          .trim();
+
         entreprise.representatives = [
           ...entreprise.representatives,
           representative,
         ];
-        
+
         // Find the section with finances data
         const financeEntities = await this.buildFinanceEntity(page);
-        entreprise.financeDetails = financeEntities
-        const savedEntity = await this.entrepriseDao.saveOrUpdateBySirene(entreprise.siren,entreprise);
+        entreprise.financeDetails = financeEntities;
+        const savedEntity = await this.entrepriseDao.saveOrUpdateBySirene(
+          entreprise.siren,
+          entreprise,
+        );
         console.log('Entity saved:', savedEntity);
       } catch (error) {
         console.error('Error during scraping:', error);
@@ -149,67 +171,73 @@ export class PappersService {
       const firstName = nameParts.slice(0, lastNameIndex).join(' ');
       return { firstName, lastName };
     } else {
-      return { firstName: fullName, lastName: fullName};
+      return { firstName: fullName, lastName: fullName };
     }
   }
 
-
-
   private async buildFinanceEntity(page): Promise<FinanceEntrepriseEntity[]> {
     let financeEntities: FinanceEntrepriseEntity[] = [];
-    
-    const {years,performanceData} = await this.scrapePerformanceData(page);
-    console.log(years)
+
+    const { years, performanceData } = await this.scrapePerformanceData(page);
+    console.log(years);
     //console.log(performanceData)
-    const nbYears =  years.length;
+    const nbYears = years.length;
     for (let i = 0; i < nbYears; i++) {
       let financeEntity = {
-        shareCapital : "a compléter",
-        financialYear : years [i],
-        turnover : performanceData["Chiffre d'affaires (€)"][i],
-        turnoverTrend : "a compléter",
-        cashFlow : performanceData["Trésorerie (€)"][i],
-        netProfit : performanceData["Résultat net (€)"][i],
-        netMargin : performanceData["Marge nette (%)"][i],
+        shareCapital: 'a compléter',
+        financialYear: years[i],
+        turnover: performanceData["Chiffre d'affaires (€)"][i],
+        turnoverTrend: 'a compléter',
+        cashFlow: performanceData['Trésorerie (€)'][i],
+        netProfit: performanceData['Résultat net (€)'][i],
+        netMargin: performanceData['Marge nette (%)'][i],
       } as FinanceEntrepriseEntity;
       financeEntities.push(financeEntity);
     }
     return financeEntities;
-} 
-  
-async scrapePerformanceData(page) {
-  const financesSection = await page.$('#finances');
-  if (financesSection) {
-    let years;
+  }
+
+  async scrapePerformanceData(page) {
+    const financesSection = await page.$('#finances');
     if (financesSection) {
-      years = await financesSection.$$eval('.tr-header th:not(:first-child)', (headers) => Array.from(new Set(headers.map(header => header.textContent.trim()))));    }
-    const ratiosTable = await financesSection.$('.ratios table');
-    if (ratiosTable) {
-      const performanceData = await page.evaluate(() => {
-            const data = {};
-            const rows = document.querySelectorAll('.ratios table tr:not(:first-child)');
-            rows.forEach((row) => {
-                const performanceLabel = row.querySelector('th:first-child').textContent.trim();
-                const values = Array.from(row.querySelectorAll('td')).map(cell => cell.textContent.trim());
-                data[performanceLabel] = values;
-            });
-            return data;
+      let years;
+      if (financesSection) {
+        years = await financesSection.$$eval(
+          '.tr-header th:not(:first-child)',
+          (headers) =>
+            Array.from(
+              new Set(headers.map((header) => header.textContent.trim())),
+            ),
+        );
+      }
+      const ratiosTable = await financesSection.$('.ratios table');
+      if (ratiosTable) {
+        const performanceData = await page.evaluate(() => {
+          const data = {};
+          const rows = document.querySelectorAll(
+            '.ratios table tr:not(:first-child)',
+          );
+          rows.forEach((row) => {
+            const performanceLabel = row
+              .querySelector('th:first-child')
+              .textContent.trim();
+            const values = Array.from(row.querySelectorAll('td')).map((cell) =>
+              cell.textContent.trim(),
+            );
+            data[performanceLabel] = values;
+          });
+          return data;
         });
         return {
-          years : years,
-          performanceData: performanceData
-        }
-
-    } else {
+          years: years,
+          performanceData: performanceData,
+        };
+      } else {
         console.log('Tableau de ratios non trouvé');
-    }
-  } else {
+      }
+    } else {
       console.log('Section des finances non trouvée');
+    }
+    return {}; // Retourner un objet vide si les données ne sont pas trouvées
   }
-  return {}; // Retourner un objet vide si les données ne sont pas trouvées
-}
-
-
-
-
 }

@@ -17,4 +17,4 @@ export class Representative extends Document {
 }
 
 export const RepresentativeSchema =
-SchemaFactory.createForClass(Representative);
+  SchemaFactory.createForClass(Representative);

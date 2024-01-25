@@ -23,7 +23,7 @@ export class Location extends Document {
 
   @Prop({ required: false })
   country: string;
-  
+
   @Prop({ required: false })
   interventionZone: string;
 
@@ -34,5 +34,4 @@ export class Location extends Document {
   latitude: number;
 }
 
-export const LocationSchema =
-  SchemaFactory.createForClass(Location);
+export const LocationSchema = SchemaFactory.createForClass(Location);

@@ -36,16 +36,11 @@ export class Entreprise extends Document {
   @Prop({ type: [RepresentativeSchema] })
   representatives: EntrepriseRepresentativeEntity[];
 
-
   @Prop({ type: [LocationSchema] })
   location: LocationEntrepriseEntity;
 
-
   @Prop({ type: [FinanceSchema] })
   financeDetails: FinanceEntrepriseEntity[];
-
-
 }
 
-export const EntrepriseSchema =
-  SchemaFactory.createForClass(Entreprise);
+export const EntrepriseSchema = SchemaFactory.createForClass(Entreprise);

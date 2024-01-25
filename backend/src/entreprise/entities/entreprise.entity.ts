@@ -44,9 +44,8 @@ export class EntrepriseEntity {
   @Expose()
   @Type(() => LocationEntrepriseEntity)
   location: LocationEntrepriseEntity;
-  
+
   @Expose()
   @Type(() => FinanceEntrepriseEntity)
   financeDetails: FinanceEntrepriseEntity[];
-  
 }

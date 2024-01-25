@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import {Entreprise } from '../schema/entreprise.schema';
+import { Entreprise } from '../schema/entreprise.schema';
 import { EntrepriseEntity } from '../entities/entreprise.entity';
 
 @Injectable()
@@ -28,17 +28,20 @@ export class EntrepriseDao {
       .exec();
   }
 
-  async saveOrUpdateBySirene(siren: string, updatedEntreprise: EntrepriseEntity): Promise<Entreprise | null> {
-    const existingEntreprise = await this._entrepriseModel.findOne({ siren }).exec();
-    
+  async saveOrUpdateBySirene(
+    siren: string,
+    updatedEntreprise: EntrepriseEntity,
+  ): Promise<Entreprise | null> {
+    const existingEntreprise = await this._entrepriseModel
+      .findOne({ siren })
+      .exec();
+
     if (existingEntreprise) {
       return await this.update(existingEntreprise._id, updatedEntreprise);
-    } else {  
+    } else {
       return await this.save(updatedEntreprise);
     }
-
   }
-
 
   async delete(id: string): Promise<void> {
     await this._entrepriseModel.findByIdAndDelete(id).exec();
