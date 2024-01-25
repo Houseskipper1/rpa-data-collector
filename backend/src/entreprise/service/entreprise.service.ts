@@ -29,6 +29,10 @@ export class EntrepriseService {
     return await this.entrepriseDao.save(entreprise);
   }
 
+  async createOrUpdateBySirene(entreprise: EntrepriseEntity): Promise<EntrepriseEntity> {
+    return await this.entrepriseDao.saveOrUpdateBySirene(entreprise.siren, entreprise);
+  }
+
   async findBySiren(siren: string): Promise<EntrepriseEntity | null> {
     return this.entrepriseDao.findBySiren(siren);
   }

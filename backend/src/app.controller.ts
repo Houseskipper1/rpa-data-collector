@@ -1,10 +1,13 @@
-import { Controller, Get, Header, Query, Res } from '@nestjs/common';
+import { Body, Controller, Get, Header, Post, Put, Query, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { PappersService } from './scraping/entreprise/pappers.service';
 import { data } from 'cheerio/lib/api/attributes';
 import { SocieteService } from './scraping/entreprise/societe.service';
 import { EntrepriseService } from './entreprise/service/entreprise.service';
 import { Readable } from 'stream';
+import { SireneService } from './api/sirene/sirene.service';
+import { EntrepriseEntity } from './entreprise/entities/entreprise.entity';
+import { ScrapSirenesDto } from './api/sirene/scrap-sirene.dto';
 import { BanService } from './api/ban/ban.service';
 
 @Controller()
@@ -13,6 +16,8 @@ export class AppController {
     private readonly appService: AppService,
     private _pappersService: PappersService,
     private readonly entrepriseService: EntrepriseService,
+    private _societeService: SocieteService,
+    private _sireneService: SireneService
     private readonly banService: BanService,
     private _societeService: SocieteService
   ) {}
@@ -27,7 +32,15 @@ export class AppController {
   getSociete(): any {
     return this._societeService.fetch();
   }
-    
+
+  @Put('sirene')
+  async scrapSirenes(@Body() scrapSirenesDto: ScrapSirenesDto){
+      return this._sireneService.getEntreprisesAPI(scrapSirenesDto.entreprises);
+  }
+  
+
+  
+
   @Get('CSVExport')
   @Header('Content-Type', 'text/plain')
   @Header('Content-Disposition', 'attachment; filename=entrepriseData.csv')
