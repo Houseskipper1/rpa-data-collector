@@ -24,9 +24,21 @@ export class EntrepriseDao {
     updatedEntreprise: Partial<EntrepriseEntity>,
   ): Promise<Entreprise | null> {
     return await this._entrepriseModel
-      .findByIdAndUpdate(id, updatedEntreprise, { new: true })
+      .findByIdAndUpdate(id, updatedEntreprise, { new: false })
       .exec();
   }
+
+  async saveOrUpdateBySirene(siren: string, updatedEntreprise: EntrepriseEntity): Promise<Entreprise | null> {
+    const existingEntreprise = await this._entrepriseModel.findOne({ siren }).exec();
+    
+    if (existingEntreprise) {
+      return await this.update(existingEntreprise._id, updatedEntreprise);
+    } else {  
+      return await this.save(updatedEntreprise);
+    }
+
+  }
+
 
   async delete(id: string): Promise<void> {
     await this._entrepriseModel.findByIdAndDelete(id).exec();

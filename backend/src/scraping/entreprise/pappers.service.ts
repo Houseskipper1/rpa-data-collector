@@ -93,13 +93,11 @@ export class PappersService {
           ...entreprise.representatives,
           representative,
         ];
-
-
+        
         // Find the section with finances data
         const financeEntities = await this.buildFinanceEntity(page);
         entreprise.financeDetails = financeEntities
-      
-        const savedEntity = await this.entrepriseDao.save(entreprise);
+        const savedEntity = await this.entrepriseDao.saveOrUpdateBySirene(entreprise.siren,entreprise);
         console.log('Entity saved:', savedEntity);
       } catch (error) {
         console.error('Error during scraping:', error);

@@ -1,0 +1,27 @@
+<div class="center-section mt-16 mb-16 md:mx-0 mx-1 top-16 w-96 lg:w-auto">
+  <ul>
+    <li
+      *ngFor="let entreprise of entreprises"
+      class="bg-background text-font p-4 rounded-lg shadow-md mt-4"
+    >
+      <div class="mb-4">
+        <h2 class="text-xl font-semibold">{{ entreprise.name }}</h2>
+        <p class="mb-2">SIREN: {{ entreprise.siren }}</p>
+        <p class="mb-2">SIRET: {{ entreprise.siret }}</p>
+        <p class="mb-2">Date de création: {{ entreprise.dateCreation }}</p>
+        <p class="mb-2">Effectif: {{ entreprise.effective }}</p>
+        <p class="mb-2">Représentant(s):</p>
+        <ul>
+          <li *ngFor="let representative of entreprise.representatives">
+            {{ representative.firstName }} {{ representative.lastName }} -
+            {{ representative.position }}
+          </li>
+        </ul>
+        <p>
+          Date de confirmation de l'effectif:
+          {{ entreprise.dateConfirmationEffectif }}
+        </p>
+      </div>
+    </li>
+  </ul>
+</div>
