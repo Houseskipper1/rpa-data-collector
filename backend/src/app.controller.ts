@@ -8,6 +8,7 @@ import { Readable } from 'stream';
 import { SireneService } from './api/sirene/sirene.service';
 import { EntrepriseEntity } from './entreprise/entities/entreprise.entity';
 import { ScrapSirenesDto } from './api/sirene/scrap-sirene.dto';
+import { BanService } from './api/ban/ban.service';
 
 @Controller()
 export class AppController {
@@ -17,6 +18,8 @@ export class AppController {
     private readonly entrepriseService: EntrepriseService,
     private _societeService: SocieteService,
     private _sireneService: SireneService
+    private readonly banService: BanService,
+    private _societeService: SocieteService
   ) {}
 
   @Get()
@@ -53,6 +56,14 @@ export class AppController {
     }
   }
 
+
+  @Get("/search")
+  async searchInRadius(@Query() query: any) {
+    let lat = query.lat;
+    let lon = query.lon;
+    let radius = query.radius;
+    return this.banService.getInRadius({lat, long: lon}, radius);
+
   @Get('jsonExport')
   @Header('Content-Type', 'text/plain')
   async getFileJson(@Query('filename') filename: string, @Res() res) {
@@ -70,5 +81,6 @@ export class AppController {
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }
+
   }
 }
