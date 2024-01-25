@@ -1,11 +1,22 @@
-import { Controller, Get, Param, Put, Body, Delete, Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Put,
+  Body,
+  Delete,
+  Post,
+} from '@nestjs/common';
 import { EntrepriseService } from '../service/entreprise.service';
+import { PappersService } from 'src/scraping/entreprise/pappers.service';
 import { EntrepriseEntity } from '../entities/entreprise.entity';
-import { EntrepriseSchema } from '../schema/entreprise.schema';
 
 @Controller('entreprise')
 export class EntrepriseController {
-  constructor(private readonly entrepriseService: EntrepriseService) {}
+  constructor(
+    private entrepriseService: EntrepriseService,
+    private pappersService: PappersService,
+  ) {}
 
   @Get(':id')
   async findById(@Param('id') id: string): Promise<EntrepriseEntity | null> {
@@ -18,7 +29,10 @@ export class EntrepriseController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updatedEntreprise: Partial<EntrepriseEntity>): Promise<EntrepriseEntity | null> {
+  async update(
+    @Param('id') id: string,
+    @Body() updatedEntreprise: Partial<EntrepriseEntity>,
+  ): Promise<EntrepriseEntity | null> {
     return this.entrepriseService.update(id, updatedEntreprise);
   }
 
@@ -26,20 +40,31 @@ export class EntrepriseController {
   async delete(@Param('id') id: string): Promise<void> {
     return this.entrepriseService.delete(id);
   }
-  
+
   @Post()
-  async createEntreprise(@Body() entreprise: EntrepriseSchema): Promise<EntrepriseEntity> {
+  async createEntreprise(
+    @Body() entreprise: EntrepriseEntity,
+  ): Promise<EntrepriseEntity> {
     return this.entrepriseService.create(entreprise);
   }
+
   @Get('siren/:siren')
-  async findBySiren(@Param('siren') siren: string): Promise<EntrepriseEntity | null> {
+  async findBySiren(
+    @Param('siren') siren: string,
+  ): Promise<EntrepriseEntity | null> {
     return this.entrepriseService.findBySiren(siren);
   }
 
   @Get('siret/:siret')
-  async findBySiret(@Param('siret') siret: string): Promise<EntrepriseEntity | null> {
+  async findBySiret(
+    @Param('siret') siret: string,
+  ): Promise<EntrepriseEntity | null> {
     return this.entrepriseService.findBySiret(siret);
   }
+
+  @Put('scraping/pappers')
+  async scrappingPappers(@Body() data: any): Promise<void> {
+    // TODO créer un DTO
+    this.pappersService.scrap(data.ids);
+  }
 }
-
-

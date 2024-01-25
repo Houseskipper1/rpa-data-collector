@@ -1,9 +1,7 @@
-
 import { Exclude, Expose, Type } from 'class-transformer';
 
 @Exclude()
 export class EntrepriseRepresentativeEntity {
-
   @Expose()
   @Type(() => String)
   firstName: string;
@@ -18,4 +16,8 @@ export class EntrepriseRepresentativeEntity {
   @Expose()
   @Type(() => String)
   position: string;
+
+  @Expose()
+  @Type(() => String)
+  employmentStartDate: string;
 }
