@@ -17,9 +17,8 @@ export class AppController {
     private _pappersService: PappersService,
     private readonly entrepriseService: EntrepriseService,
     private _societeService: SocieteService,
-    private _sireneService: SireneService
+    private _sireneService: SireneService,
     private readonly banService: BanService,
-    private _societeService: SocieteService
   ) {}
 
   @Get()
@@ -37,9 +36,6 @@ export class AppController {
   async scrapSirenes(@Body() scrapSirenesDto: ScrapSirenesDto){
       return this._sireneService.getEntreprisesAPI(scrapSirenesDto.entreprises);
   }
-  
-
-  
 
   @Get('CSVExport')
   @Header('Content-Type', 'text/plain')
@@ -56,13 +52,13 @@ export class AppController {
     }
   }
 
-
   @Get("/search")
   async searchInRadius(@Query() query: any) {
     let lat = query.lat;
     let lon = query.lon;
     let radius = query.radius;
     return this.banService.getInRadius({lat, long: lon}, radius);
+  }
 
   @Get('jsonExport')
   @Header('Content-Type', 'text/plain')
