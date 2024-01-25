@@ -46,7 +46,7 @@ export class AppController {
   ) {
     const entreprises = await this._societeService.fetch(entreprisesIdsDto);
     for (const entreprise of entreprises) {
-      this.entrepriseService.create(entreprise);
+      this.entrepriseService.createOrUpdateBySirene(entreprise);
     }
     res.status(HttpStatus.OK).json(entreprises);
   }

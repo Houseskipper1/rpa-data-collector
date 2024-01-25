@@ -32,6 +32,8 @@ export class EntrepriseDao {
     siren: string,
     updatedEntreprise: EntrepriseEntity,
   ): Promise<Entreprise | null> {
+    updatedEntreprise.siren
+
     const existingEntreprise = await this._entrepriseModel
       .findOne({ siren })
       .exec();

@@ -7,13 +7,14 @@ import { EntrepriseDao } from 'src/entreprise/dao/entreprise-dao';
 import { LocationEntrepriseEntity } from 'src/entreprise/entities/entreprise.location.entity';
 import { BanService } from 'src/api/ban/ban.service';
 import { FinanceEntrepriseEntity } from 'src/entreprise/entities/entreprise.Finance.entity';
+import { EntrepriseService } from 'src/entreprise/service/entreprise.service';
 
 @Injectable()
 export class PappersService {
   private _UrlPappers = 'https://www.pappers.fr/entreprise';
 
   constructor(
-    private entrepriseDao: EntrepriseDao,
+    private entrepriseService: EntrepriseService,
     private _banService: BanService,
   ) {}
 
@@ -116,9 +117,8 @@ export class PappersService {
         // Find the section with finances data
         const financeEntities = await this.buildFinanceEntity(page);
         entreprise.financeDetails = financeEntities;
-        const savedEntity = await this.entrepriseDao.saveOrUpdateBySirene(
-          entreprise.siren,
-          entreprise,
+        const savedEntity = await this.entrepriseService.createOrUpdateBySirene(
+          entreprise
         );
         console.log('Entity saved:', savedEntity);
       } catch (error) {
@@ -179,7 +179,11 @@ export class PappersService {
     let financeEntities: FinanceEntrepriseEntity[] = [];
 
     const { years, performanceData } = await this.scrapePerformanceData(page);
+    if (years ==undefined ){
+      return financeEntities;
+    }
     console.log(years);
+
     //console.log(performanceData)
     const nbYears = years.length;
     for (let i = 0; i < nbYears; i++) {
