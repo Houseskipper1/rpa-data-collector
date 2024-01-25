@@ -1,0 +1,33 @@
+<div class="bg-background p-8 rounded-lg shadow-md sticky top-16 bg-slate-50">
+  <div class="mb-4 flex flex-wrap justify-center items-center">
+    <button
+      (click)="rien()"
+      class="btn btn-danger mb-2 w-full text-white px-4 py-2 rounded-lg"
+      [class.bg-blue-500]="vrai()"
+      [class.bg-gray-400]="!vrai()"
+      [class.hover:bg-blue-600]="vrai()"
+    >
+      Scrapping Pappers
+    </button>
+
+    <button
+      (click)="rien()"
+      class="btn btn-danger mb-2 w-full text-white px-4 py-2 rounded-lg"
+      [class.bg-blue-500]="vrai()"
+      [class.bg-gray-400]="!vrai()"
+      [class.hover:bg-blue-600]="vrai()"
+    >
+      Scrapping Societe.com
+    </button>
+
+    <button
+      (click)="scrapSirene()"
+      class="btn btn-danger mb-2 w-full text-white px-4 py-2 rounded-lg"
+      [class.bg-blue-500]="vrai()"
+      [class.bg-gray-400]="!vrai()"
+      [class.hover:bg-blue-600]="vrai()"
+    >
+      Scrapping SIRENE
+    </button>
+  </div>
+</div>

@@ -7,7 +7,7 @@ import { LocationEntrepriseEntity } from '../entities/entreprise.location.entity
 import { FinanceSchema } from './finance.schema';
 import { FinanceEntrepriseEntity } from '../entities/entreprise.Finance.entity';
 
-@Schema({ collection: 'entreprise' })
+@Schema({ collection: 'entreprises' })
 export class Entreprise extends Document {
   @Prop({ required: false })
   id: string;
@@ -18,19 +18,19 @@ export class Entreprise extends Document {
   @Prop({ required: true })
   siret: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   name: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   dateCreation: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   yearsInExistence: number;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   effective: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   dateConfirmationEffectif: string;
 
   @Prop({ type: [RepresentativeSchema] })

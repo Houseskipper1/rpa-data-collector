@@ -1,4 +1,4 @@
-import { Controller, Get, Header, Param, Query, Res, Put, Body, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Header, Param, Post, Query, Res, Put, Body, HttpStatus } from '@nestjs/common';
 import { AppService } from './app.service';
 import { PappersService } from './scraping/entreprise/pappers.service';
 import { data } from 'cheerio/lib/api/attributes';
@@ -7,6 +7,10 @@ import { EntrepriseService } from './entreprise/service/entreprise.service';
 import { Readable } from 'stream';
 import { EntreprisesIdsDto } from './entreprise/dto/entreprisesids.dto';
 import { Response } from 'express';
+import { SireneService } from './api/sirene/sirene.service';
+import { EntrepriseEntity } from './entreprise/entities/entreprise.entity';
+import { ScrapSirenesDto } from './api/sirene/scrap-sirene.dto';
+import { BanService } from './api/ban/ban.service';
 
 @Controller()
 export class AppController {
@@ -14,7 +18,9 @@ export class AppController {
     private readonly appService: AppService,
     private _pappersService: PappersService,
     private readonly entrepriseService: EntrepriseService,
-    private _societeService: SocieteService,
+    private _sireneService: SireneService,
+    private readonly banService: BanService,
+    private _societeService: SocieteService
   ) {}
 
   @Get()
@@ -35,6 +41,11 @@ export class AppController {
     res.status(HttpStatus.OK).json(entreprises);
   }
 
+  @Put('sirene')
+  async scrapSirenes(@Body() scrapSirenesDto: ScrapSirenesDto){
+      return this._sireneService.getEntreprisesAPI(scrapSirenesDto.entreprises);
+  }
+
   @Get('CSVExport')
   @Header('Content-Type', 'text/plain')
   @Header('Content-Disposition', 'attachment; filename=entrepriseData.csv')
@@ -48,6 +59,15 @@ export class AppController {
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }
+  }
+
+
+  @Get("/search")
+  async searchInRadius(@Query() query: any) {
+    let lat = query.lat;
+    let lon = query.lon;
+    let radius = query.radius;
+    return this.banService.getInRadius({lat, long: lon}, radius);
   }
 
   @Get('jsonExport')
@@ -67,5 +87,6 @@ export class AppController {
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }
+
   }
 }
