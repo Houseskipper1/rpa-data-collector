@@ -21,6 +21,25 @@
           Date de confirmation de l'effectif:
           {{ entreprise.dateConfirmationEffectif }}
         </p>
+
+        <!-- Nouvelles propriétés ajoutées -->
+        <p class="mb-2">Adresse:</p>
+        <ul>
+          <li *ngFor="let location of entreprise.location">
+            {{ location.streetAddress }}, {{ location.postalCode }}
+            {{ location.city }}
+          </li>
+        </ul>
+
+        <p class="mb-2">Détails financiers:</p>
+        <ul>
+          <li *ngFor="let financeDetail of entreprise.financeDetails">
+            Année: {{ financeDetail.financialYear }}, Capital:
+            {{ financeDetail.shareCapital }}, Chiffre d'affaires:
+            {{ financeDetail.turnover }}, Marge nette:
+            {{ financeDetail.netMargin }}
+          </li>
+        </ul>
       </div>
     </li>
   </ul>
