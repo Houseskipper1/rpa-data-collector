@@ -10,7 +10,10 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+# Eessources
+/ressources/RNCP
 yarn.lock
+
 # OS
 .DS_Store
 
