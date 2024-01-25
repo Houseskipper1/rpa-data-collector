@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Header, Post, Put, Query, Res } from '@nestjs/common';
+import { Body, Controller, Get, Header, HttpStatus, Post, Put, Query, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { PappersService } from './scraping/entreprise/pappers.service';
 import { data } from 'cheerio/lib/api/attributes';
@@ -9,6 +9,8 @@ import { SireneService } from './api/sirene/sirene.service';
 import { EntrepriseEntity } from './entreprise/entities/entreprise.entity';
 import { ScrapSirenesDto } from './api/sirene/scrap-sirene.dto';
 import { BanService } from './api/ban/ban.service';
+import { EntreprisesIdsDto } from './entreprise/dto/entreprisesids.dto';
+import { Response } from 'express';
 
 @Controller()
 export class AppController {
@@ -27,9 +29,16 @@ export class AppController {
   }
 
   // get societe 
-  @Get('societe')
-  getSociete(): any {
-    return this._societeService.fetch();
+  @Put('societe')
+  async getSociete(
+    @Body() entreprisesIdsDto: EntreprisesIdsDto,
+    @Res() res: Response,
+  ) {
+    const entreprises = await this._societeService.fetch(entreprisesIdsDto);
+    for (const entreprise of entreprises) {
+      this.entrepriseService.create(entreprise);
+    }
+    res.status(HttpStatus.OK).json(entreprises);
   }
 
   @Put('sirene')
