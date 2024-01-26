@@ -32,17 +32,43 @@ export class EntrepriseDao {
     siren: string,
     updatedEntreprise: EntrepriseEntity,
   ): Promise<Entreprise | null> {
-    updatedEntreprise.siren
-
     const existingEntreprise = await this._entrepriseModel
       .findOne({ siren })
       .exec();
 
     if (existingEntreprise) {
-      return await this.update(existingEntreprise._id, updatedEntreprise);
+      const updatedFields: Partial<EntrepriseEntity> = {};
+      this.recursiveUpdate(updatedEntreprise, updatedFields);
+
+      if (Object.keys(updatedFields).length > 0) {
+        return await this.update(
+          existingEntreprise._id,
+          updatedFields as EntrepriseEntity,
+        );
+      } else {
+        return existingEntreprise;
+      }
     } else {
       return await this.save(updatedEntreprise);
     }
+  }
+
+  private recursiveUpdate(
+    source: Record<string, any>,
+    target: Record<string, any>,
+  ): void {
+    Object.keys(source).forEach((key) => {
+      const sourceValue = source[key];
+
+      if (sourceValue !== undefined && sourceValue !== null) {
+        if (typeof sourceValue === 'object') {
+          target[key] = target[key] || {};
+          this.recursiveUpdate(sourceValue, target[key]);
+        } else {
+          target[key] = sourceValue;
+        }
+      }
+    });
   }
 
   async delete(id: string): Promise<void> {
