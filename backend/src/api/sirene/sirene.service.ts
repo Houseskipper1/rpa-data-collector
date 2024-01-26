@@ -9,6 +9,7 @@ import { parseStream } from 'fast-csv';
 import { LocationEntrepriseEntity } from 'src/entreprise/entities/entreprise.location.entity';
 import { EntrepriseDao } from 'src/entreprise/dao/entreprise-dao';
 import { EntrepriseService } from 'src/entreprise/service/entreprise.service';
+import { data } from 'cheerio/lib/api/attributes';
 
 @Injectable()
 export class SireneService {
@@ -39,40 +40,44 @@ export class SireneService {
                             }
     constructor(private _entrepriseService: EntrepriseService){
         this.pathsUrls = [
-            {"name": "StockUL"  , "url": "https://files.data.gouv.fr/insee-sirene/StockUniteLegale_utf8.zip"},
+            //{"name": "StockUL"  , "url": "https://files.data.gouv.fr/insee-sirene/StockUniteLegale_utf8.zip"},
             {"name": "StockEtab", "url": "https://files.data.gouv.fr/insee-sirene/StockEtablissement_utf8.zip"}
         ];
     }
 
-    private unzipAndRemove(zipPath: string, csvPath: string){
-        try{
-            console.log("Début du dézip de "+ zipPath)
-            yauzl.open(zipPath, {lazyEntries: true}, (err, zipfile) => {
-                if (err) throw err;
-                zipfile.readEntry();
-                zipfile.on("entry", function(entry) {
-                    if(/\/$/.test(entry.fileName)){
-                        //dossier
-                        fs.mkdirSync("ressources/sirene/" + entry.fileName, {recursive: true});
-                        zipfile.readEntry();
-                    }else{
-                        //fichier 
-                        zipfile.openReadStream(entry, function(err, readStream) {
-                        if (err) throw err;
-                        readStream.pipe(fs.createWriteStream("ressources/sirene/" + entry.fileName))
-                        readStream.on("end", function() {
-                          zipfile.readEntry();
-                        });
-                      });
+    private async unzipAndRemove(zipPath: string, csvPath: string): Promise<void>{
+        return new Promise((resolve, reject) => {
+            try{
+                console.log("Début du dézip de "+ zipPath)
+                yauzl.open(zipPath, {lazyEntries: true}, (err, zipfile) => {
+                    if (err){
+                        reject(err);
+                        return;
                     }
+                    zipfile.readEntry();
+                    zipfile.on("entry", function(entry) {
+                            //fichier 
+                            zipfile.openReadStream(entry, function(err, readStream) {
+                                if (err){
+                                    return Promise.reject(err);
+                                }
+                                readStream.pipe(fs.createWriteStream(csvPath))
+                                readStream.on("end", function() {
+                                    zipfile.readEntry();
+                                });
+                            });
+                    });
+                    zipfile.on("end", function () {
+                        console.log("Dézip terminé");
+                        fs.unlinkSync(zipPath)
+                        resolve();
+                    });
                 });
-              });
-              console.log("Dézip terminé")
-              //fs.unlinkSync(zipPath)
-        }
-        catch (err){
-            console.error(err)
-        }  
+            }
+            catch (err){
+                reject(err);
+            }
+        });
     }
     
     private async downloadCSV(path: string, url: string){
@@ -91,19 +96,16 @@ export class SireneService {
     }
 
     private async getSireneCSVs(){
-        for(const datas of this.pathsUrls){
-            console.log(datas)
-            let csvPath = this._ressourcePath + datas["name"] + ".csv";
-            let zipPath = this._ressourcePath + datas["name"] + ".zip";
+        for(const pathDatas of this.pathsUrls){
+            let zipPath = this._ressourcePath + pathDatas["name"] + ".zip"
+            let csvPath = this._ressourcePath + pathDatas["name"] + ".csv"
             if(!fs.existsSync(csvPath)){
-                 await this.downloadCSV(zipPath, datas["url"])
-                           .then(() =>{
-                             this.unzipAndRemove(zipPath, csvPath);
-                           });
+                await this.downloadCSV(zipPath, pathDatas["url"])
+                await this.unzipAndRemove(zipPath, csvPath);
             }
         }
 
-        return fs.createReadStream(this._ressourcePath + "StockUniteLegale_utf8.csv")
+        return fs.createReadStream(this._ressourcePath + "StockEtab.csv")
 
     }
 
@@ -120,7 +122,7 @@ export class SireneService {
     //     return entreprise
     // }
 
-    private addStockEtabToEntity(res, entreprise: EntrepriseEntity): EntrepriseEntity{
+    private addStockEtabToEntity(res, entreprise: EntrepriseEntity, isCSV: boolean): EntrepriseEntity{
         //Identité
         entreprise.siret = res.siret;
         entreprise.siren = res.siren;
@@ -131,10 +133,17 @@ export class SireneService {
         entreprise.effective = this._effectifsRep[res.trancheEffectifsEtablissement];
         entreprise.dateConfirmationEffectif = res.anneeEffectifsEtablissement;
 
-        entreprise.name = res.uniteLegale.denominationUniteLegale ? res.uniteLegale.denominationUniteLegale : res.periodesEtablissement[0].denominationUsuelleEtablissement;
+        if (isCSV){
+            entreprise.name = res.denominationUsuelleEtablissement
+
+        }
+        else{
+            entreprise.name = res.uniteLegale.denominationUniteLegale ? res.uniteLegale.denominationUniteLegale : res.periodesEtablissement[0].denominationUsuelleEtablissement;
+            res = res.adresseEtablissement;
+
+        }
         
         //Localisation
-        res = res.adresseEtablissement;
         let entrepriseLoc = new LocationEntrepriseEntity;
         entrepriseLoc.streetAddress        = res.numeroVoieEtablissement + " " + (res.typeVoieEtablissement?res.typeVoieEtablissement+" ":"") + res.libelleVoieEtablissement;
         if(res.codeCommuneEtablissement){ //France
@@ -161,7 +170,7 @@ export class SireneService {
                     })
                     .then((res) => {
                         //console.log(res.data.etablissement)
-                        return this.addStockEtabToEntity(res.data.etablissement, entreprise)
+                        return this.addStockEtabToEntity(res.data.etablissement, entreprise, false)
                     })
                     .catch((err) => {
                         return Promise.reject(err.toString());
@@ -178,32 +187,40 @@ export class SireneService {
         return res;
     }
 
-    // FONCTION DE DEZIP CASSE
     
-    // async getEntrepriseCSV(entrepriseSiren: string): Promise<EntrepriseEntity>{
-    //     if(!/^\d{9}$/.test(entrepriseSiren)){
-    //         return Promise.reject(new Error("siren non valide"));
-    //     }
-    //     //a changer
-    //     let stream = await this.getSireneCSVs();
-    //     console.log("Début de la recherche CSV, cela peut prendre quelques minutes...")
-    //     return new Promise((resolve, reject) => {
-    //         parseStream(stream, {headers: true})
-    //         .on('error', error => console.error(error))
-    //         .on('data', row => {
-    //             if(row.siren == entrepriseSiren){
-    //                 let entreprise = new EntrepriseEntity;
-    //                 //this.addULToEntity(row, entreprise);
-    //                 stream.close();
-    //                 resolve(entreprise);
-    //             }
-    //         })
-    //         .on('end', (rowCount: number) => {
-    //             console.log(rowCount)
-    //             stream.close();
-    //             reject(new Error("not found"));
-    //         })
-    //     });
-    // }
+    async getEntrepriseCSV(entrepriseSiret: string): Promise<EntrepriseEntity>{
+        if(!/^\d{14}$/.test(entrepriseSiret)){
+            return Promise.reject(new Error("siret non valide"));
+        }
+        //a changer
+        let stream = await this.getSireneCSVs();
+
+        console.log("Début de la recherche CSV, cela peut prendre quelques minutes...")
+        return new Promise((resolve, reject) => {
+            parseStream(stream, {headers: true})
+            .on('error', error => console.error(error))
+            .on('data', row => {
+                if(row.siret == entrepriseSiret){
+                    let entreprise = new EntrepriseEntity;
+                    this.addStockEtabToEntity(row, entreprise, true)
+                    stream.close();
+                    resolve(entreprise);
+                }
+            })
+            .on('end', (rowCount: number) => {
+                console.log(rowCount)
+                stream.close();
+                reject(new Error("not found"));
+            })
+        });
+    }
+
+    async getEntreprisesCSV(entrepriseSirets: string[]): Promise<Promise<EntrepriseEntity>[]>{
+        let res : Promise<EntrepriseEntity>[] = [];
+        for (let siret of entrepriseSirets){
+            res.push(this.getEntrepriseCSV(siret));
+        }
+        return res;
+    }
 
 }

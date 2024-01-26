@@ -20,40 +20,40 @@ describe('SireneService', () => {
     return expect(service).toBeDefined();
   });
 
-  it('should return an EntrepriseEntity of the given siren using API', () => {
+  it('should return an EntrepriseEntity of the given siret using API', () => {
     const expected = new EntrepriseEntity();
-    expected.siren = "338411101" 
+    expected.siret = "33841110100029" 
 
-    //test sur le siren car il ne risque pas de changer
-    return expect(service.getEntrepriseAPI(expected.siren)).resolves.toHaveProperty("siren", expected.siren);
+    //test sur le siret car il ne risque pas de changer
+    return expect(service.getEntrepriseAPI(expected.siret)).resolves.toHaveProperty("siret", expected.siret);
   })
 
-  it('should return an error because the siren does not exist using API', () => {
+  it('should return an error because the siret does not exist using API', () => {
     const expected = new EntrepriseEntity();
-    expected.siren = "338411101zzz" 
+    expected.siret = "33841110100099" 
 
-    return expect(service.getEntrepriseAPI(expected.siren)).rejects.toEqual("AxiosError: Request failed with status code 400");
+    return expect(service.getEntrepriseAPI(expected.siret)).rejects.toEqual("AxiosError: Request failed with status code 400");
   })
 
-  it('should return an EntrepriseEntity of the given siren using CSV', () => {
+  it('should return an EntrepriseEntity of the given siret using CSV', () => {
     const expected = new EntrepriseEntity();
-    expected.siren = "338411101" 
+    expected.siret = "33841110100029" 
 
-    return expect(service.getEntrepriseCSV(expected.siren)).resolves.toEqual(service.getEntrepriseAPI(expected.siren))
+    return expect(service.getEntrepriseCSV(expected.siret)).resolves.toEqual(service.getEntrepriseAPI(expected.siret))
   }, 3000000)
 
-  it('should return an error because the siren does not exist using CSV', () => {
+  it('should return an error because the siret does not exist using CSV', () => {
     const expected = new EntrepriseEntity();
-    expected.siren = "999999999" 
+    expected.siret = "99999999999999" 
 
-    return expect(service.getEntrepriseCSV(expected.siren)).resolves.toEqual(new Error("not found"))
+    return expect(service.getEntrepriseCSV(expected.siret)).resolves.toEqual(new Error("not found"))
   }, 1800000) //30 min
 
-  it('should return an error because the siren is not valid using CSV', () => {
+  it('should return an error because the siret is not valid using CSV', () => {
     const expected = new EntrepriseEntity();
-    expected.siren = "338411101zzz"
+    expected.siret = "338411101zzz"
 
-    return expect(service.getEntrepriseCSV(expected.siren)).rejects.toEqual(new Error("siren non valide"));
+    return expect(service.getEntrepriseCSV(expected.siret)).rejects.toEqual(new Error("siret non valide"));
   })
 
 
