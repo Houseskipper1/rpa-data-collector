@@ -4,12 +4,9 @@ import { Fichier } from '../entities/fichier.entity';
 
 @Injectable()
 export class FichierService {
-    constructor(private fichierDao: fichierDao) {}
+  constructor(private fichierDao: fichierDao) {}
 
-    async lireFichierCSV(nombreLignes: number = 5): Promise<Fichier[]> {
-        
-        return this.fichierDao.lireFichierCSV(nombreLignes);
-    }
-
-  
+  async lireFichierCSV(nombreLignes: number = 5): Promise<Fichier[]> {
+    return this.fichierDao.lireFichierCSV(nombreLignes);
+  }
 }

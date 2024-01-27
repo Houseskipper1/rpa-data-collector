@@ -20,7 +20,7 @@ export class EntrepriseService {
 
   scrapSirene() {
     return this._http.put<Entreprise[]>(
-      `${this._apiUrl}/sirene`,
+      `${this._apiUrl}/scraping/sirene`,
       {
         entreprises: [
           '33841110100029',
@@ -35,7 +35,7 @@ export class EntrepriseService {
 
   scrapPappers() {
     return this._http.put<void>(
-      `${this._apiUrl}/entreprise/scraping/pappers`,
+      `${this._apiUrl}/scraping/pappers`,
       {
         ids: 'sarl-favata-338411101,bati-france-57-851900654,lenninger-arthur-918347071,grosjean-et-fils-348279191',
       },
@@ -45,7 +45,7 @@ export class EntrepriseService {
 
   scrapSociete() {
     return this._http.put<void>(
-      `${this._apiUrl}/societe`,
+      `${this._apiUrl}/scraping/societe`,
       {
         entreprises:
           'sarl-favata-338411101,bati-france-57-851900654,lenninger-arthur-918347071,grosjean-et-fils-348279191',

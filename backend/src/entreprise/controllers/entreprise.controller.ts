@@ -61,9 +61,4 @@ export class EntrepriseController {
   ): Promise<EntrepriseEntity | null> {
     return this.entrepriseService.findBySiret(siret);
   }
-
-  @Put('scraping/pappers')
-  async scrappingPappers(@Body() data: any): Promise<void> {
-    this.pappersService.scrap(data.ids);
-  }
 }

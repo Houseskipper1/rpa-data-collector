@@ -29,10 +29,15 @@ export class EntrepriseService {
     return await this.entrepriseDao.save(entreprise);
   }
 
-  async createOrUpdateBySirene(entreprise: EntrepriseEntity): Promise<EntrepriseEntity> {
-    entreprise.siren = entreprise.siren.replace(/\s/g, "");
-    entreprise.siret = entreprise.siret.replace(/\s/g, "");
-    return await this.entrepriseDao.saveOrUpdateBySirene(entreprise.siren, entreprise);
+  async createOrUpdateBySirene(
+    entreprise: EntrepriseEntity,
+  ): Promise<EntrepriseEntity> {
+    entreprise.siren = entreprise.siren.replace(/\s/g, '');
+    entreprise.siret = entreprise.siret.replace(/\s/g, '');
+    return await this.entrepriseDao.saveOrUpdateBySirene(
+      entreprise.siren,
+      entreprise,
+    );
   }
 
   async findBySiren(siren: string): Promise<EntrepriseEntity | null> {
@@ -88,17 +93,19 @@ export class EntrepriseService {
     });
   }
 
-  
   async exportToJSON(): Promise<string> {
     return new Promise(async (resolve, reject) => {
       const jsonData = [];
       const dataStatic = await this.findAll();
-      dataStatic.forEach((data) => {        
+      dataStatic.forEach((data) => {
         jsonData.push(data);
       });
       const jsonString = JSON.stringify(jsonData, null, 2);
       resolve(jsonString);
     });
   }
-  
+
+  async deleteAll(): Promise<void> {
+    return this.entrepriseDao.deleteAll();
+  }
 }

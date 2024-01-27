@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
 import { EntrepriseController } from './entreprise/controllers/entreprise.controller';
 import { EntrepriseModule } from './entreprise/entreprise.module';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -17,6 +16,6 @@ import { SocieteService } from './scraping/entreprise/societe.service';
     ConfigModule.forRoot(),
   ],
   controllers: [EntrepriseController, AppController],
-  providers: [AppService, BanService, PappersService, SireneService, SocieteService],
+  providers: [BanService, PappersService, SireneService, SocieteService],
 })
 export class AppModule {}

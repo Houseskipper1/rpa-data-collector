@@ -3,75 +3,54 @@
     <li class="bg-background text-font p-4 rounded-lg shadow-md mt-4">
       <div class="mb-4">
         <h2 class="text-xl font-semibold">{{ entreprise.name }}</h2>
+        <div class="font-bold">SIREN:</div>
+        <div class="mb-1">{{ entreprise.siren }}</div>
+
+        <div class="font-bold">SIRET:</div>
+        <div class="mb-1">{{ entreprise.siret }}</div>
+
+        <div class="font-bold">Date de création:</div>
+        <div class="mb-1">{{ entreprise.dateCreation }}</div>
+
+        <div class="font-bold">Effectif:</div>
+        <div class="mb-1">{{ entreprise.effective }}</div>
+
+        <div class="font-bold">Représentant(s):</div>
+        <ul class="mb-1">
+          <li *ngFor="let representative of entreprise.representatives">
+            {{ representative.firstName }}
+            {{ representative.lastName }} -
+            {{ representative.position }}
+          </li>
+        </ul>
+
+        <div class="font-bold">Date de confirmation de l'effectif:</div>
+        <div class="mb-1">{{ entreprise.dateConfirmationEffectif }}</div>
+
+        <div class="font-bold">Adresse:</div>
+        <ul class="mb-1">
+          <li *ngFor="let location of entreprise.location">
+            {{ location.streetAddress }}, {{ location.postalCode }}
+            {{ location.city }}
+          </li>
+        </ul>
+
+        <div class="font-bold">Détails financiers:</div>
         <table class="table-fixed w-full">
-          <tbody>
-            <tr>
-              <td class="font-bold">SIREN:</td>
-              <td>{{ entreprise.siren }}</td>
-            </tr>
-            <tr>
-              <td class="font-bold">SIRET:</td>
-              <td>{{ entreprise.siret }}</td>
-            </tr>
-            <tr>
-              <td class="font-bold">Date de création:</td>
-              <td>{{ entreprise.dateCreation }}</td>
-            </tr>
-            <tr>
-              <td class="font-bold">Effectif:</td>
-              <td>{{ entreprise.effective }}</td>
-            </tr>
-            <tr>
-              <td class="font-bold">Représentant(s):</td>
-              <td>
-                <ul>
-                  <li *ngFor="let representative of entreprise.representatives">
-                    {{ representative.firstName }}
-                    {{ representative.lastName }} -
-                    {{ representative.position }}
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <td class="font-bold">Date de confirmation de l'effectif:</td>
-              <td>{{ entreprise.dateConfirmationEffectif }}</td>
-            </tr>
-            <tr>
-              <td class="font-bold">Adresse:</td>
-              <td>
-                <ul>
-                  <li *ngFor="let location of entreprise.location">
-                    {{ location.streetAddress }}, {{ location.postalCode }}
-                    {{ location.city }}
-                  </li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <td class="font-bold">Détails financiers:</td>
-              <td>
-                <table class="table-fixed w-full">
-                  <tbody>
-                    <tr>
-                      <td>Année</td>
-                      <td>Capital</td>
-                      <td>Chiffre d'affaires</td>
-                      <td>Marge nette</td>
-                      <td>Profit net</td>
-                    </tr>
-                    <tr *ngFor="let financeDetail of entreprise.financeDetails">
-                      <td>{{ financeDetail.financialYear }}</td>
-                      <td>{{ financeDetail.shareCapital }}</td>
-                      <td>{{ financeDetail.turnover }}</td>
-                      <td>{{ financeDetail.netMargin }}</td>
-                      <td>{{ financeDetail.netProfit }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-          </tbody>
+          <tr>
+            <th>Année</th>
+            <th>Capital</th>
+            <th>Chiffre d'affaires</th>
+            <th>Marge nette</th>
+            <th>Profit net</th>
+          </tr>
+          <tr *ngFor="let financeDetail of entreprise.financeDetails">
+            <td>{{ financeDetail.financialYear }}</td>
+            <td>{{ financeDetail.shareCapital }}</td>
+            <td>{{ financeDetail.turnover }}</td>
+            <td>{{ financeDetail.netMargin }}</td>
+            <td>{{ financeDetail.netProfit }}</td>
+          </tr>
         </table>
       </div>
     </li>
