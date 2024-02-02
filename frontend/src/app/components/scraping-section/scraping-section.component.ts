@@ -9,10 +9,6 @@ import { EntrepriseService } from 'src/app/shared/services/entreprise.service';
 export class ScrapingSectionComponent {
   constructor(private _entrepriseService: EntrepriseService) {}
 
-  rien(): void {
-    console.log('rien');
-  }
-
   scrapSirene() {
     this._entrepriseService.scrapSirene().subscribe({
       next: (res) => alert('Scraping de Sirene réussis'),

@@ -3,7 +3,6 @@ import * as puppeteer from 'puppeteer';
 import * as cheerio from 'cheerio';
 import { EntrepriseEntity } from 'src/entreprise/entities/entreprise.entity';
 import { EntrepriseRepresentativeEntity } from 'src/entreprise/entities/entreprise.representative.entity';
-import { EntrepriseDao } from 'src/entreprise/dao/entreprise-dao';
 import { LocationEntrepriseEntity } from 'src/entreprise/entities/entreprise.location.entity';
 import { BanService } from 'src/api/ban/ban.service';
 import { FinanceEntrepriseEntity } from 'src/entreprise/entities/entreprise.Finance.entity';
@@ -62,12 +61,10 @@ export class PappersService {
         entreprise.effective = salarieRange;
         entreprise.dateConfirmationEffectif = year;
 
-        //extract address
         const adresseElement = $(
           'div.entreprise-page .table-container table tr th:contains("Adresse") + td',
         );
 
-        // Extrait l'adresse
         const adresseEntreprise = adresseElement.text().trim();
         let location = {} as LocationEntrepriseEntity;
 
@@ -87,7 +84,6 @@ export class PappersService {
 
         //Representative
         entreprise.representatives = [];
-        // Select the first .dirigeant element
 
         // Extract information of the leader
         const firstLeaderElement = $('section#dirigeants .dirigeant').first();
@@ -117,9 +113,8 @@ export class PappersService {
         // Find the section with finances data
         const financeEntities = await this.buildFinanceEntity(page);
         entreprise.financeDetails = financeEntities;
-        const savedEntity = await this.entrepriseService.createOrUpdateBySirene(
-          entreprise
-        );
+        const savedEntity =
+          await this.entrepriseService.createOrUpdateBySirene(entreprise);
         console.log('Entity saved:', savedEntity);
       } catch (error) {
         console.error('Error during scraping:', error);
@@ -179,12 +174,10 @@ export class PappersService {
     let financeEntities: FinanceEntrepriseEntity[] = [];
 
     const { years, performanceData } = await this.scrapePerformanceData(page);
-    if (years ==undefined ){
+    if (years == undefined) {
       return financeEntities;
     }
-    console.log(years);
 
-    //console.log(performanceData)
     const nbYears = years.length;
     for (let i = 0; i < nbYears; i++) {
       let financeEntity = {

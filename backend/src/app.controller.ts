@@ -1,22 +1,19 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Header,
   HttpStatus,
-  Post,
   Put,
   Query,
   Res,
 } from '@nestjs/common';
-import { AppService } from './app.service';
 import { PappersService } from './scraping/entreprise/pappers.service';
-import { data } from 'cheerio/lib/api/attributes';
 import { SocieteService } from './scraping/entreprise/societe.service';
 import { EntrepriseService } from './entreprise/service/entreprise.service';
 import { Readable } from 'stream';
 import { SireneService } from './api/sirene/sirene.service';
-import { EntrepriseEntity } from './entreprise/entities/entreprise.entity';
 import { ScrapSirenesDto } from './api/sirene/scrap-sirene.dto';
 import { BanService } from './api/ban/ban.service';
 import { EntreprisesIdsDto } from './entreprise/dto/entreprisesids.dto';
@@ -25,7 +22,6 @@ import { Response } from 'express';
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService,
     private _pappersService: PappersService,
     private readonly entrepriseService: EntrepriseService,
     private _societeService: SocieteService,
@@ -33,13 +29,7 @@ export class AppController {
     private readonly banService: BanService,
   ) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
-  // get societe
-  @Put('societe')
+  @Put('scraping/societe')
   async getSociete(
     @Body() entreprisesIdsDto: EntreprisesIdsDto,
     @Res() res: Response,
@@ -51,9 +41,14 @@ export class AppController {
     res.status(HttpStatus.OK).json(entreprises);
   }
 
-  @Put('sirene')
+  @Put('scraping/sirene')
   async scrapSirenes(@Body() scrapSirenesDto: ScrapSirenesDto) {
     return this._sireneService.getEntreprisesAPI(scrapSirenesDto.entreprises);
+  }
+
+  @Put('scraping/pappers')
+  async scrappingPappers(@Body() data: any): Promise<void> {
+    this._pappersService.scrap(data.ids);
   }
 
   @Get('CSVExport')
@@ -99,5 +94,11 @@ export class AppController {
     } catch (error) {
       res.status(500).send('Internal Server Error');
     }
+  }
+
+  @Delete('CleanBDD')
+  @Header('Content-Type', 'text/plain')
+  async deleteBDD() {
+    return this.entrepriseService.deleteAll();
   }
 }
