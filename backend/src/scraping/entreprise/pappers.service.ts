@@ -35,6 +35,9 @@ export class PappersService {
         let representative: EntrepriseRepresentativeEntity =
           new EntrepriseRepresentativeEntity();
 
+        const capitalSocialRow = $('div.content table tr:contains("Capital social")');
+        entreprise.shareCapital = capitalSocialRow.find('td').text().trim();
+
         const siretRow = $('div div table tr:contains("SIRET (siège)")');
         entreprise.siret = siretRow.find('td').text().trim();
 
@@ -181,7 +184,6 @@ export class PappersService {
     const nbYears = years.length;
     for (let i = 0; i < nbYears; i++) {
       let financeEntity = {
-        shareCapital: 'a compléter',
         financialYear: years[i],
         turnover: performanceData["Chiffre d'affaires (€)"][i],
         turnoverTrend: 'a compléter',

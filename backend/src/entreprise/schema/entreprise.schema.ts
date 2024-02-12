@@ -39,6 +39,9 @@ export class Entreprise extends Document {
   @Prop({ type: [LocationSchema] })
   location: LocationEntrepriseEntity;
 
+  @Prop({ required: false })
+  shareCapital: string;
+
   @Prop({ type: [FinanceSchema] })
   financeDetails: FinanceEntrepriseEntity[];
 }

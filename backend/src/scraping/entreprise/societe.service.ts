@@ -207,7 +207,12 @@ export class SocieteService {
           (el) => el.textContent,
           secondSpan,
         );
-        finance.shareCapital = capitalSocialText.replace(/\s/g, '');
+        /*
+          Paul le shareCapital il est plus dans l'entitée finance.
+          il est devenu un champ dans l'entité entreprise.
+        */
+        //finance.shareCapital = capitalSocialText.replace(/\s/g, '');
+
         finances.push(finance);
       }
     }

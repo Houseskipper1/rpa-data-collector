@@ -2,11 +2,6 @@ import { Exclude, Expose, Type } from 'class-transformer';
 
 @Exclude()
 export class FinanceEntrepriseEntity {
-  // Capital social
-  @Expose()
-  @Type(() => String)
-  shareCapital: string;
-
   // Année financière
   @Expose()
   @Type(() => String)

@@ -45,6 +45,11 @@ export class EntrepriseEntity {
   @Type(() => LocationEntrepriseEntity)
   location: LocationEntrepriseEntity;
 
+
+  @Expose()
+  @Type(() => String)
+  shareCapital: string;   // capital social
+
   @Expose()
   @Type(() => FinanceEntrepriseEntity)
   financeDetails: FinanceEntrepriseEntity[];

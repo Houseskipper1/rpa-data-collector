@@ -3,10 +3,6 @@ import { Document } from 'mongoose';
 
 @Schema()
 export class Finance extends Document {
-  // Capital social
-  @Prop({ required: false })
-  shareCapital: string;
-
   // Année financière
   @Prop({ required: false })
   financialYear: string;
