@@ -39,8 +39,11 @@ export class EntrepriseDao {
       .findOne({ siren })
       .exec();
     if (existingEntreprise) {
+      updatedEntreprise.updated = new Date();
       return await this.update(existingEntreprise._id, updatedEntreprise);
     } else {
+      updatedEntreprise.created = new Date();
+      updatedEntreprise.updated = new Date();
       return await this.save(updatedEntreprise);
     }
   }

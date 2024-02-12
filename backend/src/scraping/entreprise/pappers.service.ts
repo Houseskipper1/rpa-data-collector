@@ -7,6 +7,7 @@ import { LocationEntrepriseEntity } from 'src/entreprise/entities/entreprise.loc
 import { BanService } from 'src/api/ban/ban.service';
 import { FinanceEntrepriseEntity } from 'src/entreprise/entities/entreprise.Finance.entity';
 import { EntrepriseService } from 'src/entreprise/service/entreprise.service';
+import { Entreprise } from 'src/entreprise/schema/entreprise.schema';
 
 @Injectable()
 export class PappersService {
@@ -32,6 +33,7 @@ export class PappersService {
         const pageContent = await page.content();
         const $ = cheerio.load(pageContent);
         let entreprise: EntrepriseEntity = new EntrepriseEntity();
+        entreprise.lastDataSource = "https://www.pappers.fr/entreprise"
         let representative: EntrepriseRepresentativeEntity =
           new EntrepriseRepresentativeEntity();
 
