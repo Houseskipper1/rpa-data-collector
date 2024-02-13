@@ -11,6 +11,8 @@ async function runSetup() {
     console.log('Connected to MongoDB.');
     const db = client.db(dbName);
     await db.createCollection('entreprises');
+    await db.createCollection('sireneEntreprises');
+    await db.createCollection('naf')
     console.log('Setup complete.');
   } catch (err) {
     console.error('Error during setup:', err);

@@ -8,14 +8,18 @@ import { ConfigModule } from '@nestjs/config';
 import { SireneService } from './api/sirene/sirene.service';
 import { AppController } from './app.controller';
 import { SocieteService } from './scraping/entreprise/societe.service';
-
+import { SireneEntrepriseController } from './sirene-entreprise/sirene-entreprise.controller';
+import { SireneEntrepriseService } from './sirene-entreprise/services/sirene-entreprise.service';
+import { SireneEntrepriseModule } from './sirene-entreprise/sirene-entreprise.module';
+ 
 @Module({
   imports: [
     EntrepriseModule,
+    SireneEntrepriseModule,
     MongooseModule.forRoot('mongodb://localhost:27017/rpaDataCollectorDB'),
     ConfigModule.forRoot(),
   ],
-  controllers: [EntrepriseController, AppController],
-  providers: [BanService, PappersService, SireneService, SocieteService],
+  controllers: [EntrepriseController, SireneEntrepriseController, AppController],
+  providers: [BanService, PappersService, SireneService, SocieteService, SireneEntrepriseService],
 })
 export class AppModule {}

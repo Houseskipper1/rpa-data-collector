@@ -1,0 +1,157 @@
+{
+    "NafCodes":
+        [
+            {
+                "code"    : "41.20A", 
+                "desc": "Construction de maisons individuelles"
+            },
+            {
+                "code"    : "43.11Z", 
+                "desc": "Travaux de démolition"
+            },
+            {
+                "code"    : "43.12A", 
+                "desc": "Travaux de terrassement courants et travaux préparatoires"
+            },
+            {
+                "code"    : "43.12B", 
+                "desc": "Travaux de terrassement spécialisés ou de grande masse"
+            },
+            {
+                "code"    : "43.21A", 
+                "desc": "Travaux d'installation électrique dans tous locaux"
+            },
+            {
+                "code"    : "43.22A", 
+                "desc": "Travaux d'installation d'eau et de gaz en tous locaux"
+            },
+            {
+                "code"    : "43.22B", 
+                "desc": "Travaux d'installation d'équipements thermiques et de climatisation"
+            },
+            {
+                "code"    : "43.29A", 
+                "desc": "Travaux d'isolation"
+            },
+            {
+                "code"    : "43.29B", 
+                "desc": "Autres travaux d'installation n.c.a."
+            },
+            {
+                "code"    : "43.31Z", 
+                "desc": "Travaux de plâtrerie"
+            },
+            {
+                "code"    : "43.32A", 
+                "desc": "Travaux de menuiserie bois et PVC"
+            },
+            {
+                "code"    : "43.32B", 
+                "desc": "Travaux de menuiserie métallique et serrurerie"
+            },
+            {
+                "code"    : "43.33Z", 
+                "desc": "Travaux de revêtement des sols et des murs"
+            },
+            {
+                "code"    : "43.34Z", 
+                "desc": "Travaux de peinture et vitrerie"
+            },
+            {
+                "code"    : "43.39Z", 
+                "desc": "Autres travaux de finition"
+            },
+            {
+                "code"    : "43.91A", 
+                "desc": "Travaux de charpente"
+            },
+            {
+                "code"    : "43.91B", 
+                "desc": "Travaux de couverture par éléments"
+            },
+            {
+                "code"    : "43.99A", 
+                "desc": "Travaux d'étanchéification"
+            },
+            {
+                "code"    : "43.99B", 
+                "desc": "Travaux de montage de structures métalliques"
+            },
+            {
+                "code"    : "43.99C", 
+                "desc": "Travaux de maçonnerie générale et gros œuvre de bâtiment"
+            },
+            {
+                "code"    : "43.99D", 
+                "desc": "Autres travaux spécialisés de construction"
+            },
+            {
+                "code"    : "43.99E", 
+                "desc": "Location avec opérateur de matériel de construction"
+            },
+            {
+                "code"    : "47.52A", 
+                "desc": "Commerce de détail de quincaillerie, peintures et verres en petites surfaces (moins de 400 m2)"
+            },
+            {
+                "code"    : "47.52B", 
+                "desc": "Commerce de détail de quincaillerie, peintures et verres en grandes surfaces (400 m2 et plus)"
+            },
+            {
+                "code"    : "63.12Z", 
+                "desc": "Portails Internet"
+            },
+            {
+                "code"    : "63.99Z", 
+                "desc": "Autres services d'information n.c.a."
+            },
+            {
+                "code"    : "65.12Z", 
+                "desc": "Autres assurances"
+            },
+            {
+                "code"    : "66.22Z", 
+                "desc": "Activités des agents et courtiers d'assurances"
+            },
+            {
+                "code"    : "69.10Z", 
+                "desc": "Activités juridiques"
+            },
+            {
+                "code"    : "70.22Z", 
+                "desc": "Conseil pour les affaires et autres conseils de gestion"
+            },
+            {
+                "code"    : "71.11Z", 
+                "desc": "Activités d'architecture "
+            },
+            {
+                "code"    : "71.12A", 
+                "desc": "Activité des géomètres"
+            },
+            {
+                "code"    : "71.12B", 
+                "desc": "Ingénierie, études techniques"
+            },
+            {
+                "code"    : "80.20Z", 
+                "desc": "Activités liées aux systèmes de sécurité "
+            },
+            {
+                "code"    : "81.21Z", 
+                "desc": "Nettoyage courant des bâtiments"
+            },
+            {
+                "code"    : "81.29A", 
+                "desc": "Désinfection, désinsectisation, dératisation"
+            },
+            {
+                "code"    : "81.30Z", 
+                "desc": "Services d'aménagement paysager "
+            },
+            {
+                "code"    : "82.99Z", 
+                "desc": "Autres activités de soutien aux entreprises n.c.a."
+            }
+        ]
+}

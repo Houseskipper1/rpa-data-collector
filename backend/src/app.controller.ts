@@ -18,6 +18,7 @@ import { ScrapSirenesDto } from './api/sirene/scrap-sirene.dto';
 import { BanService } from './api/ban/ban.service';
 import { EntreprisesIdsDto } from './entreprise/dto/entreprisesids.dto';
 import { Response } from 'express';
+import { SireneEntrepriseService } from './sirene-entreprise/services/sirene-entreprise.service';
 
 @Controller()
 export class AppController {
@@ -27,7 +28,10 @@ export class AppController {
     private _societeService: SocieteService,
     private _sireneService: SireneService,
     private readonly banService: BanService,
-  ) {}
+    private readonly _sirenEntrepriseService: SireneEntrepriseService
+  ) {
+    this._sireneService.populateSireneEntreprise();
+  }
 
   @Put('scraping/societe')
   async getSociete(
@@ -72,6 +76,11 @@ export class AppController {
     let lon = query.lon;
     let radius = query.radius;
     return this.banService.getInRadius({ lat, long: lon }, radius);
+  }
+
+  @Get('/sireneEntreprises')
+  async getSireneEntreprises(){
+    return this._sirenEntrepriseService.findAll();
   }
 
   @Get('jsonExport')

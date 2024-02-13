@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { EntrepriseService } from 'src/app/shared/services/entreprise.service';
 
 @Component({
@@ -7,7 +8,11 @@ import { EntrepriseService } from 'src/app/shared/services/entreprise.service';
   styleUrls: [],
 })
 export class ScrapingSectionComponent {
-  constructor(private _entrepriseService: EntrepriseService) {}
+  constructor(private _entrepriseService: EntrepriseService, private _router: Router) {}
+
+  showSireneEntreprises() {
+    this._router.navigate(["/sireneEntreprises"])
+  }
 
   scrapSirene() {
     this._entrepriseService.scrapSirene().subscribe({
