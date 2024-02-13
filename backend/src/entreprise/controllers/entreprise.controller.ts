@@ -52,7 +52,7 @@ export class EntrepriseController {
   async findBySiren(
     @Param('siren') siren: string,
   ): Promise<EntrepriseEntity | null> {
-    return this.entrepriseService.findBySiren(siren);
+    return  this.entrepriseService.findBySiren(siren);
   }
 
   @Get('siret/:siret')

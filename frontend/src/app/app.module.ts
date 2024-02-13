@@ -15,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SirenEntreprisesListComponent } from './components/siren-entreprises-list/siren-entreprises-list.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import { EntrepriseViewComponent } from './components/entreprise-view/entreprise-view.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     EntreprisesListComponent,
     DetailsSectionComponent,
     SirenEntreprisesListComponent,
+    EntrepriseViewComponent,
   ],
   imports: [
     BrowserModule,

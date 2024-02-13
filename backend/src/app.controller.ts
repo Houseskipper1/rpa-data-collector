@@ -5,6 +5,7 @@ import {
   Get,
   Header,
   HttpStatus,
+  Param,
   Put,
   Query,
   Res,
@@ -19,6 +20,7 @@ import { BanService } from './api/ban/ban.service';
 import { EntreprisesIdsDto } from './entreprise/dto/entreprisesids.dto';
 import { Response } from 'express';
 import { SireneEntrepriseService } from './sirene-entreprise/services/sirene-entreprise.service';
+import { Console } from 'console';
 
 @Controller()
 export class AppController {
@@ -28,7 +30,7 @@ export class AppController {
     private _societeService: SocieteService,
     private _sireneService: SireneService,
     private readonly banService: BanService,
-    private readonly _sirenEntrepriseService: SireneEntrepriseService
+    private readonly _sirenEntrepriseService: SireneEntrepriseService,
   ) {
     this._sireneService.populateSireneEntreprise();
   }
@@ -38,11 +40,11 @@ export class AppController {
     @Body() entreprisesIdsDto: EntreprisesIdsDto,
     @Res() res: Response,
   ) {
-    const entreprises = await this._societeService.fetch(entreprisesIdsDto);
-    for (const entreprise of entreprises) {
-      this.entrepriseService.createOrUpdateBySirene(entreprise);
-    }
-    res.status(HttpStatus.OK).json(entreprises);
+    //const entreprises = await this._societeService.fetch(entreprisesIdsDto);
+    //for (const entreprise of entreprises) {
+    //  this.entrepriseService.createOrUpdateBySirene(entreprise);
+    //}
+    //res.status(HttpStatus.OK).json(entreprises);
   }
 
   @Put('scraping/sirene')
@@ -52,7 +54,18 @@ export class AppController {
 
   @Put('scraping/pappers')
   async scrappingPappers(@Body() data: any): Promise<void> {
-    this._pappersService.scrap(data.ids);
+    const entreprise = await this.entrepriseService.findBySiren(data.ids);
+    if (entreprise == undefined) {
+      await this._pappersService.scrap(data.ids);
+    }
+  }
+
+  @Put('scraping/pappers/:siren')
+  async scrappingOneWithPappers(@Param('siren') siren: string): Promise<void> {
+    const entreprise = await this.entrepriseService.findBySiren(siren);
+    if (entreprise == undefined) {
+      await this._pappersService.scrap(siren);
+    }
   }
 
   @Get('CSVExport')
@@ -79,7 +92,7 @@ export class AppController {
   }
 
   @Get('/sireneEntreprises')
-  async getSireneEntreprises(){
+  async getSireneEntreprises() {
     return this._sirenEntrepriseService.findAll();
   }
 

@@ -1,21 +1,28 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { EntrepriseService } from 'src/app/shared/services/entreprise.service';
 import { SireneEntrepriseService } from 'src/app/shared/services/sirene-entreprise.service';
 import { SireneEntreprise } from 'src/app/shared/types/sirene-entreprise.type';
 
 @Component({
   selector: 'app-siren-entreprises-list',
   templateUrl: './siren-entreprises-list.component.html',
-  styleUrls: ['./siren-entreprises-list.component.css']
+  styleUrls: ['./siren-entreprises-list.component.css'],
 })
 export class SirenEntreprisesListComponent implements OnInit {
+
   private _sireneEntreprises: SireneEntreprise[];
   private _currentSireneEntreprisesToShow: SireneEntreprise[];
   private _pageSize;
 
-  constructor(private _sireneEntrepriseService: SireneEntrepriseService){
+  constructor(private _sireneEntrepriseService: SireneEntrepriseService,
+              private _entrepriseService : EntrepriseService,
+              private router: Router) {
+
     this._sireneEntreprises = [];
     this._currentSireneEntreprisesToShow = [];
     this._pageSize = 10;
+
   }
 
   ngOnInit(): void {
@@ -27,21 +34,31 @@ export class SirenEntreprisesListComponent implements OnInit {
   }
 
   onPageChange($event: any) {
-    this._currentSireneEntreprisesToShow =  this._sireneEntreprises.slice($event.pageIndex*$event.pageSize, $event.pageIndex*$event.pageSize + $event.pageSize);
+    this._currentSireneEntreprisesToShow = this._sireneEntreprises.slice(
+      $event.pageIndex * $event.pageSize,
+      $event.pageIndex * $event.pageSize + $event.pageSize
+    );
   }
 
-  get currenSireneEntreprisesToShow(){
+  get currenSireneEntreprisesToShow() {
     return this._currentSireneEntreprisesToShow;
   }
 
-  get sireneEntreprises(){
+  get sireneEntreprises() {
     return this._sireneEntreprises;
   }
 
-  get pageSize(){
-    return this._pageSize
+  get pageSize() {
+    return this._pageSize;
   }
 
+  onScrapEntreprise(sireneEntreprise : SireneEntreprise) {
 
-
+   this._entrepriseService.scrapOneWithPappers(sireneEntreprise).
+   subscribe(
+    (data) => {
+      this.router.navigate(['/entreprise', sireneEntreprise.siren]);
+    }
+   );
+  }
 }
