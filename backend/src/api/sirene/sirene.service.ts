@@ -269,6 +269,7 @@ export class SireneService {
         parseStream(streams["StockEtab"], { headers: true })
         .on('error', (error) => console.error(error))
         .on('data', async (row) => {
+            c += 1;
             if (this.isSelectedNaf(nafCodes, row.activitePrincipaleEtablissement)) {
                 let sireneEntreprise = new SireneEntrepriseEntity();
                 sireneEntreprise.siren = row.siren;
