@@ -262,7 +262,7 @@ export class SireneService {
         }
         let streams = await this.getSireneCSVs();
         let c = 0
-        console.log('Début de la création de la liste d\'entreprise simple (cela prend environ 1h30 minutes)');
+        console.log('Début de la création de la liste d\'entreprise simple (cela prend environ 1h)');
         let timeStart = new Date()
 
 
@@ -270,7 +270,8 @@ export class SireneService {
         .on('error', (error) => console.error(error))
         .on('data', async (row) => {
             c += 1;
-            if (this.isSelectedNaf(nafCodes, row.activitePrincipaleEtablissement)) {
+            // etatAdministratifEtablissement A: Actif
+            if (row.etatAdministratifEtablissement === 'A' && this.isSelectedNaf(nafCodes, row.activitePrincipaleEtablissement)) {
                 let sireneEntreprise = new SireneEntrepriseEntity();
                 sireneEntreprise.siren = row.siren;
                 sireneEntreprise.nic = row.nic;
@@ -281,6 +282,7 @@ export class SireneService {
                 sireneEntreprise.address = address.includes("[ND]") ? "" : address;
                 sireneEntreprise.city = row.libelleCommuneEtablissement;
                 sireneEntreprise.naf = (await this._nafService.findByCode(row.activitePrincipaleEtablissement))._id;
+                this._sireneEntrepriseService.create(sireneEntreprise);
             }
             if (c%100000 == 0){
                 console.log(c);
@@ -304,7 +306,7 @@ export class SireneService {
                     let sireneEntreprise = await this._sireneEntrepriseService.findBySiren(row.siren);
                     if(sireneEntreprise && sireneEntreprise.name == ""){
                       sireneEntreprise.name = row.prenomUsuelUniteLegale + " " + row.nomUniteLegale
-                      await this._sireneEntrepriseService.update(sireneEntreprise);
+                      this._sireneEntrepriseService.update(sireneEntreprise);
                     }
                 }
                 if (c%100000 == 0){
