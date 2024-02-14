@@ -262,7 +262,7 @@ export class SireneService {
         }
         let streams = await this.getSireneCSVs();
         let c = 0
-        console.log('Début de la création de la liste d\'entreprise simple (cela prend environ 1h30 minutes)');
+        console.log('Début de la création de la liste d\'entreprise simple (cela prend environ 1h)');
         let timeStart = new Date()
 
 
