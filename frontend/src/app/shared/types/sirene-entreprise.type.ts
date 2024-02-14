@@ -4,6 +4,8 @@ export type SireneEntreprise = {
     nic: string;
     name: string;
     naf: string;
+    address: string;
+    city: string;
     postalCode: number;
     __v: number;
 }

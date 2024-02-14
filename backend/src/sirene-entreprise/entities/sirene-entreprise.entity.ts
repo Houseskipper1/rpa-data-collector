@@ -23,6 +23,14 @@ export class SireneEntrepriseEntity {
   name: string;
 
   @Expose()
+  @Type(() => String)
+  address: string;
+
+  @Expose()
+  @Type(() => String)
+  city: string;
+
+  @Expose()
   @Type(() => Number)
   postalCode: number;
 }

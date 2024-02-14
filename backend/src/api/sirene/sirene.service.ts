@@ -269,7 +269,6 @@ export class SireneService {
         parseStream(streams["StockEtab"], { headers: true })
         .on('error', (error) => console.error(error))
         .on('data', async (row) => {
-            c += 1;
             if (this.isSelectedNaf(nafCodes, row.activitePrincipaleEtablissement)) {
                 let sireneEntreprise = new SireneEntrepriseEntity();
                 sireneEntreprise.siren = row.siren;
@@ -277,8 +276,10 @@ export class SireneService {
                 // [ND] lorsque le statut de diffusion de l'etablissement est en non diffusable (tatutDiffusionEtablissement = P)
                 sireneEntreprise.name = ["", "[ND]"].includes(row.denominationUsuelleEtablissement) ? "" : row.denominationUsuelleEtablissement;
                 sireneEntreprise.postalCode = ["", "[ND]"].includes(row.codePostalEtablissement) ? null : row.codePostalEtablissement;
+                let address = row.numeroVoieEtablissement + " " + row.typeVoieEtablissement + " " + row.libelleVoieEtablissement;
+                sireneEntreprise.address = address.includes("[ND]") ? "" : address;
+                sireneEntreprise.city = row.libelleCommuneEtablissement;
                 sireneEntreprise.naf = (await this._nafService.findByCode(row.activitePrincipaleEtablissement))._id;
-                await this._sireneEntrepriseService.create(sireneEntreprise);
             }
             if (c%100000 == 0){
                 console.log(c);
