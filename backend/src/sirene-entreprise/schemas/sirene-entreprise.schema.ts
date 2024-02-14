@@ -19,6 +19,12 @@ export class SireneEntreprise extends Document {
   name: string;
 
   @Prop({ required: false })
+  address: string;
+
+  @Prop({ required: false })
+  city: string;
+
+  @Prop({ required: false })
   postalCode: number;
 }
 
