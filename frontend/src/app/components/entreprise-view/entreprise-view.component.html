@@ -1,0 +1,177 @@
+<div class="flex flex-col md:flex-row bg-slate-50">
+  <div class="mt-20 w-3/6 bg-gray-200 p-4 rounded-lg shadow-md mx-auto">
+    <div class="p-3">
+      <h1 class="text-2xl font-bold text-gray-900">{{ entreprise.name }} </h1>
+    </div>
+
+    <div class="flex flex-row px-10 justify-between">
+      <div
+        class="basis-4/12 p-3 bg-white border border-gray-200 rounded-lg shadow"
+      >
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+          Identité
+        </h2>
+        <ul class="list-none ml-3 mb-3">
+          <li><span>SIREN</span> : <span class="font-bold">{{ entreprise.siren }}</span></li>
+          <li>
+            <span>SIRET</span> : <span class="font-bold">{{ entreprise.siret }}</span>
+          </li>
+          <li>
+            <span>Nom</span> : <span class="font-bold">{{ entreprise.name }}</span>
+          </li>
+          <li>
+            <span>Date de création</span> :
+            <span class="font-bold">{{ entreprise.dateCreation }}</span>
+          </li>
+          <li>
+            <span>Années d'existence</span> : <span class="font-bold"> {{ entreprise.yearsInExistence }}</span>
+          </li>
+          <li>
+            <span>Capital Social</span> :
+            <span class="font-bold"> a compléter</span>
+          </li>
+        </ul>
+      </div>
+
+      <div
+        class="basis-3/12 p-3 bg-white border border-gray-200 rounded-lg shadow"
+      >
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+          Effectif
+        </h2>
+        <ul class="list-none ml-3 mb-3">
+          <li>
+            <span>Effectif</span> :
+            <span class="font-bold">{{ entreprise.effective }}</span>
+          </li>
+          <li>
+            <span>Date de confirmation </span> :
+            <span class="font-bold">{{ entreprise.dateConfirmationEffectif }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div
+        class="basis-4/12 p-3 bg-white border border-gray-200 rounded-lg shadow"
+      >
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+          Représentants
+        </h2>
+        <ul  *ngFor="let representatif of entreprise.representatives" class="list-none ml-3 mb-3">
+          <li  >
+            <span>Nom:</span> <span class="font-bold">{{ representatif.lastName }} </span>
+          </li>
+          <li  *ngFor="let representatif of entreprise.representatives">
+            <span>Prénom:</span> <span class="font-bold">{{ representatif.firstName }} </span>
+          </li>
+          <li><span>Âge:</span> <span class="font-bold">{{ representatif.age }}</span></li>
+          <li>
+            <span>Poste:</span>
+            <span class="font-bold">{{ representatif.position }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex flex-row px-10">
+      <div
+        class="px-10 my-6 p-3 pb-6 bg-white border border-gray-200 rounded-lg shadow"
+      >
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+          Finance
+        </h2>
+        <div class="flex justify-center">
+          <table class="table-auto mx-auto">
+            <thead>
+              <tr >
+                <th class="px-4 py-2">Année financière</th>
+                <th class="px-4 py-2">Chiffre d'affaires</th>
+                <th class="px-4 py-2">Tendance du chiffre d'affaires</th>
+                <th class="px-4 py-2">Trésorerie</th>
+                <th class="px-4 py-2">Bénéfice net</th>
+                <th class="px-4 py-2">Marge nette</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let finance of entreprise.financeDetails" >
+                <td class="border px-4 py-2">{{ finance.financialYear }}</td>
+                <td class="border px-4 py-2">{{ finance.cashFlow }}</td>
+                <td class="border px-4 py-2">{{ finance.turnoverTrend }}</td>
+                <td class="border px-4 py-2">{{ finance.turnover }}</td>
+                <td class="border px-4 py-2">{{ finance.netProfit }}</td>
+                <td class="border px-4 py-2">{{ finance.netMargin }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-row px-10">
+      <div
+        class="basis-6/12 p-3 bg-white border border-gray-200 rounded-lg shadow"
+      >
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+          Localisation
+        </h2>
+        <ul *ngFor="let l of entreprise.location" class="list-none ml-3 mb-3">
+          <li>
+            <span>Adresse</span> :
+            <span class="font-bold">{{ l.streetAddress }}</span>
+          </li>
+          <li>
+            <span>Code postal</span> : <span class="font-bold">{{ l.postalCode }}</span>
+          </li>
+          <li>
+            <span>Ville</span> : <span class="font-bold">{{ l.city }}</span>
+          </li>
+          <li>
+            <span>Département</span> :
+            <span class="font-bold">{{ l.department}}</span>
+          </li>
+          <li>
+            <span>Région</span> : <span class="font-bold">{{ l.region }}</span>
+          </li>
+          <li><span>Pays</span> : <span class="font-bold">{{ l.country }}</span></li>
+          <li>
+            <span>Zone d'intervention</span> :
+            <span class="font-bold">{{ l.interventionZone }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="basis-6/12 flex justify-center items-center">
+        <a *ngFor="let l of entreprise.location"
+          [href]="'https://www.google.com/maps/search/?api=1&query=' + l.latitude + ',' + l.longitude"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center p-5 text-base font-medium text-gray-500 rounded-lg bg-gray-50 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:text-white"
+        >
+          <svg
+            aria-hidden="true"
+            class="w-5 h-5 me-3"
+            viewBox="0 0 22 31"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          ></svg>
+          <span class="w-full">Voir sur Google Maps</span>
+          <svg
+            class="w-4 h-4 ms-2 rtl:rotate-180"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 10"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M1 5h12m0 0L9 1m4 4L9 9"
+            />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

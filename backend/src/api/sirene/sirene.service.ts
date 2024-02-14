@@ -290,7 +290,7 @@ export class SireneService {
             streams["StockEtab"].close();
 
             //patch des nom dans le cas d'une unité légal.
-            console.log('Début du patch des noms des etablissements en cas d\'unité légal');
+            console.log('Début du patch des noms des etablissements en cas d\'unité légal (cela prend environ 15 minutes');
             timeStart = new Date()
 
             c = 0

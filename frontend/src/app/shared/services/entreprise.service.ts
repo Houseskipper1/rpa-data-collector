@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Entreprise } from '../types/entreprise.type';
 import { environment } from '../../../environments/environment';
+import { SireneEntreprise } from '../types/sirene-entreprise.type';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,12 @@ export class EntrepriseService {
     return this._http.get<Entreprise[]>(`${this._apiUrl}/entreprise`);
   }
 
+  getEntreprisesBySiren(siren: string): Observable<Entreprise> {
+    return this._http.get<Entreprise>(
+      `${this._apiUrl}/entreprise/siren/` + siren
+    );
+  }
+
   scrapSirene() {
     return this._http.put<Entreprise[]>(
       `${this._apiUrl}/scraping/sirene`,
@@ -29,6 +36,13 @@ export class EntrepriseService {
           '34827919100012',
         ],
       },
+      this._options()
+    );
+  }
+
+  scrapOneWithPappers(sireneEntreprises: SireneEntreprise) {
+    return this._http.put<void>(
+      `${this._apiUrl}/scraping/pappers/`+sireneEntreprises.siren,
       this._options()
     );
   }
