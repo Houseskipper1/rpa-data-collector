@@ -26,6 +26,8 @@ export class EntrepriseService {
   }
 
   async create(entreprise: EntrepriseEntity): Promise<EntrepriseEntity> {
+    entreprise.created = new Date();
+    entreprise.updated = new Date();
     return await this.entrepriseDao.save(entreprise);
   }
 

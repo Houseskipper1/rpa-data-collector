@@ -32,6 +32,7 @@ export class SocieteService {
 
   async fetchEntity(entrepriseId: string): Promise<EntrepriseEntity> {
     const entreprise = new EntrepriseEntity();
+    entreprise.lastDataSource = 'https://www.societe.com/societe/';
 
     const browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();
@@ -207,7 +208,12 @@ export class SocieteService {
           (el) => el.textContent,
           secondSpan,
         );
-        finance.shareCapital = capitalSocialText.replace(/\s/g, '');
+        /*
+          Paul le shareCapital il est plus dans l'entitée finance.
+          il est devenu un champ dans l'entité entreprise.
+        */
+        //finance.shareCapital = capitalSocialText.replace(/\s/g, '');
+
         finances.push(finance);
       }
     }
