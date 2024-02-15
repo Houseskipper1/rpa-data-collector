@@ -33,7 +33,12 @@ export class AppController {
     private readonly _sirenEntrepriseService: SireneEntrepriseService,
   ) {
     this._sireneService.populateSireneEntreprise();
-    this.banService.updateSireneEntreprise();
+
+    let entreprises = this._sirenEntrepriseService.findAll().then(es => {
+      if (es[0] !== undefined && es[0].latitude !== undefined && es[0].latitude !== null) return;
+      console.log("Il faut mettre à jour les entreprises avec les coordonnées.");      
+      this.banService.updateSireneEntreprise();
+    });
   }
 
   @Put('scraping/societe')

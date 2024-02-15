@@ -6,12 +6,14 @@ import { EntrepriseService } from './service/entreprise.service';
 import { EntrepriseDao } from './dao/entreprise-dao';
 import { PappersService } from 'src/scraping/entreprise/pappers.service';
 import { BanService } from 'src/api/ban/ban.service';
+import { SireneEntrepriseModule } from 'src/sirene-entreprise/sirene-entreprise.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Entreprise.name, schema: EntrepriseSchema },
     ]),
+    SireneEntrepriseModule
   ],
   controllers: [EntrepriseController],
   providers: [EntrepriseService, EntrepriseDao, PappersService, BanService],

@@ -33,4 +33,13 @@ export class SireneEntrepriseEntity {
   @Expose()
   @Type(() => Number)
   postalCode: number;
+
+  @Expose()
+  @Type(() => Number)
+  latitude: number;
+
+  @Expose()
+  @Type(() => Number)
+  longitude: number;
+  
 }

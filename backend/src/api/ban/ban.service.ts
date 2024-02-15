@@ -6,7 +6,6 @@ import { EntrepriseService } from 'src/entreprise/service/entreprise.service';
 import { SireneEntrepriseService } from 'src/sirene-entreprise/services/sirene-entreprise.service';
 import { SireneEntrepriseEntity } from 'src/sirene-entreprise/entities/sirene-entreprise.entity';
 import { parseStream } from 'fast-csv';
-import { exit } from 'process';
 
 let fs = require("fs");
 
@@ -24,14 +23,14 @@ export class BanService {
     async updateSireneEntreprise() {
         fs.mkdir("temp/ban", { recursive: true }, () => { });
 
-        let entreprises = await this.sireneEntrepriseService.findAll();
-        if (entreprises[0].latitude !== undefined && entreprises[0].latitude !== null) return;
-
-        entreprises = await this.sireneEntrepriseService.findAllForBan();
+        console.log("Récupération des entreprises");
+        let entreprises = await this.sireneEntrepriseService.findAllForBan();
+        console.log("> Fin");
 
         let files = this.makeBanCsv(entreprises);
         entreprises.reverse();
         for (let file of files) {
+            console.log(`Début fichier ${file}`);
             let path = require("path");
             file = path.resolve(".") + "/" + file;
             let newFile = path.resolve(".") + "/" + `temp/ban/res_${file.split('/').at(-1)}`;
@@ -57,6 +56,7 @@ export class BanService {
 
             let csvStream = fs.createReadStream(newFile);
 
+            let c = 0;
             parseStream(csvStream, { headers: true })
                 .on('error', console.log)
                 .on('data', row => {
@@ -66,10 +66,16 @@ export class BanService {
                     entreprise.longitude = row.longitude;
 
                     this.sireneEntrepriseService.update(entreprise);
+                    if (c % 100000 == 0) {
+                        c += 1;
+                    }
+                    console.log(c);
+
                 })
                 .on('end', _ => {
                     csvStream.close();
-                    fs.unlink(csvStream.path);
+                    fs.unlink(csvStream.path, () => { });
+                    console.log(`Fin fichier ${file}`);
                 });
         }
     }

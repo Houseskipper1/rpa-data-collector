@@ -15,6 +15,10 @@ export class SireneEntrepriseDao {
     return await this._sireneEntrepriseModel.find({"name": {$ne: ""}}).sort({"name": 1}).limit(1000).exec();
   }
 
+  async findAllLimitless() {
+    return await this._sireneEntrepriseModel.find({"name": {$ne: ""}}).exec();
+  }
+
   async findBySiren(siren: string): Promise<SireneEntreprise | null> {
     return await this._sireneEntrepriseModel.findOne({"siren": siren}).exec()
   }

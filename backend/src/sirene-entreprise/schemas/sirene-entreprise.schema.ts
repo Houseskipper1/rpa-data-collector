@@ -26,6 +26,12 @@ export class SireneEntreprise extends Document {
 
   @Prop({ required: false })
   postalCode: number;
+
+  @Prop({ required: false })
+  latitude: number;
+
+  @Prop({ required: false })
+  longitude: number;
 }
 
 export const SireneEntrepriseSchema = SchemaFactory.createForClass(SireneEntreprise);

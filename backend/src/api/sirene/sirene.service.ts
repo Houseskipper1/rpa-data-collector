@@ -12,6 +12,7 @@ import { SireneEntrepriseService } from 'src/sirene-entreprise/services/sirene-e
 import { NafService } from 'src/sirene-entreprise/services/naf.service';
 import { NafEntity } from 'src/sirene-entreprise/entities/naf.entity';
 import { SireneEntrepriseEntity } from 'src/sirene-entreprise/entities/sirene-entreprise.entity';
+import { BanService } from '../ban/ban.service';
 
 @Injectable()
 export class SireneService {
@@ -43,7 +44,8 @@ export class SireneService {
 
   constructor(private _entrepriseService: EntrepriseService,
               private _sireneEntrepriseService: SireneEntrepriseService,
-              private _nafService: NafService
+              private _nafService: NafService,
+              private _banService: BanService
               ) {
     this.pathsUrls = [
       {"name": "StockUL"  , "url": "https://files.data.gouv.fr/insee-sirene/StockUniteLegale_utf8.zip"},
@@ -269,6 +271,7 @@ export class SireneService {
         parseStream(streams["StockEtab"], { headers: true })
         .on('error', (error) => console.error(error))
         .on('data', async (row) => {
+            c += 1;
             if (this.isSelectedNaf(nafCodes, row.activitePrincipaleEtablissement)) {
                 let sireneEntreprise = new SireneEntrepriseEntity();
                 sireneEntreprise.siren = row.siren;
@@ -280,6 +283,7 @@ export class SireneService {
                 sireneEntreprise.address = address.includes("[ND]") ? "" : address;
                 sireneEntreprise.city = row.libelleCommuneEtablissement;
                 sireneEntreprise.naf = (await this._nafService.findByCode(row.activitePrincipaleEtablissement))._id;
+                this._sireneEntrepriseService.create(sireneEntreprise);
             }
             if (c%100000 == 0){
                 console.log(c);
@@ -315,6 +319,8 @@ export class SireneService {
                 let timeEnd = new Date()
                 console.log("Fin du patch des noms en " + (timeEnd.getTime() - timeStart.getTime()) + " ms" )
                 streams["StockEtab"].close();
+                console.log('Début de la mise à jour de la liste d\'entreprise simple');
+                // this._banService.updateSireneEntreprise();
             });
         });
     }

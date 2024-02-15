@@ -16,6 +16,14 @@ export class SireneEntrepriseService {
     return sireneEntreprises;
   }
 
+  async findAllForBan(): Promise<SireneEntrepriseEntity[]> {
+    let sireneEntreprises = await this._sireneEntrepriseDao.findAllLimitless();
+    for(const sireneEntreprise of sireneEntreprises){
+      sireneEntreprise.naf = (await this._nafService.findById(sireneEntreprise.naf)).desc;
+    }
+    return sireneEntreprises;
+  }
+
   async findBySiren(siren: string): Promise<SireneEntrepriseEntity> {
     return await this._sireneEntrepriseDao.findBySiren(siren);
   }
