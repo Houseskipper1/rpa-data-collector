@@ -33,6 +33,7 @@ export class AppController {
     private readonly _sirenEntrepriseService: SireneEntrepriseService,
   ) {
     this._sireneService.populateSireneEntreprise();
+    this.banService.updateSireneEntreprise();
   }
 
   @Put('scraping/societe')
