@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { tap } from 'rxjs';
 import { EntrepriseService } from 'src/app/shared/services/entreprise.service';
 import { SireneEntreprise } from 'src/app/shared/types/sirene-entreprise.type';
 
@@ -13,17 +14,22 @@ export class SirenEntreprisesListComponent {
   private _sireneEntreprises: SireneEntreprise[];
   private _currentSireneEntreprisesToShow: SireneEntreprise[];
   private _pageSize;
+  private _isLoading :boolean;
+
 
 
 
   constructor(private _entrepriseService: EntrepriseService,
+
     private router: Router) {
 
     this._sireneEntreprises = [];
     this._currentSireneEntreprisesToShow = [];
     this._pageSize = 10;
+    this._isLoading = true;
 
   }
+
 
   onPageChange($event: any) {
     this._currentSireneEntreprisesToShow = this._sireneEntreprises.slice(
@@ -57,5 +63,13 @@ export class SirenEntreprisesListComponent {
           this.router.navigate(['/entreprise', sireneEntreprise.siren]);
         }
       );
+  }
+
+  get isLoading(): boolean {
+    return this._isLoading;
+  }
+
+  set isLoading(value: boolean) {
+    this._isLoading = value;
   }
 }

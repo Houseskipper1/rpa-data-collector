@@ -1,0 +1,21 @@
+.card-entreprise {
+  display: flex;
+}
+
+.info-container {
+  width: 80%;
+}
+
+.button-container {
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-center-spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
