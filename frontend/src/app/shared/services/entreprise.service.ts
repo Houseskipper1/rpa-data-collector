@@ -47,6 +47,13 @@ export class EntrepriseService {
     );
   }
 
+  scrapOneWithPappersSimple(entreprise: Entreprise) {
+    return this._http.put<void>(
+      `${this._apiUrl}/scraping/pappers/`+entreprise.siren,
+      this._options()
+    );
+  }
+
   scrapPappers() {
     return this._http.put<void>(
       `${this._apiUrl}/scraping/pappers`,

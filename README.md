@@ -27,3 +27,8 @@ Pour lancer le frontend :
 - Lancer la commande `npm install`
 - Lancer la commande `npm start`
 - Le frontend est lancé sur le port 4200
+
+Problèmes de ports sur Windows : 
+(Admin)
+net stop winnat
+net start winnat
