@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SirenEntreprisesListComponent } from './components/siren-entreprises-list/siren-entreprises-list.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { EntrepriseViewComponent } from './components/entreprise-view/entreprise-view.component';
+import { ScrappingEntreprisesListComponent } from './components/scrapping-entreprises-list/scrapping-entreprises-list.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { EntrepriseViewComponent } from './components/entreprise-view/entreprise
     EntreprisesListComponent,
     DetailsSectionComponent,
     SirenEntreprisesListComponent,
+    ScrappingEntreprisesListComponent,
     EntrepriseViewComponent,
   ],
   imports: [

@@ -39,8 +39,20 @@ export class Entreprise extends Document {
   @Prop({ type: [LocationSchema] })
   location: LocationEntrepriseEntity;
 
+  @Prop({ required: false })
+  shareCapital: string;
+
   @Prop({ type: [FinanceSchema] })
   financeDetails: FinanceEntrepriseEntity[];
+
+  @Prop({ required: false })
+  lastDataSource: string;
+
+  @Prop({ required: false })
+  created: Date;
+
+  @Prop({ required: false })
+  updated: Date;
 }
 
 export const EntrepriseSchema = SchemaFactory.createForClass(Entreprise);

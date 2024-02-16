@@ -45,7 +45,25 @@ export class EntrepriseEntity {
   @Type(() => LocationEntrepriseEntity)
   location: LocationEntrepriseEntity;
 
+
+  @Expose()
+  @Type(() => String)
+  shareCapital: string;   // capital social
+
   @Expose()
   @Type(() => FinanceEntrepriseEntity)
   financeDetails: FinanceEntrepriseEntity[];
+
+
+  @Expose()
+  @Type(() => String)
+  lastDataSource: string; // New field: Name of the last data source exemple pappers....
+
+  @Expose()
+  @Type(() => Date)
+  created: Date;  // date when the entity is added to the BD
+  
+  @Expose()
+  @Type(() => Date)
+  updated: Date;     // date when the entity is updated 
 }
