@@ -13,6 +13,9 @@ async function runSetup() {
     await db.createCollection('entreprises');
     await db.createCollection('sireneEntreprises');
     await db.createCollection('naf')
+
+    const sireneEntr = db.collection('sireneEntreprises');
+    await sireneEntr.createIndex({ siren: 1 });
     console.log('Setup complete.');
   } catch (err) {
     console.error('Error during setup:', err);

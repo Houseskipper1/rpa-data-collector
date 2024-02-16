@@ -257,6 +257,39 @@ export class SireneService {
   }
 
   async populateSireneEntreprise(){
+            let streams = await this.getSireneCSVs();
+
+            let nafCodes = JSON.parse(await fs.promises.readFile(this._ressourcePath + "NafCodes.json", "utf-8"))["NafCodes"];
+            streams["StockEtab"].close();
+
+            //patch des nom dans le cas d'une unité légal.
+            console.log('Début du patch des noms des etablissements en cas d\'unité légal (cela prend environ 15 minutes');
+
+            let c = 0
+            parseStream(streams["StockUL"], { headers: true })
+            .on('error', (error) => console.error(error))
+            .on('data',  (row) => {
+                c += 1;
+                if (this.isSelectedNaf(nafCodes, row.activitePrincipaleUniteLegale)) {
+                    this._sireneEntrepriseService.findBySiren(row.siren)
+                                                 .then((sireneEntreprises) => sireneEntreprises.map((e) => {
+                                                   if(e.name == ""){
+                                                    e.name = ["", "[ND]"].includes(row.denominationUniteLegale) ? (["", "[ND]"].includes(row.prenomUsuelUniteLegale) ? "" : row.nomUniteLegale + " " + row.prenomUsuelUniteLegale) : row.denominationUniteLegale;
+                                                    this._sireneEntrepriseService.update(e);
+                                                   }
+                                                 }))
+                }
+                if (c%100000 == 0){
+                  console.log(c);
+                }
+            })
+            .on('end', (rowCount: number) => {
+                let timeEnd = new Date()
+                //console.log("Fin du patch des noms en " + (timeEnd.getTime() - timeStart.getTime()) + " ms" )
+                streams["StockEtab"].close();
+                console.log('Début de la mise à jour de la liste d\'entreprise simple');
+                this._banService.updateSireneEntreprise();
+            });
     if(await this._sireneEntrepriseService.isEmpty()){
         let nafCodes = JSON.parse(await fs.promises.readFile(this._ressourcePath + "NafCodes.json", "utf-8"))["NafCodes"];
         for (const naf of nafCodes){
@@ -302,17 +335,18 @@ export class SireneService {
             c = 0
             parseStream(streams["StockUL"], { headers: true })
             .on('error', (error) => console.error(error))
-            .on('data', async (row) => {
+            .on('data', (row) => {
                 c += 1;
                 if (this.isSelectedNaf(nafCodes, row.activitePrincipaleUniteLegale)) {
-                    let sireneEntreprises = await this._sireneEntrepriseService.findBySiren(row.siren);
-                    for (let sireneEntreprise of sireneEntreprises){
-                      if(sireneEntreprise && sireneEntreprise.name == ""){
-                        sireneEntreprise.name = ["", "[ND]"].includes(row.denominationUniteLegale) ? (["", "[ND]"].includes(row.prenomUsuelUniteLegale) ? "" : row.nomUniteLegale + " " + row.prenomUsuelUniteLegale) : row.denominationUniteLegale;
-                        this._sireneEntrepriseService.update(sireneEntreprise);
-                      }
-                    }
-                }
+                  this._sireneEntrepriseService
+                      .findBySiren(row.siren)
+                      .then((sireneEntreprises) => sireneEntreprises.map((e) => {
+                        if(e.name == ""){
+                        e.name = ["", "[ND]"].includes(row.denominationUniteLegale) ? (["", "[ND]"].includes(row.prenomUsuelUniteLegale) ? "" : row.nomUniteLegale + " " + row.prenomUsuelUniteLegale) : row.denominationUniteLegale;
+                        this._sireneEntrepriseService.update(e);
+                        }
+                      }))
+              }
                 if (c%100000 == 0){
                   console.log(c);
                 }

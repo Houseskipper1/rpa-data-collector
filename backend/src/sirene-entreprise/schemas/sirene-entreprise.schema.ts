@@ -6,7 +6,7 @@ export class SireneEntreprise extends Document {
   @Prop({ required: false })
   id: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, index: true })
   siren: string;
 
   @Prop({ required: true })

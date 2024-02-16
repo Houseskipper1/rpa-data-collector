@@ -29,7 +29,7 @@ export class SireneEntrepriseService {
   }
 
   async findBySiren(siren: string): Promise<SireneEntrepriseEntity[]> {
-    return await this._sireneEntrepriseDao.findBySiren(siren);
+    return this._sireneEntrepriseDao.findBySiren(siren);
   }
 
   async create(newSireneEntreprise: SireneEntrepriseEntity): Promise<SireneEntrepriseEntity> {
