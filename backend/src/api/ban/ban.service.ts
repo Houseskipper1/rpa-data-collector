@@ -42,22 +42,26 @@ export class BanService {
 
             console.log(file, newFile);
 
-            // J'ai honte
-            require("child_process")
-                .execSync(`curl -X POST -F data=@${file} -F resut_columns=latitude -F result_colums=longitude https://api-adresse.data.gouv.fr/search/csv/ > ${newFile}`, (err, stdout, stderr) => {
-                    if (err) {
-                        console.log(`error: ${err.message}`);
-                        return;
+            if (!fs.existsSync(newFile)) {
+                console.log("> Téléchargement du ficher");
 
-                    }
-                    // if (stderr) {
-                    //     console.log(`stderr: ${stderr}`);
-                    //     return;
-                    // }
-                    // console.log(`stdout: ${stdout}`);
-                })
+                // J'ai honte
+                require("child_process")
+                    .execSync(`curl -X POST -F data=@${file} -F resut_columns=latitude -F result_colums=longitude https://api-adresse.data.gouv.fr/search/csv/ > ${newFile}`, (err, stdout, stderr) => {
+                        if (err) {
+                            console.log(`error: ${err.message}`);
+                            return;
 
-            fs.unlink(file.toString(), () => { });
+                        }
+                        // if (stderr) {
+                        //     console.log(`stderr: ${stderr}`);
+                        //     return;
+                        // }
+                        // console.log(`stdout: ${stdout}`);
+                    })
+
+                fs.unlink(file.toString(), () => { });
+            }
 
             let csvStream = fs.createReadStream(newFile);
 
@@ -72,10 +76,9 @@ export class BanService {
 
                     this.sireneEntrepriseService.update(entreprise);
                     if (c % 100000 == 0) {
-                        c += 1;
+                        console.log(c);
                     }
-                    console.log(c);
-
+                    c += 1;
                 })
                 .on('end', _ => {
                     csvStream.close();
@@ -125,7 +128,8 @@ export class BanService {
             .then((res) => {
                 let coordinates = res.data.features[0].geometry.coordinates;
                 let departement = res.data.features[0].properties.postcode.slice(0, 2);
-                return {pos: { lat: coordinates[0], long: coordinates[1] }, departement: departement };
+                console.log(res.data.features[0]);
+                return { pos: { lat: coordinates[1], long: coordinates[0] }, departement: departement };
             });
     }
 
@@ -193,11 +197,13 @@ export class BanService {
             .findAllInDepartement(pos.departement)
             .then((entreprises: SireneEntrepriseEntity[]) =>
                 entreprises.filter(
-                    (e: SireneEntrepriseEntity) =>
-                        this.calcDistance(pos.pos, {
+                    (e: SireneEntrepriseEntity) => {
+                        let distance = this.calcDistance(pos.pos, {
                             lat: e.latitude,
                             long: e.longitude,
-                        }) <= radius,
+                        });
+                        return distance <= radius;
+                    },
                 ),
             );
     }
@@ -210,21 +216,26 @@ export class BanService {
      * @returns {number} The distance between the two loactions, in km
      */
     private calcDistance(pos1: Position, pos2: Position): number {
-        var R = 6371; // Radius of the earth in km
-        var dLat = this.deg2rad(pos2.lat - pos1.lat); // deg2rad below
-        var dLon = this.deg2rad(pos2.long - pos1.long);
-        var a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(this.deg2rad(pos1.lat)) *
-            Math.cos(this.deg2rad(pos2.lat)) *
-            Math.sin(dLon / 2) *
-            Math.sin(dLon / 2);
+        let lat1 = pos1.lat;
+        let lat2 = pos2.lat;
+
+        let lon1 = pos1.long;
+        let lon2 = pos2.long;
+        var R = 6371; // km
+        var dLat = this.toRad(lat2 - lat1);
+        var dLon = this.toRad(lon2 - lon1);
+        lat1 = this.toRad(lat1);
+        lat2 = this.toRad(lat2);
+
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
         var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        var d = R * c; // Distance in km
+        var d = R * c;
         return d;
     }
 
-    private deg2rad(deg) {
-        return deg * (Math.PI / 180);
+    // Converts numeric degrees to radians
+    private toRad(value) {
+        return value * Math.PI / 180;
     }
 }

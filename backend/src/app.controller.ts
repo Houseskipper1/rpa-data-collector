@@ -89,7 +89,8 @@ export class AppController {
   @Get('/search')
   async searchInRadius(@Query("address") address: String, @Query("range") range: number) {
     let pos = await this.banService.findByAddress(address);
-    return this.banService.getInRadius(pos, range);
+    let res = this.banService.getInRadius(pos, range);
+    return res;
   }
 
   @Get('/sireneEntreprises')
