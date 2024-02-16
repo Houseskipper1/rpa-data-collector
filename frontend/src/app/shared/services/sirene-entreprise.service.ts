@@ -18,4 +18,8 @@ export class SireneEntrepriseService {
   getSireneEntreprises(): Observable<SireneEntreprise[]> {
     return this._http.get<SireneEntreprise[]>(`${this._apiUrl}/sireneEntreprises`);
   }
+
+  searchBan(address: String, range: number): Observable<SireneEntreprise[]> {
+    return this._http.get<SireneEntreprise[]>(`${this._apiUrl}/search?address=${address}&range=${range}`)
+  }
 }

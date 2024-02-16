@@ -14,9 +14,15 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SirenEntreprisesListComponent } from './components/siren-entreprises-list/siren-entreprises-list.component';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { EntrepriseViewComponent } from './components/entreprise-view/entreprise-view.component';
-import { ScrappingEntreprisesListComponent } from './components/scrapping-entreprises-list/scrapping-entreprises-list.component';
+import { ScrapingEntreprisesListComponent } from './components/scraping-entreprises-list/scraping-entreprises-list.component';
+import { RechercheBanComponent } from './components/recherche-ban/recherche-ban.component';
+import { SirenEntreprisesViewComponent } from './components/siren-entreprises-view/siren-entreprises-view.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatButtonModule } from '@angular/material/button';
+
 
 @NgModule({
   declarations: [
@@ -28,8 +34,13 @@ import { ScrappingEntreprisesListComponent } from './components/scrapping-entrep
     EntreprisesListComponent,
     DetailsSectionComponent,
     SirenEntreprisesListComponent,
-    ScrappingEntreprisesListComponent,
+    ScrapingEntreprisesListComponent,
     EntrepriseViewComponent,
+    EntreprisesListComponent,
+    RechercheBanComponent,
+    SirenEntreprisesListComponent,
+    SirenEntreprisesViewComponent,
+    RechercheBanComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,10 +49,13 @@ import { ScrappingEntreprisesListComponent } from './components/scrapping-entrep
     ReactiveFormsModule,
     FormsModule,
     MatFormFieldModule,
+    MatInputModule,
     BrowserAnimationsModule,
     MatPaginatorModule,
+    MatSliderModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

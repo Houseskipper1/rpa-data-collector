@@ -4,14 +4,12 @@ import {
   Delete,
   Get,
   Header,
-  HttpStatus,
   Param,
   Put,
   Query,
   Res,
 } from '@nestjs/common';
 import { PappersService } from './scraping/entreprise/pappers.service';
-import { SocieteService } from './scraping/entreprise/societe.service';
 import { EntrepriseService } from './entreprise/service/entreprise.service';
 import { Readable } from 'stream';
 import { SireneService } from './api/sirene/sirene.service';
@@ -20,25 +18,17 @@ import { BanService } from './api/ban/ban.service';
 import { EntreprisesIdsDto } from './entreprise/dto/entreprisesids.dto';
 import { Response } from 'express';
 import { SireneEntrepriseService } from './sirene-entreprise/services/sirene-entreprise.service';
-import { Console } from 'console';
 
 @Controller()
 export class AppController {
   constructor(
     private _pappersService: PappersService,
     private readonly entrepriseService: EntrepriseService,
-    private _societeService: SocieteService,
     private _sireneService: SireneService,
     private readonly banService: BanService,
     private readonly _sirenEntrepriseService: SireneEntrepriseService,
   ) {
     this._sireneService.populateSireneEntreprise();
-
-    let entreprises = this._sirenEntrepriseService.findAll().then(es => {
-      if (es[0] !== undefined && es[0].latitude !== undefined && es[0].latitude !== null) return;
-      console.log("Il faut mettre à jour les entreprises avec les coordonnées.");      
-      this.banService.updateSireneEntreprise();
-    });
   }
 
   @Put('scraping/societe')
@@ -90,11 +80,9 @@ export class AppController {
   }
 
   @Get('/search')
-  async searchInRadius(@Query() query: any) {
-    let lat = query.lat;
-    let lon = query.lon;
-    let radius = query.radius;
-    return this.banService.getInRadius({ lat, long: lon }, radius);
+  async searchInRadius(@Query("address") address: String, @Query("range") range: number) {
+    let pos = await this.banService.findByAddress(address);
+    return this.banService.getInRadius(pos, range);
   }
 
   @Get('/sireneEntreprises')
