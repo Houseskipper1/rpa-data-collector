@@ -302,17 +302,18 @@ export class SireneService {
             c = 0
             parseStream(streams["StockUL"], { headers: true })
             .on('error', (error) => console.error(error))
-            .on('data', async (row) => {
+            .on('data', (row) => {
                 c += 1;
                 if (this.isSelectedNaf(nafCodes, row.activitePrincipaleUniteLegale)) {
-                    let sireneEntreprises = await this._sireneEntrepriseService.findBySiren(row.siren);
-                    for (let sireneEntreprise of sireneEntreprises){
-                      if(sireneEntreprise && sireneEntreprise.name == ""){
-                        sireneEntreprise.name = ["", "[ND]"].includes(row.denominationUniteLegale) ? (["", "[ND]"].includes(row.prenomUsuelUniteLegale) ? "" : row.nomUniteLegale + " " + row.prenomUsuelUniteLegale) : row.denominationUniteLegale;
-                        this._sireneEntrepriseService.update(sireneEntreprise);
-                      }
-                    }
-                }
+                  this._sireneEntrepriseService
+                      .findBySiren(row.siren)
+                      .then((sireneEntreprises) => sireneEntreprises.map((e) => {
+                        if(e.name == ""){
+                        e.name = ["", "[ND]"].includes(row.denominationUniteLegale) ? (["", "[ND]"].includes(row.prenomUsuelUniteLegale) ? "" : row.nomUniteLegale + " " + row.prenomUsuelUniteLegale) : row.denominationUniteLegale;
+                        this._sireneEntrepriseService.update(e);
+                        }
+                      }))
+              }
                 if (c%100000 == 0){
                   console.log(c);
                 }
