@@ -1,0 +1,17 @@
+<br/>
+<br/>
+<br/>
+<br/>
+<form action="">
+  <mat-form-field>
+    <mat-label>Adresse</mat-label>
+    <input matInput [(ngModel)]="address" [ngModelOptions]="{standalone: true}">
+  </mat-form-field>
+  <mat-slider min="0" max="50" step="1" value="0" showTickMarks discrete [displayWith]="formatLabel">
+    <input matSliderThumb [(ngModel)]="range" [ngModelOptions]="{standalone: true}">
+  </mat-slider>
+
+  <button mat-raised-button color="primary" (click)="search()">Rechercher</button>
+</form>
+
+<app-siren-entreprises-list [sireneEntreprises]="entreprises"/>

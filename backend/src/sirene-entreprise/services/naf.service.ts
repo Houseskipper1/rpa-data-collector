@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Naf } from '../schemas/naf.schema';
 import { NafEntity } from '../entities/naf.entity';
 import { NafDao } from '../dao/naf.dao';
+import { SireneEntrepriseEntity } from '../entities/sirene-entreprise.entity';
 
 @Injectable()
 export class NafService {
