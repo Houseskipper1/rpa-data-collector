@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
 import { EntrepriseService } from 'src/app/shared/services/entreprise.service';
-import { SireneEntrepriseService } from 'src/app/shared/services/sirene-entreprise.service';
 import { SireneEntreprise } from 'src/app/shared/types/sirene-entreprise.type';
 
 @Component({
@@ -10,7 +9,7 @@ import { SireneEntreprise } from 'src/app/shared/types/sirene-entreprise.type';
   templateUrl: './siren-entreprises-list.component.html',
   styleUrls: ['./siren-entreprises-list.component.css'],
 })
-export class SirenEntreprisesListComponent implements OnInit {
+export class SirenEntreprisesListComponent {
 
   private _sireneEntreprises: SireneEntreprise[];
   private _currentSireneEntreprisesToShow: SireneEntreprise[];
@@ -18,9 +17,11 @@ export class SirenEntreprisesListComponent implements OnInit {
   private _isLoading :boolean;
 
 
-  constructor(private _sireneEntrepriseService: SireneEntrepriseService,
-              private _entrepriseService : EntrepriseService,
-              private router: Router) {
+
+
+  constructor(private _entrepriseService: EntrepriseService,
+
+    private router: Router) {
 
     this._sireneEntreprises = [];
     this._currentSireneEntreprisesToShow = [];
@@ -29,26 +30,17 @@ export class SirenEntreprisesListComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
-    this._sireneEntrepriseService.getSireneEntreprises()
-    .pipe(
-      tap(() => {
-        this._isLoading = true;
-      })
-    )
-    .subscribe((sireneEntreprises) => {
-      this._isLoading = false;
-      this._sireneEntreprises = sireneEntreprises;
-      this._currentSireneEntreprisesToShow = this._sireneEntreprises.slice(0, this._pageSize);
-      console.log(this._currentSireneEntreprisesToShow)
-    })
-  }
 
   onPageChange($event: any) {
     this._currentSireneEntreprisesToShow = this._sireneEntreprises.slice(
       $event.pageIndex * $event.pageSize,
       $event.pageIndex * $event.pageSize + $event.pageSize
     );
+  }
+
+  @Input() set sireneEntreprises(e) {
+    this._sireneEntreprises = e
+    this._currentSireneEntreprisesToShow = this._sireneEntreprises.slice(0, this._pageSize);
   }
 
   get currenSireneEntreprisesToShow() {
@@ -63,14 +55,14 @@ export class SirenEntreprisesListComponent implements OnInit {
     return this._pageSize;
   }
 
-  onScrapEntreprise(sireneEntreprise : SireneEntreprise) {
+  onScrapEntreprise(sireneEntreprise: SireneEntreprise) {
 
-   this._entrepriseService.scrapOneWithPappers(sireneEntreprise).
-   subscribe(
-    (data) => {
-      this.router.navigate(['/entreprise', sireneEntreprise.siren]);
-    }
-   );
+    this._entrepriseService.scrapOneWithPappers(sireneEntreprise).
+      subscribe(
+        _ => {
+          this.router.navigate(['/entreprise', sireneEntreprise.siren]);
+        }
+      );
   }
 
   get isLoading(): boolean {

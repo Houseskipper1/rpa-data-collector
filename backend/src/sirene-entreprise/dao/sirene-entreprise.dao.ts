@@ -15,12 +15,21 @@ export class SireneEntrepriseDao {
     return await this._sireneEntrepriseModel.find({"name": {$ne: ""}}).sort({"name": 1}).limit(1000).exec();
   }
 
+  async findAllInDepartement(departement: String): Promise<SireneEntrepriseEntity[]> {
+    return await this._sireneEntrepriseModel.find({
+      "name": {$ne: ""},
+      $and: [
+        {"postalCode": {$gte: departement + "000"}},
+        {"postalCode": {$lte: departement + "999"}}
+      ]}).exec();
+  }
+
   async findAllLimitless() {
     return await this._sireneEntrepriseModel.find({"name": {$ne: ""}}).exec();
   }
 
-  async findBySiren(siren: string): Promise<SireneEntreprise | null> {
-    return await this._sireneEntrepriseModel.findOne({"siren": siren}).exec()
+  async findBySiren(siren: string): Promise<SireneEntreprise[] | null> {
+    return await this._sireneEntrepriseModel.find({"siren": siren}).exec()
   }
   
   async save(sireneEntrepriseEntity: SireneEntrepriseEntity): Promise<SireneEntreprise> {

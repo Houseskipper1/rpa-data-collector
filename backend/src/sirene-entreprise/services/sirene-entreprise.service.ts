@@ -16,11 +16,19 @@ export class SireneEntrepriseService {
     return sireneEntreprises;
   }
 
+  async findAllInDepartement(departement: String): Promise<SireneEntrepriseEntity[]> {
+    let sireneEntreprises = await this._sireneEntrepriseDao.findAllInDepartement(departement);
+    for(const sireneEntreprise of sireneEntreprises){
+      sireneEntreprise.naf = (await this._nafService.findById(sireneEntreprise.naf)).desc;
+    }
+    return sireneEntreprises;
+  }
+
   async findAllForBan(): Promise<SireneEntrepriseEntity[]> {
     return this._sireneEntrepriseDao.findAllLimitless();
   }
 
-  async findBySiren(siren: string): Promise<SireneEntrepriseEntity> {
+  async findBySiren(siren: string): Promise<SireneEntrepriseEntity[]> {
     return await this._sireneEntrepriseDao.findBySiren(siren);
   }
 

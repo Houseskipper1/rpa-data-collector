@@ -15,8 +15,12 @@ export class ScrapingSectionComponent {
     this._router.navigate(["/sireneEntreprises"])
   }
 
-  showScrappingEntreprises() {
-    this._router.navigate(["/scrappingEntreprises"])
+  showScrapingEntreprises() {
+    this._router.navigate(["/scrapingEntreprises"])
+  }
+
+  showSireneEntreprisesRecherche() {
+    this._router.navigate(["/sireneEntreprisesSearch"])
   }
 
   scrapSirene() {

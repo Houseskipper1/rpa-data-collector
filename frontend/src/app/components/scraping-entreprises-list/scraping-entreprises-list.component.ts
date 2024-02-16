@@ -4,11 +4,11 @@ import { EntrepriseService } from 'src/app/shared/services/entreprise.service';
 import { Entreprise } from 'src/app/shared/types/entreprise.type';
 
 @Component({
-  selector: 'app-scrapping-entreprises-list',
-  templateUrl: './scrapping-entreprises-list.component.html',
-  styleUrls: ['./scrapping-entreprises-list.component.css'],
+  selector: 'app-scraping-entreprises-list',
+  templateUrl: './scraping-entreprises-list.component.html',
+  styleUrls: ['./scraping-entreprises-list.component.css'],
 })
-export class ScrappingEntreprisesListComponent implements OnInit {
+export class ScrapingEntreprisesListComponent implements OnInit {
 
   private _entreprises: Entreprise[];
   private _currentEntreprisesToShow: Entreprise[];

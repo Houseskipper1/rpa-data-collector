@@ -14,6 +14,11 @@ export type Position = {
     long: number;
 };
 
+export type LocalisationRecherche = {
+    pos: Position;
+    departement: String;
+}
+
 @Injectable()
 export class BanService {
     constructor(private readonly entrepriseService: EntrepriseService,
@@ -111,7 +116,7 @@ export class BanService {
         return paths;
     }
 
-    async findByAddress(address: String): Promise<Position> {
+    async findByAddress(address: String): Promise<LocalisationRecherche> {
         return axios
             .get(
                 'https://api-adresse.data.gouv.fr/search/?q=' +
@@ -119,7 +124,8 @@ export class BanService {
             )
             .then((res) => {
                 let coordinates = res.data.features[0].geometry.coordinates;
-                return { lat: coordinates[0], long: coordinates[1] };
+                let departement = res.data.features[0].properties.postcode.slice(0, 2);
+                return {pos: { lat: coordinates[0], long: coordinates[1] }, departement: departement };
             });
     }
 
@@ -180,17 +186,17 @@ export class BanService {
      * @returns {Promise<EntrepriseEntity[]>} A promise of the list of entities inside the radius
      */
     async getInRadius(
-        pos: Position,
+        pos: LocalisationRecherche,
         radius: number,
-    ): Promise<EntrepriseEntity[]> {
-        return this.entrepriseService
-            .findAll()
-            .then((entreprises: EntrepriseEntity[]) =>
+    ): Promise<SireneEntrepriseEntity[]> {
+        return this.sireneEntrepriseService
+            .findAllInDepartement(pos.departement)
+            .then((entreprises: SireneEntrepriseEntity[]) =>
                 entreprises.filter(
-                    (e: EntrepriseEntity) =>
-                        this.calcDistance(pos, {
-                            lat: e.location.latitude,
-                            long: e.location.longitude,
+                    (e: SireneEntrepriseEntity) =>
+                        this.calcDistance(pos.pos, {
+                            lat: e.latitude,
+                            long: e.longitude,
                         }) <= radius,
                 ),
             );
