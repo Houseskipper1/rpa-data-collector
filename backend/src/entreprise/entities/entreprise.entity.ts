@@ -54,7 +54,6 @@ export class EntrepriseEntity {
   @Type(() => FinanceEntrepriseEntity)
   financeDetails: FinanceEntrepriseEntity[];
 
-
   @Expose()
   @Type(() => String)
   lastDataSource: string; // New field: Name of the last data source exemple pappers....

@@ -33,25 +33,13 @@ export class AppController {
     private readonly _sirenEntrepriseService: SireneEntrepriseService,
   ) {
     this._sireneService.populateSireneEntreprise();
-
-    let entreprises = this._sirenEntrepriseService.findAll().then(es => {
-      if (es[0] !== undefined && es[0].latitude !== undefined && es[0].latitude !== null) return;
-      console.log("Il faut mettre à jour les entreprises avec les coordonnées.");      
-      this.banService.updateSireneEntreprise();
-    });
   }
 
   @Put('scraping/societe')
   async getSociete(
     @Body() entreprisesIdsDto: EntreprisesIdsDto,
     @Res() res: Response,
-  ) {
-    //const entreprises = await this._societeService.fetch(entreprisesIdsDto);
-    //for (const entreprise of entreprises) {
-    //  this.entrepriseService.createOrUpdateBySirene(entreprise);
-    //}
-    //res.status(HttpStatus.OK).json(entreprises);
-  }
+  ) {}
 
   @Put('scraping/sirene')
   async scrapSirenes(@Body() scrapSirenesDto: ScrapSirenesDto) {
@@ -61,9 +49,13 @@ export class AppController {
   @Put('scraping/pappers')
   async scrappingPappers(@Body() data: any): Promise<void> {
     const entreprise = await this.entrepriseService.findBySiren(data.ids);
+
     if (entreprise == undefined) {
       await this._pappersService.scrap(data.ids);
     }
+
+ 
+  
   }
 
   @Put('scraping/pappers/:siren')
@@ -72,6 +64,15 @@ export class AppController {
     if (entreprise == undefined) {
       await this._pappersService.scrap(siren);
     }
+
+    const updateTimestamp = entreprise.updated.getTime(); 
+    const currentTimestamp = new Date().getTime(); 
+    const diffInMilliseconds = currentTimestamp - updateTimestamp;
+
+    if (diffInMilliseconds > 2 * 60 * 1000) { // 2 minutes en millisecondes  
+      await this._pappersService.scrap(siren); // rescrapp 
+    }
+    
   }
 
   @Get('CSVExport')

@@ -36,6 +36,7 @@ export type Entreprise = {
   siren: string;
   siret: string;
   name: string;
+  shareCapital: string;
   dateCreation: string;
   yearsInExistence: number;
   effective: string;
