@@ -8,10 +8,15 @@ import { EntrepriseService } from 'src/app/shared/services/entreprise.service';
   styleUrls: [],
 })
 export class ScrapingSectionComponent {
+
   constructor(private _entrepriseService: EntrepriseService, private _router: Router) {}
 
   showSireneEntreprises() {
     this._router.navigate(["/sireneEntreprises"])
+  }
+
+  showScrappingEntreprises() {
+    this._router.navigate(["/scrappingEntreprises"])
   }
 
   scrapSirene() {

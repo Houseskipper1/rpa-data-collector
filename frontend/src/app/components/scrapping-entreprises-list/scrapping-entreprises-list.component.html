@@ -1,0 +1,45 @@
+<div class="flex flex-col md:flex-row bg-slate-50">
+  <div class="flex-1 w-full md:w-1/6 p-2 sticky mt-14 mb-2 md:mb-0"></div>
+  <div class="flex-2 w-full lg:w-1/2">
+    <mat-paginator
+      class="center-section mt-16 mb-16 md:mx-0 mx-1 top-16 w-96 lg:w-auto"
+      (page)="onPageChange($event)"
+      [length]="entreprises.length"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[10, 25, 100]"
+    >
+    </mat-paginator>
+
+    <div class="center-section mt-16 mb-16 md:mx-0 mx-1 top-16 w-96 lg:w-auto">
+      <ul *ngFor="let e of currentEntreprisesToShow">
+        <li class="card-entreprise bg-background text-font p-4 rounded-lg shadow-md mt-4">
+          <div class="info-container mb-4">
+            <h2 class="text-xl font-semibold">{{ e.name }}</h2>
+            <div class="font-bold">SIREN:</div>
+            <div class="mb-1">{{ e.siren }}</div>
+
+            <div class="font-bold">SIRET:</div>
+            <div class="mb-1">{{ e.siret }}</div>
+
+            <div class="font-bold">Date de création:</div>
+            <div class="mb-1">{{ e.dateCreation }}</div>
+
+            <div class="font-bold">Addresses :</div>
+            <div *ngFor="let l of e.location">
+              <div class="mb-1">{{ l.country }}, {{ l.city }}, {{ l.postalCode }}, {{ l.streetAddress }}</div>
+            </div>
+          </div>
+          <div class="button-container">
+            <div class="button-container">
+              <button (click)="onScrapEntreprise(e)" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                  View
+              </button>
+          </div>
+
+        </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="flex-1 w-full p-2 sticky lg:mt-14 mb-14"></div>
+</div>
