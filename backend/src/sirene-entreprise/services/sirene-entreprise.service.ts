@@ -20,7 +20,7 @@ export class SireneEntrepriseService {
     return this._sireneEntrepriseDao.findAllLimitless();
   }
 
-  async findBySiren(siren: string): Promise<SireneEntrepriseEntity> {
+  async findBySiren(siren: string): Promise<SireneEntrepriseEntity[]> {
     return await this._sireneEntrepriseDao.findBySiren(siren);
   }
 

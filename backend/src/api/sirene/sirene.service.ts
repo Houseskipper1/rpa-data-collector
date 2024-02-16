@@ -304,11 +304,13 @@ export class SireneService {
             .on('error', (error) => console.error(error))
             .on('data', async (row) => {
                 c += 1;
-                if (this.isSelectedNaf(nafCodes, row.activitePrincipaleEtablissement)) {
-                    let sireneEntreprise = await this._sireneEntrepriseService.findBySiren(row.siren);
-                    if(sireneEntreprise && sireneEntreprise.name == ""){
-                      sireneEntreprise.name = row.prenomUsuelUniteLegale + " " + row.nomUniteLegale
-                      this._sireneEntrepriseService.update(sireneEntreprise);
+                if (this.isSelectedNaf(nafCodes, row.activitePrincipaleUniteLegale)) {
+                    let sireneEntreprises = await this._sireneEntrepriseService.findBySiren(row.siren);
+                    for (let sireneEntreprise of sireneEntreprises){
+                      if(sireneEntreprise && sireneEntreprise.name == ""){
+                        sireneEntreprise.name = ["", "[ND]"].includes(row.denominationUniteLegale) ? (["", "[ND]"].includes(row.prenomUsuelUniteLegale) ? "" : row.nomUniteLegale + " " + row.prenomUsuelUniteLegale) : row.denominationUniteLegale;
+                        this._sireneEntrepriseService.update(sireneEntreprise);
+                      }
                     }
                 }
                 if (c%100000 == 0){

@@ -19,8 +19,8 @@ export class SireneEntrepriseDao {
     return await this._sireneEntrepriseModel.find({"name": {$ne: ""}}).exec();
   }
 
-  async findBySiren(siren: string): Promise<SireneEntreprise | null> {
-    return await this._sireneEntrepriseModel.findOne({"siren": siren}).exec()
+  async findBySiren(siren: string): Promise<SireneEntreprise[] | null> {
+    return await this._sireneEntrepriseModel.find({"siren": siren}).exec()
   }
   
   async save(sireneEntrepriseEntity: SireneEntrepriseEntity): Promise<SireneEntreprise> {
