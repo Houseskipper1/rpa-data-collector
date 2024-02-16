@@ -63,8 +63,8 @@ export class AppController {
     const entreprise = await this.entrepriseService.findBySiren(siren);
     if (entreprise == undefined) {
       await this._pappersService.scrap(siren);
+      return;
     }
-
     const updateTimestamp = entreprise.updated.getTime(); 
     const currentTimestamp = new Date().getTime(); 
     const diffInMilliseconds = currentTimestamp - updateTimestamp;
