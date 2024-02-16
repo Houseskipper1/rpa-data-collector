@@ -26,7 +26,7 @@ export class SirenEntreprisesListComponent {
     this._sireneEntreprises = [];
     this._currentSireneEntreprisesToShow = [];
     this._pageSize = 10;
-    this._isLoading = true;
+    this._isLoading = false;
 
   }
 
@@ -69,7 +69,7 @@ export class SirenEntreprisesListComponent {
     return this._isLoading;
   }
 
-  set isLoading(value: boolean) {
+  @Input() set isLoading(value: boolean) {
     this._isLoading = value;
   }
 }

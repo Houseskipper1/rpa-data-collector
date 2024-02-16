@@ -12,12 +12,14 @@ export class RechercheBanComponent {
   private _address: String;
 
   private _entreprises: SireneEntreprise[];
+  private _isLoading: boolean;
 
   constructor(private _sireneEntrepriseService: SireneEntrepriseService) {
     this._range = 0;
     this._address = "";
 
     this._entreprises = [];
+    this._isLoading = false;
   }
 
   ngOnInit(): void {
@@ -28,8 +30,10 @@ export class RechercheBanComponent {
   }
 
   search() {
+    this._isLoading = true;
     this._sireneEntrepriseService.searchBan(this._address, this._range).subscribe((entreprises) => {
       this._entreprises = entreprises;
+      this._isLoading = false;
     })
   }
 
@@ -51,5 +55,9 @@ export class RechercheBanComponent {
 
   get entreprises(): SireneEntreprise[] {
     return this._entreprises;
+  }
+
+  get isLoading(){
+    return this._isLoading;
   }
 }
