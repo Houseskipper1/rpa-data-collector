@@ -320,7 +320,7 @@ export class SireneService {
                 console.log("Fin du patch des noms en " + (timeEnd.getTime() - timeStart.getTime()) + " ms" )
                 streams["StockEtab"].close();
                 console.log('Début de la mise à jour de la liste d\'entreprise simple');
-                // this._banService.updateSireneEntreprise();
+                this._banService.updateSireneEntreprise();
             });
         });
     }
