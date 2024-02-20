@@ -346,13 +346,24 @@ export class SireneService {
                   row.activitePrincipaleEtablissement,
                 )
               ) {
-                let sireneEntreprise =
-                  await this._sireneEntrepriseService.findBySiren(row.siren);
-                if (sireneEntreprise && sireneEntreprise.name == '') {
-                  sireneEntreprise.name =
-                    row.prenomUsuelUniteLegale + ' ' + row.nomUniteLegale;
-                  await this._sireneEntrepriseService.update(sireneEntreprise);
-                }
+                this._sireneEntrepriseService
+                  .findBySiren(row.siren)
+                  .then((sireneEntreprises) =>
+                    sireneEntreprises.map((e) => {
+                      if (e.name == '') {
+                        e.name = ['', '[ND]'].includes(
+                          row.denominationUniteLegale,
+                        )
+                          ? ['', '[ND]'].includes(row.prenomUsuelUniteLegale)
+                            ? ''
+                            : row.nomUniteLegale +
+                              ' ' +
+                              row.prenomUsuelUniteLegale
+                          : row.denominationUniteLegale;
+                        this._sireneEntrepriseService.update(e);
+                      }
+                    }),
+                  );
               }
               if (c % 100000 == 0) {
                 console.log(c + ' / ' + totalLines + ' entreprises traitées');
