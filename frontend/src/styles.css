@@ -11,3 +11,9 @@ body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+@layer utilities {
+    .z-important {
+        z-index: 9999 !important;
+    }
+}

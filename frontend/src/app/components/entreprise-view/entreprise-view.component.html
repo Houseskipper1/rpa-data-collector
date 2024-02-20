@@ -1,5 +1,7 @@
 <div class="flex flex-col md:flex-row bg-slate-50">
-  <div class="mt-20 w-3/6 bg-gray-200 p-4 rounded-lg shadow-md mx-auto">
+  <div
+    class="top-16 mt-20 mb-20 w-3/6 -z-5 bg-gray-200 p-4 rounded-lg shadow-md mx-auto"
+  >
     <div class="p-3">
       <h1 class="text-2xl font-bold text-gray-900">{{ entreprise.name }}</h1>
     </div>
@@ -133,7 +135,7 @@
       </div>
     </div>
 
-    <div class="flex z-1 flex-row px-10">
+    <div class="flex -z-20 flex-row px-10">
       <div
         class="basis-5/12 p-3 bg-white border border-gray-200 rounded-lg shadow rounded-br-none rounded-tr-none"
       >
@@ -169,12 +171,12 @@
         </ul>
       </div>
       <div
-        class="basis-7/12 flex justify-center items-center shadow rounded-br rounded-tr"
+        class="basis-7/12 flex justify-center items-center shadow rounded-br rounded-tr relative -z-4"
         id="map"
       ></div>
     </div>
 
-    <div class="flex z-1 p-10 flex-row px-10">
+    <div class="flex p-10 flex-row px-10">
       <div
         class="flex-grow p-3 bg-white border border-gray-200 rounded-lg shadow"
       >
@@ -184,10 +186,15 @@
         <ul class="list-none ml-3 mb-3">
           <li>
             <span>Date d'ajout</span> :
-            <span class="font-bold">{{ entreprise.created | date:'yyyy-MM-dd à HH:mm:ss' }}</span>          </li>
+            <span class="font-bold">{{
+              entreprise.created | date : "yyyy-MM-dd à HH:mm:ss"
+            }}</span>
+          </li>
           <li>
             <span>Date de modification</span> :
-            <span class="font-bold">{{ entreprise.updated | date:'yyyy-MM-dd à HH:mm:ss' }}</span>
+            <span class="font-bold">{{
+              entreprise.updated | date : "yyyy-MM-dd à HH:mm:ss"
+            }}</span>
           </li>
           <li>
             <span>Sources</span> :

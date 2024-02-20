@@ -5,7 +5,7 @@ import { SireneEntreprise } from 'src/app/shared/types/sirene-entreprise.type';
 @Component({
   selector: 'app-recherche-ban',
   templateUrl: './recherche-ban.component.html',
-  styleUrls: ['./recherche-ban.component.css'],
+  styleUrls: [],
 })
 export class RechercheBanComponent {
   private _range: number;
@@ -16,14 +16,13 @@ export class RechercheBanComponent {
 
   constructor(private _sireneEntrepriseService: SireneEntrepriseService) {
     this._range = 0;
-    this._address = "";
+    this._address = '';
 
     this._entreprises = [];
     this._isLoading = false;
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   formatLabel(value: number): string {
     return `${value}km`;
@@ -31,10 +30,12 @@ export class RechercheBanComponent {
 
   search() {
     this._isLoading = true;
-    this._sireneEntrepriseService.searchBan(this._address, this._range).subscribe((entreprises) => {
-      this._entreprises = entreprises;
-      this._isLoading = false;
-    })
+    this._sireneEntrepriseService
+      .searchBan(this._address, this._range)
+      .subscribe((entreprises) => {
+        this._entreprises = entreprises;
+        this._isLoading = false;
+      });
   }
 
   get range(): number {
@@ -57,7 +58,7 @@ export class RechercheBanComponent {
     return this._entreprises;
   }
 
-  get isLoading(){
+  get isLoading() {
     return this._isLoading;
   }
 }

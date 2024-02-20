@@ -8,7 +8,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { ScrapingSectionComponent } from './components/scraping-section/scraping-section.component';
 import { EntrepriseSectionComponent } from './components/entreprises-section/entreprises-section.component';
 import { EntreprisesListComponent } from './components/entreprises-list/entreprises-list.component';
-import { DetailsSectionComponent } from './components/details-section/details-section.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,7 +22,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +30,6 @@ import { MatButtonModule } from '@angular/material/button';
     ScrapingSectionComponent,
     EntrepriseSectionComponent,
     EntreprisesListComponent,
-    DetailsSectionComponent,
     SirenEntreprisesListComponent,
     ScrapingEntreprisesListComponent,
     EntrepriseViewComponent,
@@ -53,9 +50,9 @@ import { MatButtonModule } from '@angular/material/button';
     BrowserAnimationsModule,
     MatPaginatorModule,
     MatSliderModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

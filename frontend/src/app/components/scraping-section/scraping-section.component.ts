@@ -8,19 +8,21 @@ import { EntrepriseService } from 'src/app/shared/services/entreprise.service';
   styleUrls: [],
 })
 export class ScrapingSectionComponent {
-
-  constructor(private _entrepriseService: EntrepriseService, private _router: Router) {}
+  constructor(
+    private _entrepriseService: EntrepriseService,
+    private _router: Router
+  ) {}
 
   showSireneEntreprises() {
-    this._router.navigate(["/sireneEntreprises"])
+    this._router.navigate(['/sireneEntreprises']);
   }
 
   showScrapingEntreprises() {
-    this._router.navigate(["/scrapingEntreprises"])
+    this._router.navigate(['/scrapingEntreprises']);
   }
 
   showSireneEntreprisesRecherche() {
-    this._router.navigate(["/sireneEntreprisesSearch"])
+    this._router.navigate(['/sireneEntreprisesSearch']);
   }
 
   scrapSirene() {
