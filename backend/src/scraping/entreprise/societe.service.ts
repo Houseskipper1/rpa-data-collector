@@ -32,7 +32,7 @@ export class SocieteService {
 
   async fetchEntity(entrepriseId: string): Promise<EntrepriseEntity> {
     const entreprise = new EntrepriseEntity();
-    entreprise.lastDataSource = 'https://www.societe.com/societe/';
+    entreprise.lastDataSources = 'https://www.societe.com/societe/';
 
     const browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();

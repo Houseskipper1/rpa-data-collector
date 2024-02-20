@@ -89,9 +89,9 @@
       </div>
     </div>
 
-    <div class="flex flex-row px-10">
+    <div class="flex p-3 flex-row px-10">
       <div
-        class="flex-grow px-10 my-6 p-3 pb-6 bg-white border border-gray-200 rounded-lg shadow"
+        class="flex-grow px-10 my-6 bg-white border border-gray-200 rounded-lg shadow"
       >
         <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
           Finance
@@ -133,7 +133,7 @@
       </div>
     </div>
 
-    <div class="flex flex-row px-10">
+    <div class="flex z-1 flex-row px-10">
       <div
         class="basis-5/12 p-3 bg-white border border-gray-200 rounded-lg shadow rounded-br-none rounded-tr-none"
       >
@@ -169,9 +169,32 @@
         </ul>
       </div>
       <div
-        class="basis-7/12 z-1 flex justify-center items-center shadow rounded-br rounded-tr"
+        class="basis-7/12 flex justify-center items-center shadow rounded-br rounded-tr"
         id="map"
       ></div>
+    </div>
+
+    <div class="flex z-1 p-10 flex-row px-10">
+      <div
+        class="flex-grow p-3 bg-white border border-gray-200 rounded-lg shadow"
+      >
+        <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+          Historique et Provenance (Scraping)
+        </h2>
+        <ul class="list-none ml-3 mb-3">
+          <li>
+            <span>Date d'ajout</span> :
+            <span class="font-bold">{{ entreprise.created | date:'yyyy-MM-dd à HH:mm:ss' }}</span>          </li>
+          <li>
+            <span>Date de modification</span> :
+            <span class="font-bold">{{ entreprise.updated | date:'yyyy-MM-dd à HH:mm:ss' }}</span>
+          </li>
+          <li>
+            <span>Sources</span> :
+            <span class="font-bold">{{ entreprise.lastDataSource }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>

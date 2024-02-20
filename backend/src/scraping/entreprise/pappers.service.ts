@@ -33,7 +33,7 @@ export class PappersService {
         const pageContent = await page.content();
         const $ = cheerio.load(pageContent);
         let entreprise: EntrepriseEntity = new EntrepriseEntity();
-        entreprise.lastDataSource = "https://www.pappers.fr/entreprise"
+        entreprise.lastDataSources = "https://www.pappers.fr/entreprise"
         let representative: EntrepriseRepresentativeEntity =
           new EntrepriseRepresentativeEntity();
 
