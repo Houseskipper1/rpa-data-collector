@@ -44,5 +44,8 @@ export type Entreprise = {
   representatives: Representative[];
   location: Location[];
   financeDetails: FinanceDetails[];
+  created: Date;
+  updated: Date;
+  lastDataSource: string; //
   __v: number;
 };

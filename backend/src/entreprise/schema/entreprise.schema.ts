@@ -46,7 +46,7 @@ export class Entreprise extends Document {
   financeDetails: FinanceEntrepriseEntity[];
 
   @Prop({ required: false })
-  lastDataSource: string;
+  lastDataSources: string;
 
   @Prop({ required: false })
   created: Date;
