@@ -11,6 +11,7 @@ import { SocieteService } from './scraping/entreprise/societe.service';
 import { SireneEntrepriseController } from './sirene-entreprise/sirene-entreprise.controller';
 import { SireneEntrepriseService } from './sirene-entreprise/services/sirene-entreprise.service';
 import { SireneEntrepriseModule } from './sirene-entreprise/sirene-entreprise.module';
+import { ParameterModule } from './parameter/parameter.module';
  
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { SireneEntrepriseModule } from './sirene-entreprise/sirene-entreprise.mo
     SireneEntrepriseModule,
     MongooseModule.forRoot('mongodb://localhost:27017/rpaDataCollectorDB'),
     ConfigModule.forRoot(),
+    ParameterModule,
   ],
   controllers: [EntrepriseController, SireneEntrepriseController, AppController],
   providers: [BanService, PappersService, SireneService, SocieteService, SireneEntrepriseService],
