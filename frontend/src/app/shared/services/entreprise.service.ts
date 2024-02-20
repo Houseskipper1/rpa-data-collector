@@ -42,14 +42,14 @@ export class EntrepriseService {
 
   scrapOneWithPappers(sireneEntreprises: SireneEntreprise) {
     return this._http.put<void>(
-      `${this._apiUrl}/scraping/pappers/`+sireneEntreprises.siren,
+      `${this._apiUrl}/scraping/pappers/` + sireneEntreprises.siren,
       this._options()
     );
   }
 
   scrapOneWithPappersSimple(entreprise: Entreprise) {
     return this._http.put<void>(
-      `${this._apiUrl}/scraping/pappers/`+entreprise.siren,
+      `${this._apiUrl}/scraping/pappers/` + entreprise.siren,
       this._options()
     );
   }

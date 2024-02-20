@@ -5,10 +5,9 @@ import { environment } from 'src/environments/environment';
 import { SireneEntreprise } from '../types/sirene-entreprise.type';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SireneEntrepriseService {
-
   private readonly _apiUrl: string;
 
   constructor(private _http: HttpClient) {
@@ -16,10 +15,14 @@ export class SireneEntrepriseService {
   }
 
   getSireneEntreprises(): Observable<SireneEntreprise[]> {
-    return this._http.get<SireneEntreprise[]>(`${this._apiUrl}/sireneEntreprises`);
+    return this._http.get<SireneEntreprise[]>(
+      `${this._apiUrl}/sireneEntreprises`
+    );
   }
 
   searchBan(address: String, range: number): Observable<SireneEntreprise[]> {
-    return this._http.get<SireneEntreprise[]>(`${this._apiUrl}/search?address=${address}&range=${range}`)
+    return this._http.get<SireneEntreprise[]>(
+      `${this._apiUrl}/search?address=${address}&range=${range}`
+    );
   }
 }

@@ -6,7 +6,7 @@ import * as L from 'leaflet';
 @Component({
   selector: 'app-entreprise-view',
   templateUrl: './entreprise-view.component.html',
-  styleUrls: ['./entreprise-view.component.css'],
+  styleUrls: [],
 })
 export class EntrepriseViewComponent implements OnInit, AfterViewInit {
   private _entreprise: Entreprise;
@@ -51,8 +51,10 @@ export class EntrepriseViewComponent implements OnInit, AfterViewInit {
 
   private initializeMap() {
     this.map = L.map('map', {
-      center: [      this.entreprise.location[0].latitude,
-      this.entreprise.location[0].longitude], // Paris coordinates
+      center: [
+        this.entreprise.location[0].latitude,
+        this.entreprise.location[0].longitude,
+      ], // Paris coordinates
       zoom: 13,
       layers: [
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -60,10 +62,5 @@ export class EntrepriseViewComponent implements OnInit, AfterViewInit {
         }),
       ],
     });
-  }
-
-  private addMarkers() {
-    // Add your markers to the map
-    //this.markers.forEach((marker) => marker.addTo(this.map));
   }
 }

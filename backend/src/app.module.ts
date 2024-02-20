@@ -12,7 +12,7 @@ import { SireneEntrepriseController } from './sirene-entreprise/sirene-entrepris
 import { SireneEntrepriseService } from './sirene-entreprise/services/sirene-entreprise.service';
 import { SireneEntrepriseModule } from './sirene-entreprise/sirene-entreprise.module';
 import { ParameterModule } from './parameter/parameter.module';
- 
+
 @Module({
   imports: [
     EntrepriseModule,
@@ -21,7 +21,17 @@ import { ParameterModule } from './parameter/parameter.module';
     ConfigModule.forRoot(),
     ParameterModule,
   ],
-  controllers: [EntrepriseController, SireneEntrepriseController, AppController],
-  providers: [BanService, PappersService, SireneService, SocieteService, SireneEntrepriseService],
+  controllers: [
+    EntrepriseController,
+    SireneEntrepriseController,
+    AppController,
+  ],
+  providers: [
+    BanService,
+    PappersService,
+    SireneService,
+    SocieteService,
+    SireneEntrepriseService,
+  ],
 })
 export class AppModule {}

@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'sireneEntreprises', component: SirenEntreprisesViewComponent },
   { path: 'sireneEntreprisesSearch', component: RechercheBanComponent },
   { path: 'scrapingEntreprises', component: ScrapingEntreprisesListComponent },
-  { path: 'entreprise/:siren', component: EntrepriseViewComponent }
+  { path: 'entreprise/:siren', component: EntrepriseViewComponent },
 ];
 
 @NgModule({

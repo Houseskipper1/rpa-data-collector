@@ -1,17 +1,48 @@
-<br/>
-<br/>
-<br/>
-<br/>
-<form action="">
-  <mat-form-field>
-    <mat-label>Adresse</mat-label>
-    <input matInput [(ngModel)]="address" [ngModelOptions]="{standalone: true}">
-  </mat-form-field>
-  <mat-slider min="0" max="50" step="1" value="0" showTickMarks discrete [displayWith]="formatLabel">
-    <input matSliderThumb [(ngModel)]="range" [ngModelOptions]="{standalone: true}">
-  </mat-slider>
+<div class="mt-16 mb-16 top-16 container mx-auto max-w-screen-lg px-4 py-8">
+  <form class="mb-8">
+    <div class="mb-4">
+      <mat-form-field class="w-full">
+        <mat-label class="text-lg">Adresse</mat-label>
+        <input
+          matInput
+          [(ngModel)]="address"
+          [ngModelOptions]="{ standalone: true }"
+          class="mt-2 p-2 border rounded-lg w-full"
+        />
+      </mat-form-field>
+    </div>
 
-  <button mat-raised-button color="primary" (click)="search()">Rechercher</button>
-</form>
+    <div class="mb-4 w-full">
+      <mat-slider
+        min="0"
+        max="50"
+        step="1"
+        value="0"
+        showTickMarks
+        discrete
+        [displayWith]="formatLabel"
+        class="w-full"
+      >
+        <input
+          matSliderThumb
+          [(ngModel)]="range"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </mat-slider>
+    </div>
 
-<app-siren-entreprises-list [sireneEntreprises]="entreprises" [isLoading]="isLoading"/>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="search()"
+      class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    >
+      Rechercher
+    </button>
+  </form>
+
+  <app-siren-entreprises-list
+    [sireneEntreprises]="entreprises"
+    [isLoading]="isLoading"
+  ></app-siren-entreprises-list>
+</div>
