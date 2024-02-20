@@ -16,9 +16,10 @@ import { SireneService } from './api/sirene/sirene.service';
 import { ScrapSirenesDto } from './api/sirene/scrap-sirene.dto';
 import { BanService } from './api/ban/ban.service';
 import { EntreprisesIdsDto } from './entreprise/dto/entreprisesids.dto';
-import { Response } from 'express';
+import e, { Response } from 'express';
 import { SireneEntrepriseService } from './sirene-entreprise/services/sirene-entreprise.service';
 import { ParameterService } from './parameter/service/parameter.service';
+import { ifError } from 'assert';
 
 @Controller()
 export class AppController {
@@ -28,7 +29,7 @@ export class AppController {
     private _sireneService: SireneService,
     private readonly banService: BanService,
     private readonly _sirenEntrepriseService: SireneEntrepriseService,
-    private readonly _parameterService : ParameterService
+    private readonly _parameterService: ParameterService,
   ) {
     this._sireneService.populateSireneEntreprise();
   }
@@ -50,24 +51,34 @@ export class AppController {
 
     if (entreprise == undefined) {
       await this._pappersService.scrap(data.ids);
-    } 
+    }
   }
 
   @Put('scraping/pappers/:siren')
   async scrappingOneWithPappers(
     @Param('siren') siren: string,
-    @Query('forceScraping') forceScraping: boolean): Promise<void> {
-    
+    @Query('forceScraping') forceScraping: number
+  ): Promise<void> {
     const entreprise = await this.entrepriseService.findBySiren(siren);
-    if (entreprise == undefined || forceScraping) {
+
+    if (forceScraping ==1) {
       await this._pappersService.scrap(siren);
       return;
     }
-    const data = await this._parameterService.findByParameterName("scrappingParamRefresh");   
-    const updateTimestamp = entreprise.updated.getTime(); 
-    const currentTimestamp = new Date().getTime(); 
+
+    if (entreprise == undefined) {
+      await this._pappersService.scrap(siren);
+      return;
+    }
+
+    const data = await this._parameterService.findByParameterName(
+      'scrapingRefreshParam',
+    );
+    const updateTimestamp = entreprise.updated.getTime();
+    const currentTimestamp = new Date().getTime();
     const diffInMilliseconds = currentTimestamp - updateTimestamp;
-    if (diffInMilliseconds > data.refreshFrequency) {  
+
+    if (diffInMilliseconds > data.refreshFrequency) {
       await this._pappersService.scrap(siren); // rescrap if the refresh frequency is passed
     }
   }
@@ -88,7 +99,10 @@ export class AppController {
   }
 
   @Get('/search')
-  async searchInRadius(@Query("address") address: String, @Query("range") range: number) {
+  async searchInRadius(
+    @Query('address') address: String,
+    @Query('range') range: number,
+  ) {
     let pos = await this.banService.findByAddress(address);
     let res = this.banService.getInRadius(pos, range);
     return res;

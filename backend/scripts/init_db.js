@@ -21,7 +21,7 @@ async function runSetup() {
     );
 
     await parametersCollection.insertMany([
-      { parameterName: 'scrappingRefreshParam', refreshFrequency: 60 * 1000 }, 
+      { parameterName: 'scrapingRefreshParam', refreshFrequency: 60 * 1000 }, 
       { parameterName: 'sireneRefreshParam', refreshFrequency: 60 * 1000 },
     ]);
 
