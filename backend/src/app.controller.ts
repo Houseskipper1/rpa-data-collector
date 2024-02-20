@@ -18,6 +18,7 @@ import { BanService } from './api/ban/ban.service';
 import { EntreprisesIdsDto } from './entreprise/dto/entreprisesids.dto';
 import { Response } from 'express';
 import { SireneEntrepriseService } from './sirene-entreprise/services/sirene-entreprise.service';
+import { ParameterService } from './parameter/service/parameter.service';
 
 @Controller()
 export class AppController {
@@ -27,6 +28,7 @@ export class AppController {
     private _sireneService: SireneService,
     private readonly banService: BanService,
     private readonly _sirenEntrepriseService: SireneEntrepriseService,
+    private readonly _parameterService : ParameterService
   ) {
     this._sireneService.populateSireneEntreprise();
   }
@@ -48,27 +50,26 @@ export class AppController {
 
     if (entreprise == undefined) {
       await this._pappersService.scrap(data.ids);
-    }
-
- 
-  
+    } 
   }
 
   @Put('scraping/pappers/:siren')
-  async scrappingOneWithPappers(@Param('siren') siren: string): Promise<void> {
+  async scrappingOneWithPappers(
+    @Param('siren') siren: string,
+    @Query('forceScraping') forceScraping: boolean): Promise<void> {
+    
     const entreprise = await this.entrepriseService.findBySiren(siren);
-    if (entreprise == undefined) {
+    if (entreprise == undefined || forceScraping) {
       await this._pappersService.scrap(siren);
       return;
     }
+    const data = await this._parameterService.findByParameterName("scrappingParamRefresh");   
     const updateTimestamp = entreprise.updated.getTime(); 
     const currentTimestamp = new Date().getTime(); 
     const diffInMilliseconds = currentTimestamp - updateTimestamp;
-
-    if (diffInMilliseconds > 2 * 60 * 1000) { // 2 minutes en millisecondes  
-      await this._pappersService.scrap(siren); // rescrapp 
+    if (diffInMilliseconds > data.refreshFrequency) {  
+      await this._pappersService.scrap(siren); // rescrap if the refresh frequency is passed
     }
-    
   }
 
   @Get('CSVExport')

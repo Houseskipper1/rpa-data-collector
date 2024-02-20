@@ -1,7 +1,7 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 
 @Exclude()
-export class ParameterEntity {
+export class ParameterEntity{
   @Expose()
   @Type(() => String)
   id: string;

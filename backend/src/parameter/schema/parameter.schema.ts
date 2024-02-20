@@ -3,10 +3,10 @@ import { Document } from 'mongoose';
 
 @Schema({ collection: 'parameters' })
 export class Parameter extends Document {
-  @Prop()
-  _id: number;
+  @Prop({ required: false })
+  id: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true }) // Définir unique: true pour rendre parameterName unique
   parameterName: string;
 
   @Prop({ required: true })
