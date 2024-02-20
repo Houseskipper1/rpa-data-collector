@@ -1,0 +1,47 @@
+version: "3"
+services:
+  mongo:
+    container_name: rpa-mongo
+    image: mongo
+    restart: always
+    environment:
+      - TODO=TODO
+    volumes:
+      - rpa-mongo-volume:/data/db
+      - ./mongod.yml:/etc/mongod.conf
+    ports:
+      - "27020:27017"
+    networks:
+      - rpa-network
+
+  backend:
+    container_name: rpa-backend
+    networks:
+      - rpa-network
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    environment:
+      - SIREN_API_KEY=TODO
+      - MONGO_URL=TODO
+    ports:
+      - "3020:3000"
+
+  frontend:
+    container_name: rpa-frontend
+    networks:
+      - rpa-network
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    environment:
+      - TODO=TODO
+    ports:
+      - "4220:4200"
+
+networks:
+  rpa-network:
+    driver: bridge
+
+volumes:
+  rpa-mongo-volume:
