@@ -17,7 +17,7 @@ import { ParameterModule } from './parameter/parameter.module';
   imports: [
     EntrepriseModule,
     SireneEntrepriseModule,
-    MongooseModule.forRoot('mongodb://localhost:27017/rpaDataCollectorDB'),
+    MongooseModule.forRoot('${process.env.MONGO_URL}'),
     ConfigModule.forRoot(),
     ParameterModule,
   ],

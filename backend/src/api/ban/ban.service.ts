@@ -44,8 +44,6 @@ export class BanService {
 
             if (!fs.existsSync(newFile)) {
                 console.log("> Téléchargement du ficher");
-
-                // J'ai honte
                 require("child_process")
                     .execSync(`curl -X POST -F data=@${file} -F resut_columns=latitude -F result_colums=longitude https://api-adresse.data.gouv.fr/search/csv/ > ${newFile}`, (err, stdout, stderr) => {
                         if (err) {
@@ -53,11 +51,6 @@ export class BanService {
                             return;
 
                         }
-                        // if (stderr) {
-                        //     console.log(`stderr: ${stderr}`);
-                        //     return;
-                        // }
-                        // console.log(`stdout: ${stdout}`);
                     })
 
                 fs.unlink(file.toString(), () => { });
@@ -149,7 +142,6 @@ export class BanService {
             );
     }
 
-    // Added By Zinou
     async findCompletedLocationByAddress(
         address: string,
     ): Promise<LocationEntrepriseEntity> {
