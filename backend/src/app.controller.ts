@@ -32,6 +32,7 @@ export class AppController {
     private readonly _parameterService: ParameterService,
   ) {
     this._sireneService.populateSireneEntreprise();
+    this.banService.updateSireneEntreprise();
   }
 
   @Put('scraping/societe')
@@ -57,11 +58,11 @@ export class AppController {
   @Put('scraping/pappers/:siren')
   async scrappingOneWithPappers(
     @Param('siren') siren: string,
-    @Query('forceScraping') forceScraping: number
+    @Query('forceScraping') forceScraping: number,
   ): Promise<void> {
     const entreprise = await this.entrepriseService.findBySiren(siren);
 
-    if (forceScraping ==1) {
+    if (forceScraping == 1) {
       await this._pappersService.scrap(siren);
       return;
     }

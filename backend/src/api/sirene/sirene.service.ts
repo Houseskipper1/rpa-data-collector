@@ -10,6 +10,7 @@ import { SireneEntrepriseService } from 'src/sirene-entreprise/services/sirene-e
 import { NafService } from 'src/sirene-entreprise/services/naf.service';
 import { NafEntity } from 'src/sirene-entreprise/entities/naf.entity';
 import { SireneEntrepriseEntity } from 'src/sirene-entreprise/entities/sirene-entreprise.entity';
+import { BanService } from 'src/api/ban/ban.service';
 
 @Injectable()
 export class SireneService {
@@ -42,6 +43,7 @@ export class SireneService {
     private _entrepriseService: EntrepriseService,
     private _sireneEntrepriseService: SireneEntrepriseService,
     private _nafService: NafService,
+    private _banService: BanService,
   ) {
     this.pathsUrls = [
       {
@@ -381,6 +383,8 @@ export class SireneService {
                   's.',
               );
               streams['StockEtab'].close();
+              console.log('Début de la mise à jour avec BAN.');
+              this._banService.updateSireneEntreprise();
             });
         });
     }
