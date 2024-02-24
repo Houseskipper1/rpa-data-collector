@@ -1,5 +1,5 @@
 <div class="flex flex-col md:flex-row bg-slate-50">
-  <div class="mt-20 w-3/6 bg-gray-200 p-4 rounded-lg shadow-md mx-auto">
+  <div class="mt-20 w-4/6 bg-gray-200 p-4 rounded-lg shadow-md mx-auto">
     <div class="p-3">
       <h1 class="text-2xl font-bold text-gray-900">{{ entreprise.name }}</h1>
     </div>
@@ -91,7 +91,7 @@
 
     <div class="flex p-3 flex-row px-10">
       <div
-        class="flex-grow px-10 my-6 bg-white border border-gray-200 rounded-lg shadow"
+        class="flex-grow p-3 my-6 bg-white border border-gray-200 rounded-lg shadow"
       >
         <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
           Finance
@@ -106,7 +106,7 @@
           </h3>
           <table
             *ngIf="entreprise.financeDetails.length != 0"
-            class="table-auto mx-auto"
+            class="table-auto mx-auto mb-5"
           >
             <thead>
               <tr>
@@ -184,10 +184,15 @@
         <ul class="list-none ml-3 mb-3">
           <li>
             <span>Date d'ajout</span> :
-            <span class="font-bold">{{ entreprise.created | date:'yyyy-MM-dd à HH:mm:ss' }}</span>          </li>
+            <span class="font-bold">{{
+              entreprise.created | date : "yyyy-MM-dd à HH:mm:ss"
+            }}</span>
+          </li>
           <li>
             <span>Date de modification</span> :
-            <span class="font-bold">{{ entreprise.updated | date:'yyyy-MM-dd à HH:mm:ss' }}</span>
+            <span class="font-bold">{{
+              entreprise.updated | date : "yyyy-MM-dd à HH:mm:ss"
+            }}</span>
           </li>
           <li>
             <span>Sources</span> :

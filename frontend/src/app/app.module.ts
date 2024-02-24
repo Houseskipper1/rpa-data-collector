@@ -22,6 +22,8 @@ import { SirenEntreprisesViewComponent } from './components/siren-entreprises-vi
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
+import { DrawerMenuComponent } from './components/drawer-menu/drawer-menu.component';
+import { ParametersListComponent } from './components/parameters-list/parameters-list.component';
 
 
 @NgModule({
@@ -41,6 +43,8 @@ import { MatButtonModule } from '@angular/material/button';
     SirenEntreprisesListComponent,
     SirenEntreprisesViewComponent,
     RechercheBanComponent,
+    DrawerMenuComponent,
+    ParametersListComponent,
   ],
   imports: [
     BrowserModule,
