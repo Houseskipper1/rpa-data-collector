@@ -32,7 +32,6 @@ export class AppController {
     private readonly _parameterService: ParameterService,
   ) {
     this._sireneService.populateSireneEntreprise();
-    this.banService.updateSireneEntreprise();
   }
 
   @Put('scraping/societe')
