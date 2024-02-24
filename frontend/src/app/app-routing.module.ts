@@ -6,7 +6,7 @@ import { ScrapingEntreprisesListComponent } from './components/scraping-entrepri
 import { SirenEntreprisesViewComponent } from './components/siren-entreprises-view/siren-entreprises-view.component';
 import { RechercheBanComponent } from './components/recherche-ban/recherche-ban.component';
 import { DrawerMenuComponent } from './components/drawer-menu/drawer-menu.component';
-import { ParametersListComponent } from './components/parameters-list/parameters-list.component';
+import { ParametersListComponent } from './components/parameter/parameters-list/parameters-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
