@@ -61,7 +61,7 @@ export class AppController {
   ): Promise<void> {
     const entreprise = await this.entrepriseService.findBySiren(siren);
 
-    if (forceScraping ==1) {
+    if (forceScraping == 1) {
       await this._pappersService.scrap(siren);
       return;
     }

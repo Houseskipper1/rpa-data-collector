@@ -1,6 +1,15 @@
-import { Controller, Get, Param, Put, Body, Delete, Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Put,
+  Body,
+  Delete,
+  Post,
+} from '@nestjs/common';
 import { ParameterService } from '../service/parameter.service';
 import { ParameterEntity } from '../entity/parameter.entity';
+import { UpdateParameterTimeDto } from '../dto/parameter.time.update';
 
 @Controller('parameters')
 export class ParameterController {
@@ -11,6 +20,13 @@ export class ParameterController {
     return this.parameterService.findById(id);
   }
 
+  @Get('nameParameter/:name')
+  async findByNameParameter(
+    @Param('name') name: string,
+  ): Promise<ParameterEntity | null> {
+    return this.parameterService.findByParameterName(name);
+  }
+
   @Get()
   async findAll(): Promise<ParameterEntity[]> {
     return this.parameterService.findAll();
@@ -19,9 +35,9 @@ export class ParameterController {
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() updatedParameter: Partial<ParameterEntity>,
-  ): Promise<ParameterEntity | null> {
-    return this.parameterService.update(id, updatedParameter);
+    @Body() updatedParameterDto: UpdateParameterTimeDto,
+  ) : Promise<ParameterEntity | null> {
+    return this.parameterService.update(id, updatedParameterDto);
   }
 
   @Delete(':id')
@@ -33,4 +49,5 @@ export class ParameterController {
   async create(@Body() parameter: ParameterEntity): Promise<ParameterEntity> {
     return this.parameterService.create(parameter);
   }
+
 }
