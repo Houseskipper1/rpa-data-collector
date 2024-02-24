@@ -12,12 +12,16 @@ import { SireneEntrepriseController } from './sirene-entreprise/sirene-entrepris
 import { SireneEntrepriseService } from './sirene-entreprise/services/sirene-entreprise.service';
 import { SireneEntrepriseModule } from './sirene-entreprise/sirene-entreprise.module';
 import { ParameterModule } from './parameter/parameter.module';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+console.log(process.env.MONGO_URL);
 
 @Module({
   imports: [
     EntrepriseModule,
     SireneEntrepriseModule,
-    MongooseModule.forRoot('mongodb://localhost:27017/rpaDataCollectorDB'),
+    MongooseModule.forRoot(`${process.env.MONGO_URL}`),
     ConfigModule.forRoot(),
     ParameterModule,
   ],

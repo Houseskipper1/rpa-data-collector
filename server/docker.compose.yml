@@ -2,13 +2,13 @@ version: "3"
 services:
   mongo:
     container_name: rpa-mongo
-    image: mongo
+    image: mongo:latest
     restart: always
     environment:
-      - TODO=TODO
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
     volumes:
       - rpa-mongo-volume:/data/db
-      - ./mongod.yml:/etc/mongod.conf
     ports:
       - "27020:27017"
     networks:
@@ -22,8 +22,8 @@ services:
       context: ../backend
       dockerfile: Dockerfile
     environment:
-      - SIREN_API_KEY=TODO
-      - MONGO_URL=TODO
+      - SIREN_API_KEY=0e8e57f5-3a90-3844-ad19-05f66c6cecf3
+      - MONGO_URL=mongodb://rpa-mongo/rpaDataCollectorDB
     ports:
       - "3020:3000"
 
