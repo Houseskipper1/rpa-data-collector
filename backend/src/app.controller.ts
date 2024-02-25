@@ -57,7 +57,7 @@ export class AppController {
   @Put('scraping/pappers/:siren')
   async scrappingOneWithPappers(
     @Param('siren') siren: string,
-    @Query('forceScraping') forceScraping: number
+    @Query('forceScraping') forceScraping: number,
   ): Promise<void> {
     const entreprise = await this.entrepriseService.findBySiren(siren);
 

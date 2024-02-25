@@ -12,19 +12,19 @@
     </mat-paginator>
     <div class="center-section mt-16 mb-16 md:mx-0 mx-1 top-16 w-96 lg:w-auto">
       <ul *ngFor="let sireneEntreprise of currenSireneEntreprisesToShow">
-        <li
-          class="card-entreprise bg-background text-font p-4 rounded-lg shadow-md mt-4"
-        >
-          <div class="info-container mb-4">
-            <h2 class="text-xl font-semibold">{{ sireneEntreprise.name }}</h2>
-            <div class="font-bold">SIREN:</div>
-            <div class="mb-1">{{ sireneEntreprise.siren }}</div>
+        <li class="bg-background text-font p-4 rounded-lg shadow-md mt-4">
+          <div class="flex">
+            <div class="w-80 mr-4">
+              <h2 class="text-xl font-semibold">{{ sireneEntreprise.name }}</h2>
+              <div class="font-bold">SIREN:</div>
+              <div class="mb-1">{{ sireneEntreprise.siren }}</div>
 
-            <div class="font-bold">NIC:</div>
-            <div class="mb-1">{{ sireneEntreprise.nic }}</div>
 
-            <div class="font-bold">Code postal:</div>
-            <div class="mb-1">{{ sireneEntreprise.postalCode }}</div>
+              <div class="font-bold">NIC:</div>
+              <div class="mb-1">{{ sireneEntreprise.nic }}</div>
+
+              <div class="font-bold">Code postal:</div>
+              <div class="mb-1">{{ sireneEntreprise.postalCode }}</div>
 
             <div class="font-bold">Libellé NAF:</div>
             <div class="mb-1">{{ sireneEntreprise.naf }}</div>
@@ -45,6 +45,7 @@
               >
                 Scrap
               </button>
+
             </div>
           </div>
         </li>
@@ -53,7 +54,9 @@
   </div>
 
   <div *ngIf="isLoading" class="flex-2 w-full lg:w-1/2">
-    <div class="text-center-spinner">
+    <div
+      class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+    >
       <div role="status">
         <svg
           aria-hidden="true"

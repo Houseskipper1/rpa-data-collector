@@ -8,7 +8,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { ScrapingSectionComponent } from './components/scraping-section/scraping-section.component';
 import { EntrepriseSectionComponent } from './components/entreprises-section/entreprises-section.component';
 import { EntreprisesListComponent } from './components/entreprises-list/entreprises-list.component';
-import { DetailsSectionComponent } from './components/details-section/details-section.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,6 +26,9 @@ import { ParametersListComponent } from './components/parameter/parameters-list/
 import { EditParameterComponent } from './components/parameter/edit-parameter/edit-parameter.component';
 import { DialogComponent } from './components/parameter/dialog/dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +37,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     ScrapingSectionComponent,
     EntrepriseSectionComponent,
     EntreprisesListComponent,
-    DetailsSectionComponent,
     SirenEntreprisesListComponent,
     ScrapingEntreprisesListComponent,
     EntrepriseViewComponent,

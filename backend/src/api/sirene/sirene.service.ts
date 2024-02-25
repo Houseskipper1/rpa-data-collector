@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-//TODO trouver pourquoi "/src/entreprise/entities/entreprise.entity" marche pas pour jest
 import { EntrepriseEntity } from '../../entreprise/entities/entreprise.entity';
-
 import * as fs from 'fs';
 import * as yauzl from 'yauzl';
 import { parseStream } from 'fast-csv';
@@ -12,19 +10,18 @@ import { SireneEntrepriseService } from 'src/sirene-entreprise/services/sirene-e
 import { NafService } from 'src/sirene-entreprise/services/naf.service';
 import { NafEntity } from 'src/sirene-entreprise/entities/naf.entity';
 import { SireneEntrepriseEntity } from 'src/sirene-entreprise/entities/sirene-entreprise.entity';
-import { BanService } from '../ban/ban.service';
+import { BanService } from 'src/api/ban/ban.service';
 
 @Injectable()
 export class SireneService {
   private _ressourcePath = 'ressources/sirene/';
   private pathsUrls;
-  // private _baseUrlUL = "https://api.insee.fr/entreprises/sirene/V3/siren/";
   private _baseURLStockEtab =
     'https://api.insee.fr/entreprises/sirene/V3/siret/';
   private _effectifsRep = {
     null: null,
     '': null,
-    'NN': null,
+    NN: null,
     '00': '0',
     '01': '1-2',
     '02': '3-5',
@@ -42,13 +39,17 @@ export class SireneService {
     '53': '10000+',
   };
 
-  constructor(private _entrepriseService: EntrepriseService,
-              private _sireneEntrepriseService: SireneEntrepriseService,
-              private _nafService: NafService,
-              private _banService: BanService
-              ) {
+  constructor(
+    private _entrepriseService: EntrepriseService,
+    private _sireneEntrepriseService: SireneEntrepriseService,
+    private _nafService: NafService,
+    private _banService: BanService,
+  ) {
     this.pathsUrls = [
-      {"name": "StockUL"  , "url": "https://files.data.gouv.fr/insee-sirene/StockUniteLegale_utf8.zip"},
+      {
+        name: 'StockUL',
+        url: 'https://files.data.gouv.fr/insee-sirene/StockUniteLegale_utf8.zip',
+      },
       {
         name: 'StockEtab',
         url: 'https://files.data.gouv.fr/insee-sirene/StockEtablissement_utf8.zip',
@@ -62,7 +63,7 @@ export class SireneService {
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
-        console.log('Début du dézip de ' + zipPath);
+        console.log('Début du dézip de "' + zipPath + '".');
         yauzl.open(zipPath, { lazyEntries: true }, (err, zipfile) => {
           if (err) {
             reject(err);
@@ -70,7 +71,6 @@ export class SireneService {
           }
           zipfile.readEntry();
           zipfile.on('entry', function (entry) {
-            // Fichier
             zipfile.openReadStream(entry, function (err, readStream) {
               if (err) {
                 return Promise.reject(err);
@@ -82,7 +82,7 @@ export class SireneService {
             });
           });
           zipfile.on('end', function () {
-            console.log('Dézip terminé');
+            console.log('Dézip terminé.');
             fs.unlinkSync(zipPath);
             resolve();
           });
@@ -96,29 +96,29 @@ export class SireneService {
   private async downloadCSV(path: string, url: string) {
     const file = fs.createWriteStream(path);
     try {
-      console.log('Début du téléchargement de ' + url);
+      console.log('Début du téléchargement de "' + url + '".');
       const response = await axios.get(url, { responseType: 'stream' });
       response.data.pipe(file);
       await new Promise((resolve, reject) => {
-          file.on('finish', resolve);
-          file.on('error', reject);
+        file.on('finish', resolve);
+        file.on('error', reject);
       });
-      console.log('Téléchargement terminé');
+      console.log('Téléchargement terminé.');
     } catch (err) {
       fs.unlink(path, () => console.error(err.message));
     }
   }
 
   private async getSireneCSVs() {
-    let streams = {}
+    let streams = {};
     for (const pathDatas of this.pathsUrls) {
       let zipPath = this._ressourcePath + pathDatas['name'] + '.zip';
       let csvPath = this._ressourcePath + pathDatas['name'] + '.csv';
       if (!fs.existsSync(csvPath)) {
-        await this.downloadCSV(zipPath, pathDatas['url'])
+        await this.downloadCSV(zipPath, pathDatas['url']);
         await this.unzipAndRemove(zipPath, csvPath);
       }
-      streams[pathDatas['name']] = fs.createReadStream(csvPath)
+      streams[pathDatas['name']] = fs.createReadStream(csvPath);
     }
 
     return streams;
@@ -129,7 +129,6 @@ export class SireneService {
     entreprise: EntrepriseEntity,
     isCSV: boolean,
   ): EntrepriseEntity {
-    console.log(res)
     // Identité
     entreprise.siret = res.siret;
     entreprise.siren = res.siren;
@@ -214,7 +213,7 @@ export class SireneService {
       return Promise.reject(new Error('siret non valide'));
     }
     // À changer
-    let stream = await this.getSireneCSVs()["StockEtab"];
+    let stream = await this.getSireneCSVs()['StockEtab'];
 
     console.log(
       'Début de la recherche CSV, cela peut prendre quelques minutes...',
@@ -230,7 +229,7 @@ export class SireneService {
             resolve(entreprise);
           }
         })
-        .on('end', (rowCount: number) => {
+        .on('end', (_: number) => {
           stream.close();
           reject(new Error('not found'));
         });
@@ -247,87 +246,147 @@ export class SireneService {
     return res;
   }
 
-  private isSelectedNaf(nafCodes, nafCodeTested): boolean{
-    for(const naf of nafCodes){
-        if(naf.code === nafCodeTested){
-            return true;
-        }
+  private isSelectedNaf(nafCodes, nafCodeTested): boolean {
+    for (const naf of nafCodes) {
+      if (naf.code === nafCodeTested) {
+        return true;
+      }
     }
     return false;
   }
 
-  async populateSireneEntreprise(){
-    if(await this._sireneEntrepriseService.isEmpty()){
-        let nafCodes = JSON.parse(await fs.promises.readFile(this._ressourcePath + "NafCodes.json", "utf-8"))["NafCodes"];
-        for (const naf of nafCodes){
-            await this._nafService.create(naf as NafEntity)
-        }
-        let streams = await this.getSireneCSVs();
-        let c = 0
-        console.log('Début de la création de la liste d\'entreprise simple (cela prend environ 1h)');
-        let timeStart = new Date()
+  async countLines(filePath) {
+    let totalLines = 0;
+    const readStream = fs.createReadStream(filePath, { encoding: 'utf-8' });
 
+    for await (const chunk of readStream) {
+      totalLines += chunk.split('\n').length - 1;
+    }
 
-        parseStream(streams["StockEtab"], { headers: true })
+    return totalLines;
+  }
+
+  async populateSireneEntreprise() {
+    if (await this._sireneEntrepriseService.isEmpty()) {
+      let nafCodes = JSON.parse(
+        await fs.promises.readFile(
+          this._ressourcePath + 'NafCodes.json',
+          'utf-8',
+        ),
+      )['NafCodes'];
+      for (const naf of nafCodes) {
+        await this._nafService.create(naf as NafEntity);
+      }
+      let streams = await this.getSireneCSVs();
+      let c = 0;
+      let stockEtabPath = this._ressourcePath + 'StockEtab.csv';
+      let totalLines = await this.countLines(stockEtabPath);
+      console.log(
+        "Début de la création de la liste d'entreprise via siren (cela prend environ 90 minutes).",
+      );
+      let timeStart = new Date();
+
+      parseStream(streams['StockEtab'], { headers: true })
         .on('error', (error) => console.error(error))
         .on('data', async (row) => {
-            c += 1;
-            // etatAdministratifEtablissement A: Actif
-            if (row.etatAdministratifEtablissement === 'A' && this.isSelectedNaf(nafCodes, row.activitePrincipaleEtablissement)) {
-                let sireneEntreprise = new SireneEntrepriseEntity();
-                sireneEntreprise.siren = row.siren;
-                sireneEntreprise.nic = row.nic;
-                // [ND] lorsque le statut de diffusion de l'etablissement est en non diffusable (tatutDiffusionEtablissement = P)
-                sireneEntreprise.name = ["", "[ND]"].includes(row.denominationUsuelleEtablissement) ? "" : row.denominationUsuelleEtablissement;
-                sireneEntreprise.postalCode = ["", "[ND]"].includes(row.codePostalEtablissement) ? null : row.codePostalEtablissement;
-                let address = row.numeroVoieEtablissement + " " + row.typeVoieEtablissement + " " + row.libelleVoieEtablissement;
-                sireneEntreprise.address = address.includes("[ND]") ? "" : address;
-                sireneEntreprise.city = row.libelleCommuneEtablissement;
-                sireneEntreprise.naf = (await this._nafService.findByCode(row.activitePrincipaleEtablissement))._id;
-                this._sireneEntrepriseService.create(sireneEntreprise);
-            }
-            if (c%100000 == 0){
-                console.log(c);
-            }
+          c += 1;
+          if (
+            this.isSelectedNaf(nafCodes, row.activitePrincipaleEtablissement)
+          ) {
+            let sireneEntreprise = new SireneEntrepriseEntity();
+            sireneEntreprise.siren = row.siren;
+            sireneEntreprise.nic = row.nic;
+            // [ND] lorsque le statut de diffusion de l'etablissement est en non diffusable (tatutDiffusionEtablissement = P)
+            sireneEntreprise.name = ['', '[ND]'].includes(
+              row.denominationUsuelleEtablissement,
+            )
+              ? ''
+              : row.denominationUsuelleEtablissement;
+            sireneEntreprise.postalCode = ['', '[ND]'].includes(
+              row.codePostalEtablissement,
+            )
+              ? null
+              : row.codePostalEtablissement;
+            sireneEntreprise.naf = (
+              await this._nafService.findByCode(
+                row.activitePrincipaleEtablissement,
+              )
+            )._id;
+            await this._sireneEntrepriseService.create(sireneEntreprise);
+          }
+          if (c % 100000 == 0) {
+            console.log(c + ' / ' + totalLines + ' entreprises traitées');
+          }
         })
-        .on('end', (rowCount: number) => {
-            let timeEnd = new Date()
-            console.log("Fin de la création en " + (timeEnd.getTime() - timeStart.getTime()) + " ms" )
-            streams["StockEtab"].close();
+        .on('end', async (_: number) => {
+          let timeEnd = new Date();
+          console.log(
+            'Fin de la création en : ' +
+              Math.floor((timeEnd.getTime() - timeStart.getTime()) / 60000) +
+              'm ' +
+              (((timeEnd.getTime() - timeStart.getTime()) / 1000) % 60) +
+              's.',
+          );
+          streams['StockEtab'].close();
 
-            //patch des nom dans le cas d'une unité légal.
-            console.log('Début du patch des noms des etablissements en cas d\'unité légal (cela prend environ 15 minutes');
-            timeStart = new Date()
+          // Patch des nom dans le cas d'une unité légal.
+          console.log(
+            "Début du patch des noms des etablissements en cas d'unité légal.",
+          );
+          timeStart = new Date();
 
-            c = 0
-            parseStream(streams["StockUL"], { headers: true })
+          c = 0;
+          let stockULPath = this._ressourcePath + 'StockUL.csv';
+          let totalLines = await this.countLines(stockULPath);
+          parseStream(streams['StockUL'], { headers: true })
             .on('error', (error) => console.error(error))
-            .on('data', (row) => {
-                c += 1;
-                if (this.isSelectedNaf(nafCodes, row.activitePrincipaleUniteLegale)) {
-                  this._sireneEntrepriseService
-                      .findBySiren(row.siren)
-                      .then((sireneEntreprises) => sireneEntreprises.map((e) => {
-                        if(e.name == ""){
-                        e.name = ["", "[ND]"].includes(row.denominationUniteLegale) ? (["", "[ND]"].includes(row.prenomUsuelUniteLegale) ? "" : row.nomUniteLegale + " " + row.prenomUsuelUniteLegale) : row.denominationUniteLegale;
+            .on('data', async (row) => {
+              c += 1;
+              if (
+                this.isSelectedNaf(
+                  nafCodes,
+                  row.activitePrincipaleEtablissement,
+                )
+              ) {
+                this._sireneEntrepriseService
+                  .findBySiren(row.siren)
+                  .then((sireneEntreprises) =>
+                    sireneEntreprises.map((e) => {
+                      if (e.name == '') {
+                        e.name = ['', '[ND]'].includes(
+                          row.denominationUniteLegale,
+                        )
+                          ? ['', '[ND]'].includes(row.prenomUsuelUniteLegale)
+                            ? ''
+                            : row.nomUniteLegale +
+                              ' ' +
+                              row.prenomUsuelUniteLegale
+                          : row.denominationUniteLegale;
                         this._sireneEntrepriseService.update(e);
-                        }
-                      }))
+                      }
+                    }),
+                  );
               }
-                if (c%100000 == 0){
-                  console.log(c);
-                }
-
+              if (c % 100000 == 0) {
+                console.log(c + ' / ' + totalLines + ' entreprises traitées');
+              }
             })
-            .on('end', (rowCount: number) => {
-                let timeEnd = new Date()
-                console.log("Fin du patch des noms en " + (timeEnd.getTime() - timeStart.getTime()) + " ms" )
-                streams["StockEtab"].close();
-                console.log('Début de la mise à jour de la liste d\'entreprise simple');
-                this._banService.updateSireneEntreprise();
+            .on('end', (_: number) => {
+              let timeEnd = new Date();
+              console.log(
+                'Fin du patch des noms en : ' +
+                  Math.floor(
+                    (timeEnd.getTime() - timeStart.getTime()) / 60000,
+                  ) +
+                  'm ' +
+                  (((timeEnd.getTime() - timeStart.getTime()) / 1000) % 60) +
+                  's.',
+              );
+              streams['StockEtab'].close();
+              console.log('Début de la mise à jour avec BAN.');
+              this._banService.updateSireneEntreprise();
             });
         });
     }
   }
-
 }

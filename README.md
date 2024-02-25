@@ -32,3 +32,6 @@ Problèmes de ports sur Windows :
 (Admin)
 net stop winnat
 net start winnat
+
+docker compose -f .\docker.compose.yml up
+

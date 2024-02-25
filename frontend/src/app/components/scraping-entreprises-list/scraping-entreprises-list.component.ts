@@ -6,28 +6,30 @@ import { Entreprise } from 'src/app/shared/types/entreprise.type';
 @Component({
   selector: 'app-scraping-entreprises-list',
   templateUrl: './scraping-entreprises-list.component.html',
-  styleUrls: ['./scraping-entreprises-list.component.css'],
+  styleUrls: [],
 })
 export class ScrapingEntreprisesListComponent implements OnInit {
-
   private _entreprises: Entreprise[];
   private _currentEntreprisesToShow: Entreprise[];
   private _pageSize;
 
-  constructor(private _entrepriseService : EntrepriseService,
-              private router: Router) {
-
+  constructor(
+    private _entrepriseService: EntrepriseService,
+    private router: Router
+  ) {
     this._entreprises = [];
     this._currentEntreprisesToShow = [];
     this._pageSize = 10;
-
   }
 
   ngOnInit(): void {
     this._entrepriseService.getEntreprises().subscribe((entreprises) => {
       this._entreprises = entreprises;
-      this._currentEntreprisesToShow = this._entreprises.slice(0, this._pageSize);
-    })
+      this._currentEntreprisesToShow = this._entreprises.slice(
+        0,
+        this._pageSize
+      );
+    });
   }
 
   onPageChange($event: any) {
@@ -56,5 +58,6 @@ export class ScrapingEntreprisesListComponent implements OnInit {
       this.router.navigate(['/entreprise', entreprise.siren]);
     }
    );
+
   }
 }

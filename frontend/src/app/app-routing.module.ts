@@ -15,8 +15,8 @@ const routes: Routes = [
   { path: 'sireneEntreprisesSearch', component: RechercheBanComponent },
   { path: 'scrapingEntreprises', component: ScrapingEntreprisesListComponent },
   { path: 'entreprise/:siren', component: EntrepriseViewComponent },
-  { path: 'test', component: DrawerMenuComponent },
   { path: 'parameters', component: ParametersListComponent },
+
 ];
 
 @NgModule({

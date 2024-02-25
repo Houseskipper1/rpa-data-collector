@@ -6,8 +6,6 @@ import { EntrepriseRepresentativeEntity } from 'src/entreprise/entities/entrepri
 import { LocationEntrepriseEntity } from 'src/entreprise/entities/entreprise.location.entity';
 import { FinanceEntrepriseEntity } from 'src/entreprise/entities/entreprise.Finance.entity';
 
-// https://www.societe.com/societe/sarl-favata-338411101.html
-
 @Injectable()
 export class SocieteService {
   private _entreprisesData: string[] = [
@@ -208,12 +206,6 @@ export class SocieteService {
           (el) => el.textContent,
           secondSpan,
         );
-        /*
-          Paul le shareCapital il est plus dans l'entitée finance.
-          il est devenu un champ dans l'entité entreprise.
-        */
-        //finance.shareCapital = capitalSocialText.replace(/\s/g, '');
-
         finances.push(finance);
       }
     }

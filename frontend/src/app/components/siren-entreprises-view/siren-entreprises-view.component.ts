@@ -5,10 +5,9 @@ import { SireneEntreprise } from 'src/app/shared/types/sirene-entreprise.type';
 @Component({
   selector: 'app-siren-entreprises-view',
   templateUrl: './siren-entreprises-view.component.html',
-  styleUrls: ['./siren-entreprises-view.component.css'],
+  styleUrls: [],
 })
 export class SirenEntreprisesViewComponent implements OnInit {
-
   private _sireneEntreprises: SireneEntreprise[];
   private _isLoading: boolean;
 
@@ -19,17 +18,19 @@ export class SirenEntreprisesViewComponent implements OnInit {
 
   ngOnInit(): void {
     this._isLoading = true;
-    this._sireneEntrepriseService.getSireneEntreprises().subscribe((sireneEntreprises) => {
-      this._sireneEntreprises = sireneEntreprises;
-      this._isLoading = false;
-    })
+    this._sireneEntrepriseService
+      .getSireneEntreprises()
+      .subscribe((sireneEntreprises) => {
+        this._sireneEntreprises = sireneEntreprises;
+        this._isLoading = false;
+      });
   }
 
   get sireneEntreprises() {
     return this._sireneEntreprises;
   }
 
-  get isLoading(){
+  get isLoading() {
     return this._isLoading;
   }
 }

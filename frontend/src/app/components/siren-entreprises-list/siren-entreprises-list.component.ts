@@ -7,7 +7,7 @@ import { SireneEntreprise } from 'src/app/shared/types/sirene-entreprise.type';
 @Component({
   selector: 'app-siren-entreprises-list',
   templateUrl: './siren-entreprises-list.component.html',
-  styleUrls: ['./siren-entreprises-list.component.css'],
+  styleUrls: [],
 })
 export class SirenEntreprisesListComponent {
   private _sireneEntreprises: SireneEntreprise[];
@@ -53,10 +53,12 @@ export class SirenEntreprisesListComponent {
     return this._pageSize;
   }
 
+
   //forceScraping = 1 force scraping
   onScrapEntreprise(sireneEntreprise: SireneEntreprise,forceScraping:number) {
     this._entrepriseService
       .scrapOneWithPappers(sireneEntreprise,forceScraping)
+
       .subscribe((_) => {
         this.router.navigate(['/entreprise', sireneEntreprise.siren]);
       });
