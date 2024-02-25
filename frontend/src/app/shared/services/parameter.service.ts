@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { Entreprise } from '../types/entreprise.type';
 import { environment } from '../../../environments/environment';
 import { SireneEntreprise } from '../types/sirene-entreprise.type';
@@ -21,71 +21,19 @@ export class ParameterService {
   }
 
 
-  getEntreprisesBySiren(siren: string): Observable<Entreprise> {
-    return this._http.get<Entreprise>(
-      `${this._apiUrl}/entreprise/siren/` + siren
-    );
+  update(parameter: Parameter): Observable<any> {
+    
+    return this._http.put<Parameter>(`${this._apiUrl}/parameters/${parameter._id}`, parameter, this._options());
   }
 
-  scrapSirene() {
-    return this._http.put<Entreprise[]>(
-      `${this._apiUrl}/scraping/sirene`,
-      {
-        entreprises: [
-          '33841110100029',
-          '85190065400019',
-          '91834707100014',
-          '34827919100012',
-        ],
-      },
-      this._options()
-    );
-  }
-
-  scrapOneWithPappers(sireneEntreprises: SireneEntreprise) {
-    return this._http.put<void>(
-      `${this._apiUrl}/scraping/pappers/`+sireneEntreprises.siren,
-      this._options()
-    );
-  }
-
-  scrapOneWithPappersSimple(entreprise: Entreprise) {
-    return this._http.put<void>(
-      `${this._apiUrl}/scraping/pappers/`+entreprise.siren,
-      this._options()
-    );
-  }
-
-  scrapPappers() {
-    return this._http.put<void>(
-      `${this._apiUrl}/scraping/pappers`,
-      {
-        ids: 'sarl-favata-338411101,bati-france-57-851900654,lenninger-arthur-918347071,grosjean-et-fils-348279191',
-      },
-      this._options()
-    );
-  }
-
-  scrapSociete() {
-    return this._http.put<void>(
-      `${this._apiUrl}/scraping/societe`,
-      {
-        entreprises:
-          'sarl-favata-338411101,bati-france-57-851900654,lenninger-arthur-918347071,grosjean-et-fils-348279191',
-      },
-      this._options()
-    );
-  }
-
-  jsonExport() {
-    return this._http.get<void>(`${this._apiUrl}/jsonExport`, this._options());
-  }
-
+  /**
+   * Function to return request options
+   */
   private _options(headerList: object = {}): any {
-    return {
-      headers: new HttpHeaders(
-        Object.assign({ 'Content-Type': 'application/json' }, headerList)
-      ),
-    };
+    const headers = new HttpHeaders()
+      .set('Content-Type', 'application/json');
+    return { headers };
   }
+
+
 }

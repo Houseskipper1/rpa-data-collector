@@ -10,26 +10,21 @@ import { SireneEntreprise } from 'src/app/shared/types/sirene-entreprise.type';
   styleUrls: ['./siren-entreprises-list.component.css'],
 })
 export class SirenEntreprisesListComponent {
-
   private _sireneEntreprises: SireneEntreprise[];
   private _currentSireneEntreprisesToShow: SireneEntreprise[];
   private _pageSize;
-  private _isLoading :boolean;
+  private _isLoading: boolean;
 
+  constructor(
+    private _entrepriseService: EntrepriseService,
 
-
-
-  constructor(private _entrepriseService: EntrepriseService,
-
-    private router: Router) {
-
+    private router: Router
+  ) {
     this._sireneEntreprises = [];
     this._currentSireneEntreprisesToShow = [];
     this._pageSize = 10;
     this._isLoading = false;
-
   }
-
 
   onPageChange($event: any) {
     this._currentSireneEntreprisesToShow = this._sireneEntreprises.slice(
@@ -39,8 +34,11 @@ export class SirenEntreprisesListComponent {
   }
 
   @Input() set sireneEntreprises(e) {
-    this._sireneEntreprises = e
-    this._currentSireneEntreprisesToShow = this._sireneEntreprises.slice(0, this._pageSize);
+    this._sireneEntreprises = e;
+    this._currentSireneEntreprisesToShow = this._sireneEntreprises.slice(
+      0,
+      this._pageSize
+    );
   }
 
   get currenSireneEntreprisesToShow() {
@@ -55,15 +53,16 @@ export class SirenEntreprisesListComponent {
     return this._pageSize;
   }
 
-  onScrapEntreprise(sireneEntreprise: SireneEntreprise) {
-
-    this._entrepriseService.scrapOneWithPappers(sireneEntreprise).
-      subscribe(
-        _ => {
-          this.router.navigate(['/entreprise', sireneEntreprise.siren]);
-        }
-      );
+  //forceScraping = 1 force scraping
+  onScrapEntreprise(sireneEntreprise: SireneEntreprise,forceScraping:number) {
+    this._entrepriseService
+      .scrapOneWithPappers(sireneEntreprise,forceScraping)
+      .subscribe((_) => {
+        this.router.navigate(['/entreprise', sireneEntreprise.siren]);
+      });
   }
+
+
 
   get isLoading(): boolean {
     return this._isLoading;

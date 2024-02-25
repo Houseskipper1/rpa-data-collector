@@ -12,7 +12,7 @@ export class DialogComponent {
 
   constructor(private _dialogRef: MatDialogRef<DialogComponent,Parameter>,
               @Optional() @Inject(MAT_DIALOG_DATA) private data: any) {
-    this._parameter = data.event;
+    this._parameter = data.parameter;
   }
 
   get parameter(): Parameter {
@@ -26,7 +26,7 @@ export class DialogComponent {
     this._dialogRef.close();
   }
 
-  onSave(parameter: Parameter): void {
+  onSave(parameter: Parameter): void{
     this._dialogRef.close(parameter);
   }
 }
