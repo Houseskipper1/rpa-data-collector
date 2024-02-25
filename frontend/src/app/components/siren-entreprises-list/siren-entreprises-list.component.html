@@ -19,17 +19,15 @@
               <div class="font-bold">SIREN:</div>
               <div class="mb-1">{{ sireneEntreprise.siren }}</div>
 
-
               <div class="font-bold">NIC:</div>
               <div class="mb-1">{{ sireneEntreprise.nic }}</div>
 
               <div class="font-bold">Code postal:</div>
               <div class="mb-1">{{ sireneEntreprise.postalCode }}</div>
 
-            <div class="font-bold">Libellé NAF:</div>
-            <div class="mb-1">{{ sireneEntreprise.naf }}</div>
-          </div>
-          <div class="button-container">
+              <div class="font-bold">Libellé NAF:</div>
+              <div class="mb-1">{{ sireneEntreprise.naf }}</div>
+            </div>
             <div class="button-container">
               <button
                 (click)="onScrapEntreprise(sireneEntreprise, 0)"
@@ -45,11 +43,11 @@
               >
                 Scrap
               </button>
-
             </div>
           </div>
         </li>
       </ul>
+
     </div>
   </div>
 
