@@ -14,7 +14,7 @@
       <ul *ngFor="let sireneEntreprise of currenSireneEntreprisesToShow">
         <li class="bg-background text-font p-4 rounded-lg shadow-md mt-4">
           <div class="flex">
-            <div class="w-80 mr-4">
+            <div class="flex-auto w-80 mr-4">
               <h2 class="text-xl font-semibold">{{ sireneEntreprise.name }}</h2>
               <div class="font-bold">SIREN:</div>
               <div class="mb-1">{{ sireneEntreprise.siren }}</div>
@@ -28,7 +28,7 @@
               <div class="font-bold">Libellé NAF:</div>
               <div class="mb-1">{{ sireneEntreprise.naf }}</div>
             </div>
-            <div class="button-container">
+            <div class="w-20 flex flex-col justify-evenly">
               <button
                 (click)="onScrapEntreprise(sireneEntreprise, 0)"
                 type="button"
@@ -36,6 +36,7 @@
               >
                 Voir
               </button>
+
               <button
                 (click)="onScrapEntreprise(sireneEntreprise, 1)"
                 type="button"
@@ -47,7 +48,6 @@
           </div>
         </li>
       </ul>
-
     </div>
   </div>
 

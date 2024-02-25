@@ -53,18 +53,14 @@ export class SirenEntreprisesListComponent {
     return this._pageSize;
   }
 
-
   //forceScraping = 1 force scraping
   onScrapEntreprise(sireneEntreprise: SireneEntreprise,forceScraping:number) {
     this._entrepriseService
       .scrapOneWithPappers(sireneEntreprise,forceScraping)
-
       .subscribe((_) => {
         this.router.navigate(['/entreprise', sireneEntreprise.siren]);
       });
   }
-
-
 
   get isLoading(): boolean {
     return this._isLoading;
