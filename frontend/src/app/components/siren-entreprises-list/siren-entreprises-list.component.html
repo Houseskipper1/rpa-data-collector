@@ -19,23 +19,33 @@
               <div class="font-bold">SIREN:</div>
               <div class="mb-1">{{ sireneEntreprise.siren }}</div>
 
+
               <div class="font-bold">NIC:</div>
               <div class="mb-1">{{ sireneEntreprise.nic }}</div>
 
               <div class="font-bold">Code postal:</div>
               <div class="mb-1">{{ sireneEntreprise.postalCode }}</div>
 
-              <div class="font-bold">Libellé NAF:</div>
-              <div class="mb-1">{{ sireneEntreprise.naf }}</div>
-            </div>
-            <div class="flex items-center">
+            <div class="font-bold">Libellé NAF:</div>
+            <div class="mb-1">{{ sireneEntreprise.naf }}</div>
+          </div>
+          <div class="button-container">
+            <div class="button-container">
               <button
-                (click)="onScrapEntreprise(sireneEntreprise)"
+                (click)="onScrapEntreprise(sireneEntreprise, 0)"
                 type="button"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
-                View
+                Voir
               </button>
+              <button
+                (click)="onScrapEntreprise(sireneEntreprise, 1)"
+                type="button"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Scrap
+              </button>
+
             </div>
           </div>
         </li>

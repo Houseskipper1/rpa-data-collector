@@ -51,11 +51,13 @@ export class ScrapingEntreprisesListComponent implements OnInit {
     return this._pageSize;
   }
 
-  onScrapEntreprise(entreprise: Entreprise) {
-    this._entrepriseService
-      .scrapOneWithPappersSimple(entreprise)
-      .subscribe((data) => {
-        this.router.navigate(['/entreprise', entreprise.siren]);
-      });
+  onScrapEntreprise(entreprise : Entreprise,forceScraping :number) {
+   this._entrepriseService.scrapOneWithPappersSimple(entreprise,forceScraping).
+   subscribe(
+    (data) => {
+      this.router.navigate(['/entreprise', entreprise.siren]);
+    }
+   );
+
   }
 }

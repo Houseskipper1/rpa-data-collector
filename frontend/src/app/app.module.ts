@@ -21,6 +21,13 @@ import { SirenEntreprisesViewComponent } from './components/siren-entreprises-vi
 import { MatInputModule } from '@angular/material/input';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
+import { DrawerMenuComponent } from './components/drawer-menu/drawer-menu.component';
+import { ParametersListComponent } from './components/parameter/parameters-list/parameters-list.component';
+import { EditParameterComponent } from './components/parameter/edit-parameter/edit-parameter.component';
+import { DialogComponent } from './components/parameter/dialog/dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+
+
 
 @NgModule({
   declarations: [
@@ -38,6 +45,10 @@ import { MatButtonModule } from '@angular/material/button';
     SirenEntreprisesListComponent,
     SirenEntreprisesViewComponent,
     RechercheBanComponent,
+    DrawerMenuComponent,
+    ParametersListComponent,
+    EditParameterComponent,
+    DialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,6 +62,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatPaginatorModule,
     MatSliderModule,
     MatButtonModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

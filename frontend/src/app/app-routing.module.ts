@@ -5,6 +5,8 @@ import { EntrepriseViewComponent } from './components/entreprise-view/entreprise
 import { ScrapingEntreprisesListComponent } from './components/scraping-entreprises-list/scraping-entreprises-list.component';
 import { SirenEntreprisesViewComponent } from './components/siren-entreprises-view/siren-entreprises-view.component';
 import { RechercheBanComponent } from './components/recherche-ban/recherche-ban.component';
+import { DrawerMenuComponent } from './components/drawer-menu/drawer-menu.component';
+import { ParametersListComponent } from './components/parameter/parameters-list/parameters-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -13,6 +15,8 @@ const routes: Routes = [
   { path: 'sireneEntreprisesSearch', component: RechercheBanComponent },
   { path: 'scrapingEntreprises', component: ScrapingEntreprisesListComponent },
   { path: 'entreprise/:siren', component: EntrepriseViewComponent },
+  { path: 'parameters', component: ParametersListComponent },
+
 ];
 
 @NgModule({

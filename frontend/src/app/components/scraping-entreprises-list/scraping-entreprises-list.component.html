@@ -33,15 +33,24 @@
                 </div>
               </div>
             </div>
-            <div class="flex items-center">
+          </div>
+          <div class="button-container">
+            <div class="button-container">
+
               <button
-                (click)="onScrapEntreprise(e)"
-                type="button"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                View
-              </button>
-            </div>
+              (click)="onScrapEntreprise(e, 0)"
+              type="button"
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Voir
+            </button>
+            <button
+              (click)="onScrapEntreprise(e, 1)"
+              type="button"
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            >
+              Scrap
+            </button>
           </div>
         </li>
       </ul>

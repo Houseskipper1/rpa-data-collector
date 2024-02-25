@@ -40,16 +40,16 @@ export class EntrepriseService {
     );
   }
 
-  scrapOneWithPappers(sireneEntreprises: SireneEntreprise) {
+  scrapOneWithPappers(sireneEntreprises: SireneEntreprise,forceScraping : number) {
     return this._http.put<void>(
-      `${this._apiUrl}/scraping/pappers/` + sireneEntreprises.siren,
+      `${this._apiUrl}/scraping/pappers/`+sireneEntreprises.siren+'?forceScraping='+forceScraping,
       this._options()
     );
   }
 
-  scrapOneWithPappersSimple(entreprise: Entreprise) {
+  scrapOneWithPappersSimple(entreprise: Entreprise,forceScraping : number) {
     return this._http.put<void>(
-      `${this._apiUrl}/scraping/pappers/` + entreprise.siren,
+      `${this._apiUrl}/scraping/pappers/`+entreprise.siren+'?forceScraping='+forceScraping,
       this._options()
     );
   }
