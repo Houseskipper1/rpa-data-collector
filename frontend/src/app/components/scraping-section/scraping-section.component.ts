@@ -23,6 +23,10 @@ export class ScrapingSectionComponent {
     this._router.navigate(["/sireneEntreprisesSearch"])
   }
 
+  showListParameters() {
+    this._router.navigate(["/parameters"])
+  }
+
   scrapSirene() {
     this._entrepriseService.scrapSirene().subscribe({
       next: (res) => alert('Scraping de Sirene réussis'),
