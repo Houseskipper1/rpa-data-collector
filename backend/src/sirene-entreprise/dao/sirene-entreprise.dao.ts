@@ -24,8 +24,8 @@ export class SireneEntrepriseDao {
       ]}).exec();
   }
 
-  async findAllLimitless() {
-    return await this._sireneEntrepriseModel.find({"name": {$ne: ""}}).exec();
+  async findAllLimitless(sorted: boolean) {
+    return this._sireneEntrepriseModel.find({"name": {$ne: ""}}).sort({"_id": (sorted ? 1 : -1)}).cursor();
   }
 
   async findBySiren(siren: string): Promise<SireneEntreprise[] | null> {
@@ -35,6 +35,10 @@ export class SireneEntrepriseDao {
   async save(sireneEntrepriseEntity: SireneEntrepriseEntity): Promise<SireneEntreprise> {
     const SireneEntreprise = new this._sireneEntrepriseModel(sireneEntrepriseEntity);
     return await SireneEntreprise.save();
+  }
+
+  async update(filter, updateDatas): Promise<SireneEntreprise> {
+    return this._sireneEntrepriseModel.findOneAndUpdate(filter, updateDatas)
   }
 
   async isEmpty(): Promise<boolean> {

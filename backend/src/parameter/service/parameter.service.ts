@@ -58,19 +58,6 @@ export class ParameterService {
   async findByParameterName(
     parameterName: string,
   ) : Promise<ParameterEntity | null> {
-    try {
-      const parameter =
-        await this.parameterDao.findByParameterName(parameterName);
-      if (!parameter) {
-        throw new NotFoundException(
-          `Parameter with name '${parameterName}' not found`,
-        );
-      }
-      return parameter;
-    } catch (error) {
-      throw new NotFoundException(
-        `Parameter with name '${parameterName}' not found`,
-      );
-    }
+      return this.parameterDao.findByParameterName(parameterName);
   }
 }

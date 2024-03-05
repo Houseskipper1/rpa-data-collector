@@ -21,7 +21,7 @@ export class ParameterDao {
   }
 
   async findByParameterName(parameterName: string): Promise<Parameter | null> {
-    return await this._parameterModel.findOne({ parameterName }).exec();
+    return await this._parameterModel.findOne({ parameterName });
   }
 
   async findAll(): Promise<Parameter[]> {

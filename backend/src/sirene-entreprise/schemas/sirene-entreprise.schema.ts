@@ -25,7 +25,7 @@ export class SireneEntreprise extends Document {
   city: string;
 
   @Prop({ required: false })
-  postalCode: number;
+  postalCode: string;
 
   @Prop({ required: false })
   latitude: number;
