@@ -19,7 +19,7 @@ import { EntreprisesIdsDto } from './entreprise/dto/entreprisesids.dto';
 import e, { Response } from 'express';
 import { SireneEntrepriseService } from './sirene-entreprise/services/sirene-entreprise.service';
 import { ParameterService } from './parameter/service/parameter.service';
-import { ifError } from 'assert';
+import { ParameterEntity } from './parameter/entity/parameter.entity';
 
 @Controller()
 export class AppController {
@@ -31,7 +31,14 @@ export class AppController {
     private readonly _sirenEntrepriseService: SireneEntrepriseService,
     private readonly _parameterService: ParameterService,
   ) {
-    this._sireneService.populateSireneEntreprise();
+    this._sireneService.populateSireneEntreprise()
+                       .then((populated) => {
+                               if(populated){
+                                // Création du paramètre pour sireneEntreprise (1 mois de refresh Frequency)
+                                let parameterEntity: ParameterEntity = {id: "", parameterName: "sireneEntrepriseParam", refreshFrequency: 30 * 24 * 60 * 60 * 10000, lastUpdate: new Date()};
+                                this._parameterService.create(parameterEntity);
+                               }
+                             });
   }
 
   @Put('scraping/societe')

@@ -5,7 +5,8 @@ import { EntrepriseEntity } from 'src/entreprise/entities/entreprise.entity';
 import { EntrepriseService } from 'src/entreprise/service/entreprise.service';
 import { SireneEntrepriseService } from 'src/sirene-entreprise/services/sirene-entreprise.service';
 import { SireneEntrepriseEntity } from 'src/sirene-entreprise/entities/sirene-entreprise.entity';
-import { parseStream } from 'fast-csv';
+import { parseStream, parse } from 'fast-csv';
+import { Cursor, Query } from 'mongoose';
 
 let fs = require('fs');
 
@@ -26,15 +27,15 @@ export class BanService {
     private sireneEntrepriseService: SireneEntrepriseService,
   ) {}
 
-  async updateSireneEntreprise() {
+
+  async updateSireneEntreprise(): Promise<void> {
     fs.mkdir('temp/ban', { recursive: true }, () => {});
 
     console.log('Récupération des entreprises');
-    let entreprises = await this.sireneEntrepriseService.findAllForBan();
+    let cursor = await this.sireneEntrepriseService.findAllForBan(true)
+    let files = await this.makeBanCsv(cursor);
+    await cursor.rewind();
     console.log('Fin');
-
-    let files = this.makeBanCsv(entreprises);
-    entreprises.reverse();
     for (let file of files) {
       console.log(`Début fichier ${file}`);
       let path = require('path');
@@ -58,59 +59,46 @@ export class BanService {
 
         fs.unlink(file.toString(), () => {});
       }
-
       let csvStream = fs.createReadStream(newFile);
-
       let c = 0;
-      parseStream(csvStream, { headers: true })
-        .on('error', console.log)
-        .on('data', (row) => {
-          let entreprise = entreprises.pop();
 
-          entreprise.latitude = row.latitude;
-          entreprise.longitude = row.longitude;
-
-          this.sireneEntrepriseService.update(entreprise);
-          if (c % 100000 == 0) {
-            console.log(c);
-          }
-          c += 1;
-        })
-        .on('end', (_) => {
-          csvStream.close();
-          fs.unlink(csvStream.path, () => {});
-          console.log(`Fin fichier ${file}.`);
-        });
+      const readStream = csvStream.pipe(parse({headers: true}))
+      for await (let row of readStream){
+        c += 1;
+        let entreprise = await cursor.next()
+        this.sireneEntrepriseService.update({"_id": entreprise._id}, {"latitude": row.latitude, "longitude": row.longitude})
+        if (c % 100000 == 0) {
+          console.log(c);
+        }
+      }
     }
+    cursor.close()
+    Promise.resolve();
   }
 
-  private makeBanCsv(entreprises: SireneEntrepriseEntity[]): String[] {
+  private async makeBanCsv(entreprises): Promise<String[]> {
     console.log('Création des fichiers de requête BAN');
-
     let paths = [];
-    let chunck = 0;
+    let chunk = 0;
 
-    console.log(entreprises.length);
-
-    let path = `temp/ban/chunck_${chunck}.csv`;
-    let currentStream = fs.openSync(path, 'w+');
+    let path = `temp/ban/chunk_${chunk}.csv`;
+    let currentStream = fs.createWriteStream(path)
     paths.push(path);
-    fs.writeSync(currentStream, 'nom,adresse,postcode,city\n');
-    for (let entreprise of entreprises) {
-      let line = `,"${entreprise.address}","${entreprise.postalCode}","${entreprise.city}"`;
+    currentStream.write('nom,adresse,postcode,city\n')
+    for (let entreprise = await entreprises.next(); entreprise != null; entreprise = await entreprises.next()) {
+      let line = `,"${entreprise.address}","${entreprise.postalCode}","${entreprise.city}"\n`;
       if (currentStream.bytesWritten + line.length >= 5e7) {
-        fs.close(currentStream);
-        chunck++;
-        path = `temp/ban/chunck_${chunck}.csv`;
-        currentStream = fs.openSync(path, 'w+');
+        currentStream.end()
+        chunk++;
+        path = `temp/ban/chunk_${chunk}.csv`;
+        currentStream = fs.createWriteStream(path)
         paths.push(path);
-        fs.writeSync(currentStream, 'nom,adresse,postcode,city\n');
+        currentStream.write('nom,adresse,postcode,city\n')
       }
-
-      fs.writeSync(currentStream, line + '\n');
+      currentStream.write(line)
     }
 
-    fs.close(currentStream);
+    currentStream.end()
 
     return paths;
   }

@@ -31,8 +31,8 @@ export class SireneEntrepriseEntity {
   city: string;
 
   @Expose()
-  @Type(() => Number)
-  postalCode: number;
+  @Type(() => String)
+  postalCode: string;
 
   @Expose()
   @Type(() => Number)

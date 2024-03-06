@@ -24,8 +24,8 @@ export class SireneEntrepriseService {
     return sireneEntreprises;
   }
 
-  async findAllForBan(): Promise<SireneEntrepriseEntity[]> {
-    return this._sireneEntrepriseDao.findAllLimitless();
+  async findAllForBan(sorted: boolean) {
+    return this._sireneEntrepriseDao.findAllLimitless(sorted);
   }
 
   async findBySiren(siren: string): Promise<SireneEntrepriseEntity[]> {
@@ -36,8 +36,8 @@ export class SireneEntrepriseService {
     return await this._sireneEntrepriseDao.save(newSireneEntreprise);
   }
 
-  async update(updatedSireneEntreprise: SireneEntrepriseEntity): Promise<SireneEntrepriseEntity> {
-    return await this._sireneEntrepriseDao.save(updatedSireneEntreprise);
+  async update(filter, updateDatas): Promise<SireneEntrepriseEntity> {
+    return await this._sireneEntrepriseDao.update(filter, updateDatas);
   }
 
   async deleteAll(): Promise<void> {
