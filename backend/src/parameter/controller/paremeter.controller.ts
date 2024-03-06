@@ -10,8 +10,10 @@ import {
 import { ParameterService } from '../service/parameter.service';
 import { ParameterEntity } from '../entity/parameter.entity';
 import { UpdateParameterTimeDto } from '../dto/parameter.time.update';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('parameters')
+@ApiTags('parameters')
 export class ParameterController {
   constructor(private parameterService: ParameterService) {}
 
