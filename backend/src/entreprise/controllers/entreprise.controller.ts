@@ -10,8 +10,10 @@ import {
 import { EntrepriseService } from '../service/entreprise.service';
 import { PappersService } from 'src/scraping/entreprise/pappers.service';
 import { EntrepriseEntity } from '../entities/entreprise.entity';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('entreprise')
+@ApiTags('entreprise')
 export class EntrepriseController {
   constructor(
     private entrepriseService: EntrepriseService,

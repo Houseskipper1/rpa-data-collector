@@ -20,8 +20,10 @@ import e, { Response } from 'express';
 import { SireneEntrepriseService } from './sirene-entreprise/services/sirene-entreprise.service';
 import { ParameterService } from './parameter/service/parameter.service';
 import { ParameterEntity } from './parameter/entity/parameter.entity';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller()
+@ApiTags('app')
 export class AppController {
   constructor(
     private _pappersService: PappersService,
