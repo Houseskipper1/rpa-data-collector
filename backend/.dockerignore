@@ -1,5 +1,6 @@
 node_modules
-ressources
+ressources/sirene/StockEtab.csv
+ressources/sirene/StockUL.csv
 scripts
 dist
 .env
