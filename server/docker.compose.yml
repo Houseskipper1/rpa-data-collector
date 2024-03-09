@@ -34,8 +34,6 @@ services:
     build:
       context: ../frontend
       dockerfile: Dockerfile
-    environment:
-      - apiUrl=http://localhost:3020
     ports:
       - "4220:4200"
 

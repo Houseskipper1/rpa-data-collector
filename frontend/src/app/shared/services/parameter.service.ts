@@ -20,20 +20,19 @@ export class ParameterService {
     return this._http.get<Parameter[]>(`${this._apiUrl}/parameters`);
   }
 
-
   update(parameter: Parameter): Observable<any> {
-    
-    return this._http.put<Parameter>(`${this._apiUrl}/parameters/${parameter._id}`, parameter, this._options());
+    return this._http.put<Parameter>(
+      `${this._apiUrl}/parameters/${parameter._id}`,
+      parameter,
+      this._options()
+    );
   }
 
   /**
    * Function to return request options
    */
   private _options(headerList: object = {}): any {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return { headers };
   }
-
-
 }
