@@ -42,7 +42,14 @@ export class AppController {
           refreshFrequency: 30 * 24 * 60 * 60 * 10000,
           lastUpdate: new Date(),
         };
+        let scrapingRefreshParam: ParameterEntity = {
+          id: '',
+          parameterName: 'scrapingRefreshParam',
+          refreshFrequency: 30 * 24 * 60 * 60 * 10000,
+          lastUpdate: new Date(),
+        };
         this._parameterService.create(parameterEntity);
+        this._parameterService.create(scrapingRefreshParam);
       }
     });
   }
