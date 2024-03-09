@@ -54,7 +54,7 @@ export class EntrepriseViewComponent implements OnInit, AfterViewInit {
       center: [
         this.entreprise.location[0].latitude,
         this.entreprise.location[0].longitude,
-      ], // Paris coordinates
+      ],
       zoom: 13,
       layers: [
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

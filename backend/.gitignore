@@ -4,7 +4,7 @@
 /scripts/data
 /ressources/sirene/*.zip
 /ressources/sirene/*.csv
-
+.cache/
 # Logs
 logs
 *.log

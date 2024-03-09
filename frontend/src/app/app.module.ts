@@ -26,6 +26,7 @@ import { ParametersListComponent } from './components/parameter/parameters-list/
 import { EditParameterComponent } from './components/parameter/edit-parameter/edit-parameter.component';
 import { DialogComponent } from './components/parameter/dialog/dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 
 
@@ -63,6 +64,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatSliderModule,
     MatButtonModule,
     MatDialogModule,
+    LeafletModule
   ],
   providers: [],
   bootstrap: [AppComponent],
