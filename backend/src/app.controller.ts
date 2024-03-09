@@ -33,14 +33,18 @@ export class AppController {
     private readonly _sirenEntrepriseService: SireneEntrepriseService,
     private readonly _parameterService: ParameterService,
   ) {
-    this._sireneService.populateSireneEntreprise()
-                       .then((populated) => {
-                               if(populated){
-                                // Création du paramètre pour sireneEntreprise (1 mois de refresh Frequency)
-                                let parameterEntity: ParameterEntity = {id: "", parameterName: "sireneEntrepriseParam", refreshFrequency: 30 * 24 * 60 * 60 * 10000, lastUpdate: new Date()};
-                                this._parameterService.create(parameterEntity);
-                               }
-                             });
+    this._sireneService.populateSireneEntreprise().then((populated) => {
+      if (populated) {
+        // Création du paramètre pour sireneEntreprise (1 mois de refresh Frequency)
+        let parameterEntity: ParameterEntity = {
+          id: '',
+          parameterName: 'sireneEntrepriseParam',
+          refreshFrequency: 30 * 24 * 60 * 60 * 10000,
+          lastUpdate: new Date(),
+        };
+        this._parameterService.create(parameterEntity);
+      }
+    });
   }
 
   @Put('scraping/societe')
