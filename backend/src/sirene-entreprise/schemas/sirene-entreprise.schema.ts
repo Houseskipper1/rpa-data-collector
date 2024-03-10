@@ -16,7 +16,7 @@ export class SireneEntreprise extends Document {
   @ApiProperty()
   nic: string;
 
-  @Prop({ required: true})
+  @Prop({ required: true })
   @ApiProperty()
   naf: string;
 

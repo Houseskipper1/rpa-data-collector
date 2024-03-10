@@ -112,7 +112,6 @@ export class BanService {
       .then((res) => {
         let coordinates = res.data.features[0].geometry.coordinates;
         let departement = res.data.features[0].properties.postcode.slice(0, 2);
-        console.log(res.data.features[0]);
         return {
           pos: { lat: coordinates[1], long: coordinates[0] },
           departement: departement,

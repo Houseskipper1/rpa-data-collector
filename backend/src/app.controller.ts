@@ -21,6 +21,8 @@ import { SireneEntrepriseService } from './sirene-entreprise/services/sirene-ent
 import { ParameterService } from './parameter/service/parameter.service';
 import { ParameterEntity } from './parameter/entity/parameter.entity';
 import { ApiTags } from '@nestjs/swagger';
+import { EntrepriseEntity } from './entreprise/entities/entreprise.entity';
+import { SireneEntrepriseEntity } from './sirene-entreprise/entities/sirene-entreprise.entity';
 
 @Controller()
 @ApiTags('app')
@@ -60,8 +62,13 @@ export class AppController {
     @Res() res: Response,
   ) {}
 
+  /**
+   * 
+   * @param scrapSirenesDto list of sirets
+   * @returns {Promise<Promise<EntrepriseEntity>[]>} list of Entreprises Entities
+   */
   @Put('scraping/sirene')
-  async scrapSirenes(@Body() scrapSirenesDto: ScrapSirenesDto) {
+  async scrapSirenes(@Body() scrapSirenesDto: ScrapSirenesDto): Promise<Promise<EntrepriseEntity>[]> {
     return this._sireneService.getEntreprisesAPI(scrapSirenesDto.entreprises);
   }
 
@@ -118,18 +125,28 @@ export class AppController {
     }
   }
 
+  /**
+   * 
+   * @param address string of an address
+   * @param range range around the address
+   * @returns {Promise<SireneEntrepriseEntity[]>} all SireneEntreprise inside the range of the given address
+   */
   @Get('/search')
   async searchInRadius(
-    @Query('address') address: String,
+    @Query('address') address: string,
     @Query('range') range: number,
-  ) {
+  ): Promise<SireneEntrepriseEntity[]> {
     let pos = await this.banService.findByAddress(address);
     let res = this.banService.getInRadius(pos, range);
     return res;
   }
 
+  /**
+   * 
+   * @returns {Promise<SireneEntrepriseEntity[]>} list of limited SireneEntreprises
+   */
   @Get('/sireneEntreprises')
-  async getSireneEntreprises() {
+  async getSireneEntreprises(): Promise<SireneEntrepriseEntity[]> {
     return this._sirenEntrepriseService.findAll();
   }
 

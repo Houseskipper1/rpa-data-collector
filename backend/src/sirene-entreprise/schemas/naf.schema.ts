@@ -8,11 +8,11 @@ export class Naf extends Document {
   @ApiProperty()
   id: string;
 
-  @Prop({required: true})
+  @Prop({ required: true })
   @ApiProperty()
   code: string;
 
-  @Prop({required: true})
+  @Prop({ required: true })
   @ApiProperty()
   desc: string;
 
