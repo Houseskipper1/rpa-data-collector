@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, map, tap } from 'rxjs';
-import { Entreprise } from '../types/entreprise.type';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { SireneEntreprise } from '../types/sirene-entreprise.type';
 import { Parameter } from '../types/parameter.type';
 
 @Injectable({

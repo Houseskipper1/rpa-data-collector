@@ -26,7 +26,7 @@ export class ScrapingSectionComponent {
   }
 
   showListParameters() {
-    this._router.navigate(["/parameters"])
+    this._router.navigate(['/parameters']);
   }
 
   scrapSirene() {

@@ -7,7 +7,6 @@ import { LocationEntrepriseEntity } from 'src/entreprise/entities/entreprise.loc
 import { BanService } from 'src/api/ban/ban.service';
 import { FinanceEntrepriseEntity } from 'src/entreprise/entities/entreprise.Finance.entity';
 import { EntrepriseService } from 'src/entreprise/service/entreprise.service';
-import { Entreprise } from 'src/entreprise/schema/entreprise.schema';
 
 @Injectable()
 export class PappersService {
@@ -33,11 +32,13 @@ export class PappersService {
         const pageContent = await page.content();
         const $ = cheerio.load(pageContent);
         let entreprise: EntrepriseEntity = new EntrepriseEntity();
-        entreprise.lastDataSources = "https://www.pappers.fr/entreprise"
+        entreprise.lastDataSources = 'https://www.pappers.fr/entreprise';
         let representative: EntrepriseRepresentativeEntity =
           new EntrepriseRepresentativeEntity();
 
-        const capitalSocialRow = $('div.content table tr:contains("Capital social")');
+        const capitalSocialRow = $(
+          'div.content table tr:contains("Capital social")',
+        );
         entreprise.shareCapital = capitalSocialRow.find('td').text().trim();
 
         const siretRow = $('div div table tr:contains("SIRET (siège)")');
@@ -188,7 +189,7 @@ export class PappersService {
       let financeEntity = {
         financialYear: years[i],
         turnover: performanceData["Chiffre d'affaires (€)"][i],
-        turnoverTrend: 'a compléter',
+        turnoverTrend: '/',
         cashFlow: performanceData['Trésorerie (€)'][i],
         netProfit: performanceData['Résultat net (€)'][i],
         netMargin: performanceData['Marge nette (%)'][i],

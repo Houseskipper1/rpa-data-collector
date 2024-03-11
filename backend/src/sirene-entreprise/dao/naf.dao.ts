@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Naf } from "../schemas/naf.schema";
-import { Model } from "mongoose";
-import { NafEntity } from "../entities/naf.entity";
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Naf } from '../schemas/naf.schema';
+import { Model } from 'mongoose';
+import { NafEntity } from '../entities/naf.entity';
 
 @Injectable()
 export class NafDao {
@@ -16,7 +16,7 @@ export class NafDao {
   }
 
   async findByCode(code: string): Promise<Naf | null> {
-    return await this._nafModel.findOne({"code": code}).exec()
+    return await this._nafModel.findOne({ code: code }).exec();
   }
 
   async save(naf: NafEntity): Promise<Naf> {

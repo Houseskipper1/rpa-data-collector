@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
 import { EntrepriseService } from 'src/app/shared/services/entreprise.service';
 import { SireneEntreprise } from 'src/app/shared/types/sirene-entreprise.type';
 
@@ -54,9 +53,9 @@ export class SirenEntreprisesListComponent {
   }
 
   //forceScraping = 1 force scraping
-  onScrapEntreprise(sireneEntreprise: SireneEntreprise,forceScraping:number) {
+  onScrapEntreprise(sireneEntreprise: SireneEntreprise, forceScraping: number) {
     this._entrepriseService
-      .scrapOneWithPappers(sireneEntreprise,forceScraping)
+      .scrapOneWithPappers(sireneEntreprise, forceScraping)
       .subscribe((_) => {
         this.router.navigate(['/entreprise', sireneEntreprise.siren]);
       });

@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { LocationEntrepriseEntity } from 'src/entreprise/entities/entreprise.location.entity';
-import { EntrepriseEntity } from 'src/entreprise/entities/entreprise.entity';
 import { EntrepriseService } from 'src/entreprise/service/entreprise.service';
 import { SireneEntrepriseService } from 'src/sirene-entreprise/services/sirene-entreprise.service';
 import { SireneEntrepriseEntity } from 'src/sirene-entreprise/entities/sirene-entreprise.entity';
-import { parseStream, parse } from 'fast-csv';
-import { Cursor, Query } from 'mongoose';
+import { parse } from 'fast-csv';
 
 let fs = require('fs');
 
@@ -27,12 +25,11 @@ export class BanService {
     private sireneEntrepriseService: SireneEntrepriseService,
   ) {}
 
-
   async updateSireneEntreprise(): Promise<void> {
     fs.mkdir('temp/ban', { recursive: true }, () => {});
 
     console.log('Récupération des entreprises');
-    let cursor = await this.sireneEntrepriseService.findAllForBan(true)
+    let cursor = await this.sireneEntrepriseService.findAllForBan(true);
     let files = await this.makeBanCsv(cursor);
     await cursor.rewind();
     console.log('Fin');
@@ -62,17 +59,20 @@ export class BanService {
       let csvStream = fs.createReadStream(newFile);
       let c = 0;
 
-      const readStream = csvStream.pipe(parse({headers: true}))
-      for await (let row of readStream){
+      const readStream = csvStream.pipe(parse({ headers: true }));
+      for await (let row of readStream) {
         c += 1;
-        let entreprise = await cursor.next()
-        this.sireneEntrepriseService.update({"_id": entreprise._id}, {"latitude": row.latitude, "longitude": row.longitude})
+        let entreprise = await cursor.next();
+        this.sireneEntrepriseService.update(
+          { _id: entreprise._id },
+          { latitude: row.latitude, longitude: row.longitude },
+        );
         if (c % 100000 == 0) {
           console.log(c);
         }
       }
     }
-    cursor.close()
+    cursor.close();
     Promise.resolve();
   }
 
@@ -82,23 +82,27 @@ export class BanService {
     let chunk = 0;
 
     let path = `temp/ban/chunk_${chunk}.csv`;
-    let currentStream = fs.createWriteStream(path)
+    let currentStream = fs.createWriteStream(path);
     paths.push(path);
-    currentStream.write('nom,adresse,postcode,city\n')
-    for (let entreprise = await entreprises.next(); entreprise != null; entreprise = await entreprises.next()) {
+    currentStream.write('nom,adresse,postcode,city\n');
+    for (
+      let entreprise = await entreprises.next();
+      entreprise != null;
+      entreprise = await entreprises.next()
+    ) {
       let line = `,"${entreprise.address}","${entreprise.postalCode}","${entreprise.city}"\n`;
       if (currentStream.bytesWritten + line.length >= 5e7) {
-        currentStream.end()
+        currentStream.end();
         chunk++;
         path = `temp/ban/chunk_${chunk}.csv`;
-        currentStream = fs.createWriteStream(path)
+        currentStream = fs.createWriteStream(path);
         paths.push(path);
-        currentStream.write('nom,adresse,postcode,city\n')
+        currentStream.write('nom,adresse,postcode,city\n');
       }
-      currentStream.write(line)
+      currentStream.write(line);
     }
 
-    currentStream.end()
+    currentStream.end();
 
     return paths;
   }

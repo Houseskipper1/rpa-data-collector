@@ -3,8 +3,6 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-drawer-menu',
   templateUrl: './drawer-menu.component.html',
-  styleUrls: ['./drawer-menu.component.css']
+  styleUrls: [],
 })
-export class DrawerMenuComponent {
-
-}
+export class DrawerMenuComponent {}

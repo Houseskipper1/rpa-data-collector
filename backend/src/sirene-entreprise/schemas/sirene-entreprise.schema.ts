@@ -1,6 +1,6 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 @Schema({ collection: 'sireneEntreprises' })
 export class SireneEntreprise extends Document {
@@ -16,7 +16,7 @@ export class SireneEntreprise extends Document {
   @ApiProperty()
   nic: string;
 
-  @Prop({ required: true})
+  @Prop({ required: true })
   @ApiProperty()
   naf: string;
 
@@ -45,4 +45,5 @@ export class SireneEntreprise extends Document {
   longitude: number;
 }
 
-export const SireneEntrepriseSchema = SchemaFactory.createForClass(SireneEntreprise);
+export const SireneEntrepriseSchema =
+  SchemaFactory.createForClass(SireneEntreprise);

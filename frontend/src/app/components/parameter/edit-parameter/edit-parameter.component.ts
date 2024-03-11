@@ -1,11 +1,16 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Parameter } from 'src/app/shared/types/parameter.type';
 
 @Component({
   selector: 'app-edit-parameter',
   templateUrl: './edit-parameter.component.html',
-  styleUrls: ['./edit-parameter.component.css'],
+  styleUrls: [],
 })
 export class EditParameterComponent implements OnInit {
   private readonly _cancel$: EventEmitter<void>;
@@ -20,24 +25,30 @@ export class EditParameterComponent implements OnInit {
   }
   ngOnInit(): void {
     this.parameterForm = new FormGroup({
-      year:  new FormControl(this.model.year, Validators.compose([
-        Validators.required
-      ])),
-      month:  new FormControl(this.model.month, Validators.compose([
-        Validators.required
-      ])),
-      day:  new FormControl(this.model.day, Validators.compose([
-        Validators.required
-      ])),
-      hour:  new FormControl(this.model.hour, Validators.compose([
-        Validators.required
-      ])),
-      minute:  new FormControl(this.model.minute, Validators.compose([
-        Validators.required
-      ])),
-      second:  new FormControl(this.model.second, Validators.compose([
-        Validators.required
-      ]))
+      year: new FormControl(
+        this.model.year,
+        Validators.compose([Validators.required])
+      ),
+      month: new FormControl(
+        this.model.month,
+        Validators.compose([Validators.required])
+      ),
+      day: new FormControl(
+        this.model.day,
+        Validators.compose([Validators.required])
+      ),
+      hour: new FormControl(
+        this.model.hour,
+        Validators.compose([Validators.required])
+      ),
+      minute: new FormControl(
+        this.model.minute,
+        Validators.compose([Validators.required])
+      ),
+      second: new FormControl(
+        this.model.second,
+        Validators.compose([Validators.required])
+      ),
     });
   }
 
