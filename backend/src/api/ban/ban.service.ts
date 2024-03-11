@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { LocationEntrepriseEntity } from 'src/entreprise/entities/entreprise.location.entity';
-import { EntrepriseEntity } from 'src/entreprise/entities/entreprise.entity';
 import { EntrepriseService } from 'src/entreprise/service/entreprise.service';
 import { SireneEntrepriseService } from 'src/sirene-entreprise/services/sirene-entreprise.service';
 import { SireneEntrepriseEntity } from 'src/sirene-entreprise/entities/sirene-entreprise.entity';
-import { parseStream, parse } from 'fast-csv';
-import { Cursor, Query } from 'mongoose';
+import { parse } from 'fast-csv';
 
 let fs = require('fs');
 
@@ -17,24 +15,35 @@ export type Position = {
 
 export type LocalisationRecherche = {
   pos: Position;
-  departement: String;
+  departement: string;
 };
 
+/**
+ * This service is used to add localization to siren Entreprise and calculate neighbours
+ */
 @Injectable()
 export class BanService {
+
+  /**
+   * 
+   * @param entrepriseService Service for Entreprise
+   * @param sireneEntrepriseService Service for sireneEntreprise
+   */
   constructor(
     private readonly entrepriseService: EntrepriseService,
     private sireneEntrepriseService: SireneEntrepriseService,
   ) {}
 
-
+  /**
+   * update sireneEntreprises with theirs long and lat
+   */
   async updateSireneEntreprise(): Promise<void> {
     fs.mkdir('temp/ban', { recursive: true }, () => {});
 
     console.log('Récupération des entreprises');
     let cursor = await this.sireneEntrepriseService.findAllForBan(true)
     let files = await this.makeBanCsv(cursor);
-    await cursor.rewind();
+    cursor.rewind();
     console.log('Fin');
     for (let file of files) {
       console.log(`Début fichier ${file}`);
@@ -76,6 +85,11 @@ export class BanService {
     Promise.resolve();
   }
 
+  /**
+   * create X files < 50 Mb with datas needed for BAN Api
+   * @param entreprises cursor of all sireneEntreprises collection
+   * @returns {Promise<String[]>} all created path files
+   */
   private async makeBanCsv(entreprises): Promise<String[]> {
     console.log('Création des fichiers de requête BAN');
     let paths = [];
@@ -103,6 +117,11 @@ export class BanService {
     return paths;
   }
 
+  /**
+   * 
+   * @param address 
+   * @returns {Promise<LocalisationRecherche>} position and dep of the given address using BAN API
+   */
   async findByAddress(address: String): Promise<LocalisationRecherche> {
     return axios
       .get(
@@ -135,6 +154,11 @@ export class BanService {
       );
   }
 
+  /**
+   * 
+   * @param address 
+   * @returns {Promise<LocationEntrepriseEntity>} LocationEntrepriseEntity created using ban API on address
+   */
   async findCompletedLocationByAddress(
     address: string,
   ): Promise<LocationEntrepriseEntity> {
@@ -218,8 +242,12 @@ export class BanService {
     return d;
   }
 
-  // Converts numeric degrees to radians
-  private toRad(value) {
-    return (value * Math.PI) / 180;
+  /**
+   * Converts numeric degrees to radians
+   * @param deg 
+   * @returns {number} radian 
+   */
+  private toRad(deg) {
+    return (deg * Math.PI) / 180;
   }
 }

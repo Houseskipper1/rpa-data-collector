@@ -75,7 +75,7 @@ export class SireneEntrepriseDao {
    * @returns {Promise<SireneEntreprise>} the sireneEntreprise updated
    */
   async update(filter, updateDatas): Promise<SireneEntreprise> {
-    return this._sireneEntrepriseModel.findOneAndUpdate(filter, updateDatas)
+    return this._sireneEntrepriseModel.findOneAndUpdate(filter, updateDatas, {returnOriginal: false})
   }
 
   /**

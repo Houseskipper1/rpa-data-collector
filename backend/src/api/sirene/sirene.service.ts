@@ -11,7 +11,8 @@ import { NafService } from 'src/sirene-entreprise/services/naf.service';
 import { NafEntity } from 'src/sirene-entreprise/entities/naf.entity';
 import { SireneEntrepriseEntity } from 'src/sirene-entreprise/entities/sirene-entreprise.entity';
 import { BanService } from 'src/api/ban/ban.service';
-
+import { Types } from 'mongoose';
+import { SireneEntreprise } from 'src/sirene-entreprise/schemas/sirene-entreprise.schema';
 /**
  * This service is used to get information about companies using SIRENE
  * Also, it is used to init the database with sireneEntrepries.
@@ -426,7 +427,7 @@ export class SireneService {
                 this._sireneEntrepriseService
                   .findBySiren(row.siren)
                   .then((sireneEntreprises) =>
-                    sireneEntreprises.map((e) => {
+                    sireneEntreprises.map((e: SireneEntreprise) => {
                       if (e.name == '') {
                         if (['', '[ND]'].includes(row.denominationUniteLegale)) {
                           if (['', '[ND]'].includes(row.prenomUsuelUniteLegale)) {
@@ -439,7 +440,7 @@ export class SireneService {
                         else {
                           e.name = row.denominationUniteLegale
                         }
-                        this._sireneEntrepriseService.update({ "_id": e.id }, { "name": e.name });
+                        this._sireneEntrepriseService.update({ "_id": e._id }, { "name": e.name });
                       }
                     }),
                   );
