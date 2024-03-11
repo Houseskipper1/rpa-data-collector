@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { EntrepriseService } from 'src/app/shared/services/entreprise.service';
 import { SireneEntrepriseService } from 'src/app/shared/services/sirene-entreprise.service';
 import { SireneEntreprise } from 'src/app/shared/types/sirene-entreprise.type';
 
@@ -14,7 +15,8 @@ export class RechercheBanComponent {
   private _entreprises: SireneEntreprise[];
   private _isLoading: boolean;
 
-  constructor(private _sireneEntrepriseService: SireneEntrepriseService) {
+  constructor(private _sireneEntrepriseService: SireneEntrepriseService,
+              private _entrepriseService: EntrepriseService) {
     this._range = 0;
     this._address = '';
 
@@ -29,6 +31,7 @@ export class RechercheBanComponent {
   }
 
   search() {
+    this._entreprises = []
     this._isLoading = true;
     this._sireneEntrepriseService
       .searchBan(this._address, this._range)
@@ -36,6 +39,11 @@ export class RechercheBanComponent {
         this._entreprises = entreprises;
         this._isLoading = false;
       });
+  }
+
+  scrapAll(){
+    this._entrepriseService.scrapWithPappersSimple(this._entreprises.map(e => e.siren), 0)
+                           .subscribe({next: () => alert("Les entreprises ont bien été récupérées.")})
   }
 
   get range(): number {
