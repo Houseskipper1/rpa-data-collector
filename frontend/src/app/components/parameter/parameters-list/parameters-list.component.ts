@@ -8,7 +8,7 @@ import { filter, map, mergeMap } from 'rxjs';
 @Component({
   selector: 'app-parameters-list',
   templateUrl: './parameters-list.component.html',
-  styleUrls: ['./parameters-list.component.css'],
+  styleUrls: [],
 })
 export class ParametersListComponent implements OnInit {
   private _parameters: Parameter[];

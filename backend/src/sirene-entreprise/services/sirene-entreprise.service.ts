@@ -8,6 +8,10 @@ import { NafService } from './naf.service';
  */
 @Injectable()
 export class SireneEntrepriseService {
+  constructor(
+    private readonly _sireneEntrepriseDao: SireneEntrepriseDao,
+    private readonly _nafService: NafService,
+  ) {}
 
   /**
    * 
@@ -94,5 +98,4 @@ export class SireneEntrepriseService {
   async isEmpty(): Promise<boolean> {
     return await this._sireneEntrepriseDao.isEmpty();
   }
-
 }

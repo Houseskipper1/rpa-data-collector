@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ScrapSirenesDto {
-  @ApiProperty()
+  @ApiProperty({
+    example: '["companySiret1", "companySiret2", ...]',
+  })
   entreprises: string[];
 }

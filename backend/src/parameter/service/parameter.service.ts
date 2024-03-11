@@ -2,7 +2,6 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-  UnprocessableEntityException,
 } from '@nestjs/common';
 import { ParameterDao } from '../dao/parameter.dao';
 import { ParameterEntity } from '../entity/parameter.entity';
@@ -29,9 +28,9 @@ export class ParameterService {
   }
 
   async update(
-    id: string, 
-    updatedParameterDto: UpdateParameterTimeDto, 
-  ): Promise<ParameterEntity | null> { 
+    id: string,
+    updatedParameterDto: UpdateParameterTimeDto,
+  ): Promise<ParameterEntity | null> {
     const parameterToUpdate = await this.findById(id);
     parameterToUpdate.refreshFrequency = updatedParameterDto.refreshFrequency;
     await this.parameterDao.update(id, parameterToUpdate);
@@ -57,7 +56,7 @@ export class ParameterService {
 
   async findByParameterName(
     parameterName: string,
-  ) : Promise<ParameterEntity | null> {
-      return this.parameterDao.findByParameterName(parameterName);
+  ): Promise<ParameterEntity | null> {
+    return this.parameterDao.findByParameterName(parameterName);
   }
 }

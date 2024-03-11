@@ -29,4 +29,9 @@ export class SireneEntrepriseController {
         return this._sireneEntrepriseService.findAll();
     }
 
+
+  @Get()
+  async findAll(): Promise<SireneEntrepriseEntity[]> {
+    return this._sireneEntrepriseService.findAll();
+  }
 }

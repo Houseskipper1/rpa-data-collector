@@ -28,8 +28,6 @@ import { DialogComponent } from './components/parameter/dialog/dialog.component'
 import { MatDialogModule } from '@angular/material/dialog';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,7 +62,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     MatSliderModule,
     MatButtonModule,
     MatDialogModule,
-    LeafletModule
+    LeafletModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

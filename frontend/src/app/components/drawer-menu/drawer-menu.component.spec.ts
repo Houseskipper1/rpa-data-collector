@@ -8,7 +8,7 @@ describe('DrawerMenuComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [DrawerMenuComponent]
+      declarations: [DrawerMenuComponent],
     });
     fixture = TestBed.createComponent(DrawerMenuComponent);
     component = fixture.componentInstance;

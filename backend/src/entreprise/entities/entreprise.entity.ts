@@ -56,11 +56,10 @@ export class EntrepriseEntity {
   @ApiProperty()
   location: LocationEntrepriseEntity;
 
-
   @Expose()
   @Type(() => String)
   @ApiProperty()
-  shareCapital: string;   // capital social
+  shareCapital: string; // capital social
 
   @Expose()
   @Type(() => FinanceEntrepriseEntity)
@@ -75,10 +74,10 @@ export class EntrepriseEntity {
   @Expose()
   @Type(() => Date)
   @ApiProperty()
-  created: Date;  // date when the entity is added to the BD
-  
+  created: Date; // date when the entity is added to the BD
+
   @Expose()
   @Type(() => Date)
   @ApiProperty()
-  updated: Date;     // date when the entity is updated 
+  updated: Date; // date when the entity is updated
 }

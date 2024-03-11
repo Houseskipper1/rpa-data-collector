@@ -28,8 +28,13 @@ export class ParameterDao {
     return await this._parameterModel.find().exec();
   }
 
-  async update(id: string, updatedParameter: Partial<ParameterEntity>): Promise<Parameter | null> {
-    return await this._parameterModel.findByIdAndUpdate(id, updatedParameter, { new: false }).exec();
+  async update(
+    id: string,
+    updatedParameter: Partial<ParameterEntity>,
+  ): Promise<Parameter | null> {
+    return await this._parameterModel
+      .findByIdAndUpdate(id, updatedParameter, { new: false })
+      .exec();
   }
 
   async delete(id: string): Promise<void> {

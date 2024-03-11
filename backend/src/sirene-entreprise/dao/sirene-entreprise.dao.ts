@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { SireneEntreprise } from "../schemas/sirene-entreprise.schema";
-import { Model } from "mongoose";
-import { SireneEntrepriseEntity } from "../entities/sirene-entreprise.entity";
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { SireneEntreprise } from '../schemas/sirene-entreprise.schema';
+import { Model } from 'mongoose';
+import { SireneEntrepriseEntity } from '../entities/sirene-entreprise.entity';
 
 /**
  * DAO for accessing and manipulating data related to sireneEntreprises.
@@ -46,7 +46,9 @@ export class SireneEntrepriseDao {
    * @returns a cursor of the query
    */
   async findAllLimitless(sorted: boolean) {
+
     return this._sireneEntrepriseModel.find({ "name": { $ne: "" } }).sort({ "_id": (sorted ? 1 : -1) }).cursor();
+
   }
 
   /**

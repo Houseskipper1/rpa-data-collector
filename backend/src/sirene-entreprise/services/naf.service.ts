@@ -20,7 +20,7 @@ export class NafService {
    * @returns { Promise<Naf>} naf 
    */
   async findById(id: string): Promise<Naf> {
-    return this._nafDao.findById(id)
+    return this._nafDao.findById(id);
   }
 
   /**
@@ -28,7 +28,7 @@ export class NafService {
    * @returns { Promise<Naf>} naf
    */
   async findByCode(code: string): Promise<Naf> {
-    return this._nafDao.findByCode(code)
+    return this._nafDao.findByCode(code);
   }
 
   /**
@@ -39,5 +39,4 @@ export class NafService {
   async create(naf: NafEntity): Promise<NafEntity> {
     return await this._nafDao.save(naf);
   }
-
 }

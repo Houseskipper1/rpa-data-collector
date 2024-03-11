@@ -52,5 +52,4 @@ export class SireneEntrepriseEntity {
   @Type(() => Number)
   @ApiProperty()
   longitude: number;
-
 }

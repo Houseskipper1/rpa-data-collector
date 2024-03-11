@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import axios, { toFormData } from 'axios';
+import axios from 'axios';
 import { EntrepriseEntity } from '../../entreprise/entities/entreprise.entity';
 import * as fs from 'fs';
 import * as yauzl from 'yauzl';
@@ -82,7 +82,7 @@ export class SireneService {
    * unzip and remove the compressed file at zipPath param
    * @param zipPath path of the zip file
    * @param csvPath dest of the unzipped file
-   * @returns {Promise<void>} 
+   * @returns {Promise<void>}
    */
   private async unzipAndRemove(
     zipPath: string,
@@ -229,11 +229,7 @@ export class SireneService {
         },
       })
       .then((res) => {
-        this.addStockEtabToEntity(
-          res.data.etablissement,
-          entreprise,
-          false,
-        );
+        this.addStockEtabToEntity(res.data.etablissement, entreprise, false);
       })
       .catch((err) => {
         return Promise.reject(err.toString());
@@ -307,7 +303,8 @@ export class SireneService {
   }
 
   /**
-   * 
+   *
+   * @param nafCodes list of NAF codes that we want to keep
    * @param nafCodeTested tested NAF code
    * @returns {boolean} nafCodeTested selected status
    */
@@ -338,7 +335,7 @@ export class SireneService {
 
   /**
    * Populate the sireneEntreprise collection if she is empty using StockEtab and StockUL csv
-   * 
+   *
    * @returns {Promise<boolean>} populated status of the collection
    */
   async populateSireneEntreprise(): Promise<boolean> {
@@ -379,8 +376,14 @@ export class SireneService {
               ? null
               : row.codePostalEtablissement;
 
-            let address = row.numeroVoieEtablissement + " " + row.typeVoieEtablissement + " " + row.libelleVoieEtablissement
-            sireneEntreprise.address = address.includes("[ND]") ? "" : address
+
+            let address =
+              row.numeroVoieEtablissement +
+              ' ' +
+              row.typeVoieEtablissement +
+              ' ' +
+              row.libelleVoieEtablissement;
+            sireneEntreprise.address = address.includes('[ND]') ? '' : address;
             sireneEntreprise.city = row.libelleCommuneEtablissement;
 
             sireneEntreprise.naf = (
@@ -436,11 +439,14 @@ export class SireneService {
                           else {
                             e.name = row.nomUniteLegale + " " + row.prenomUsuelUniteLegale
                           }
+                        } else {
+                          e.name = row.denominationUniteLegale;
                         }
                         else {
                           e.name = row.denominationUniteLegale
                         }
                         this._sireneEntrepriseService.update({ "_id": e._id }, { "name": e.name });
+
                       }
                     }),
                   );
@@ -462,9 +468,9 @@ export class SireneService {
               );
               streams['StockUL'].close();
               console.log('Début de la mise à jour avec BAN.');
-              return this._banService.updateSireneEntreprise()
-                .then(() => Promise.resolve(true))
-
+              return this._banService
+                .updateSireneEntreprise()
+                .then(() => Promise.resolve(true));
             });
         });
     }
