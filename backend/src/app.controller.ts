@@ -73,40 +73,39 @@ export class AppController {
   }
 
   @Put('scraping/pappers')
-  async scrappingPappers(@Body() data: any): Promise<void> {
-    const entreprise = await this.entrepriseService.findBySiren(data.ids);
+  async scrappingPappers(@Body() scrapSirenesDto: ScrapSirenesDto): Promise<void> {
+    for (const siren of scrapSirenesDto.entreprises){
+      const entreprise = await this.entrepriseService.findBySiren(siren);
 
-    if (entreprise == undefined) {
-      await this._pappersService.scrap(data.ids);
+      if (entreprise == undefined) {
+        await this._pappersService.scrap(siren);
+      }
     }
+
   }
 
-  @Put('scraping/pappers/:siren')
-  async scrappingOneWithPappers(
-    @Param('siren') siren: string,
+  @Put('scraping/manyPappers')
+  async scrappingManyWithPappers(
+    @Body() scrapSirenesDto: ScrapSirenesDto,
     @Query('forceScraping') forceScraping: number,
   ): Promise<void> {
-    const entreprise = await this.entrepriseService.findBySiren(siren);
-
-    if (forceScraping == 1) {
-      await this._pappersService.scrap(siren);
-      return;
-    }
-
-    if (entreprise == undefined) {
-      await this._pappersService.scrap(siren);
-      return;
-    }
-
-    const data = await this._parameterService.findByParameterName(
-      'scrapingRefreshParam',
-    );
-    const updateTimestamp = entreprise.updated.getTime();
-    const currentTimestamp = new Date().getTime();
-    const diffInMilliseconds = currentTimestamp - updateTimestamp;
-
-    if (diffInMilliseconds > data.refreshFrequency) {
-      await this._pappersService.scrap(siren); // rescrap if the refresh frequency is passed
+    for (const siren of scrapSirenesDto.entreprises){
+      const entreprise = await this.entrepriseService.findBySiren(siren);
+      if (forceScraping == 1 || entreprise == null) {
+        await this._pappersService.scrap(siren);
+        continue;
+      }
+  
+      const data = await this._parameterService.findByParameterName(
+        'scrapingRefreshParam',
+      );
+      const updateTimestamp = entreprise.updated.getTime();
+      const currentTimestamp = new Date().getTime();
+      const diffInMilliseconds = currentTimestamp - updateTimestamp;
+  
+      if (diffInMilliseconds > data.refreshFrequency) {
+        await this._pappersService.scrap(siren); // rescrap if the refresh frequency is passed
+      }
     }
   }
 

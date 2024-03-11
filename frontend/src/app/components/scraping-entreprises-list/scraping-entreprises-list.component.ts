@@ -52,7 +52,7 @@ export class ScrapingEntreprisesListComponent implements OnInit {
   }
 
   onScrapEntreprise(entreprise : Entreprise,forceScraping :number) {
-   this._entrepriseService.scrapOneWithPappersSimple(entreprise,forceScraping).
+   this._entrepriseService.scrapWithPappersSimple([entreprise.siren],forceScraping).
    subscribe(
     (data) => {
       this.router.navigate(['/entreprise', entreprise.siren]);

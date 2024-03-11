@@ -40,25 +40,14 @@ export class EntrepriseService {
     );
   }
 
-  scrapOneWithPappers(
-    sireneEntreprises: SireneEntreprise,
-    forceScraping: number
-  ) {
+  scrapWithPappersSimple(sirens: string[], forceScraping: number) {
     return this._http.put<void>(
-      `${this._apiUrl}/scraping/pappers/` +
-        sireneEntreprises.siren +
+      `${this._apiUrl}/scraping/manyPappers/` +
         '?forceScraping=' +
         forceScraping,
-      this._options()
-    );
-  }
-
-  scrapOneWithPappersSimple(entreprise: Entreprise, forceScraping: number) {
-    return this._http.put<void>(
-      `${this._apiUrl}/scraping/pappers/` +
-        entreprise.siren +
-        '?forceScraping=' +
-        forceScraping,
+        {
+          entreprises: sirens,
+        },
       this._options()
     );
   }
@@ -67,7 +56,12 @@ export class EntrepriseService {
     return this._http.put<void>(
       `${this._apiUrl}/scraping/pappers`,
       {
-        ids: 'sarl-favata-338411101,bati-france-57-851900654,lenninger-arthur-918347071,grosjean-et-fils-348279191',
+        entreprises: [
+          '338411101',
+          '851900654',
+          '918347071',
+          '348279191',
+        ],
       },
       this._options()
     );

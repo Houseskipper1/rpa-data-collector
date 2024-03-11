@@ -35,9 +35,19 @@
       mat-raised-button
       color="primary"
       (click)="search()"
-      class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mb-4 rounded"
     >
       Rechercher
+    </button>
+
+    <button
+    *ngIf="entreprises.length != 0"
+    mat-raised-button
+    color="primary"
+    (click)="scrapAll()"
+    class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    >
+      Récupérer
     </button>
   </form>
 

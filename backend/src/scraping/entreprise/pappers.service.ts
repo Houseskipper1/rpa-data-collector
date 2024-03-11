@@ -13,18 +13,20 @@ import { Entreprise } from 'src/entreprise/schema/entreprise.schema';
 export class PappersService {
   private _UrlPappers = 'https://www.pappers.fr/entreprise';
 
+  private _browser;
   constructor(
     private entrepriseService: EntrepriseService,
     private _banService: BanService,
-  ) {}
+  ) {
+    puppeteer.launch({ headless: false }).then(browser => {
+      this._browser = browser;
+    });
+  }
 
-  async scrap(ids: string): Promise<EntrepriseEntity> {
-    const idsEntreprise = ids.split(',');
-    const browser = await puppeteer.launch({ headless: false });
-    for (let idEntreprise of idsEntreprise) {
-      const page = await browser.newPage();
+  async scrap(siren: string): Promise<EntrepriseEntity> {
+      const page = await this._browser.newPage();
       try {
-        await page.goto(`${this._UrlPappers}/${idEntreprise}`, {
+        await page.goto(`${this._UrlPappers}/${siren}`, {
           waitUntil: 'domcontentloaded',
         });
         await page.waitForSelector(
@@ -125,8 +127,8 @@ export class PappersService {
         console.error('Error during scraping:', error);
         return Promise.reject(error);
       }
-    }
-    await browser.close();
+      await page.close()
+    //await browser.close();
   }
 
   private computeYearsSinceCreation(creationDate: string) {
