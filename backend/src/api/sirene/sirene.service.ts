@@ -47,7 +47,7 @@ export class SireneService {
   private _nafCodes;
 
   /**
-   * 
+   *
    * @param _entrepriseService Service for Entreprises
    * @param _sireneEntrepriseService Service for sireneEntreprises
    * @param _nafService Service for NAF
@@ -71,10 +71,7 @@ export class SireneService {
     ];
 
     this._nafCodes = JSON.parse(
-      fs.readFileSync(
-        this._ressourcePath + 'NafCodes.json',
-        'utf-8',
-      ),
+      fs.readFileSync(this._ressourcePath + 'NafCodes.json', 'utf-8'),
     )['NafCodes'];
   }
 
@@ -376,7 +373,6 @@ export class SireneService {
               ? null
               : row.codePostalEtablissement;
 
-
             let address =
               row.numeroVoieEtablissement +
               ' ' +
@@ -402,10 +398,10 @@ export class SireneService {
           let timeEnd = new Date();
           console.log(
             'Fin de la création en : ' +
-            Math.floor((timeEnd.getTime() - timeStart.getTime()) / 60000) +
-            'm ' +
-            (((timeEnd.getTime() - timeStart.getTime()) / 1000) % 60) +
-            's.',
+              Math.floor((timeEnd.getTime() - timeStart.getTime()) / 60000) +
+              'm ' +
+              (((timeEnd.getTime() - timeStart.getTime()) / 1000) % 60) +
+              's.',
           );
           streams['StockEtab'].close();
 
@@ -422,31 +418,32 @@ export class SireneService {
             .on('error', (error) => console.error(error))
             .on('data', async (row) => {
               c += 1;
-              if (
-                this.isSelectedNaf(
-                  row.activitePrincipaleUniteLegale,
-                )
-              ) {
+              if (this.isSelectedNaf(row.activitePrincipaleUniteLegale)) {
                 this._sireneEntrepriseService
                   .findBySiren(row.siren)
                   .then((sireneEntreprises) =>
                     sireneEntreprises.map((e: SireneEntreprise) => {
                       if (e.name == '') {
-                        if (['', '[ND]'].includes(row.denominationUniteLegale)) {
-                          if (['', '[ND]'].includes(row.prenomUsuelUniteLegale)) {
-                            e.name = ''
-                          }
-                          else {
-                            e.name = row.nomUniteLegale + " " + row.prenomUsuelUniteLegale
+                        if (
+                          ['', '[ND]'].includes(row.denominationUniteLegale)
+                        ) {
+                          if (
+                            ['', '[ND]'].includes(row.prenomUsuelUniteLegale)
+                          ) {
+                            e.name = '';
+                          } else {
+                            e.name =
+                              row.nomUniteLegale +
+                              ' ' +
+                              row.prenomUsuelUniteLegale;
                           }
                         } else {
                           e.name = row.denominationUniteLegale;
                         }
-                        else {
-                          e.name = row.denominationUniteLegale
-                        }
-                        this._sireneEntrepriseService.update({ "_id": e._id }, { "name": e.name });
-
+                        this._sireneEntrepriseService.update(
+                          { _id: e._id },
+                          { name: e.name },
+                        );
                       }
                     }),
                   );
@@ -459,12 +456,12 @@ export class SireneService {
               let timeEnd = new Date();
               console.log(
                 'Fin du patch des noms en : ' +
-                Math.floor(
-                  (timeEnd.getTime() - timeStart.getTime()) / 60000,
-                ) +
-                'm ' +
-                (((timeEnd.getTime() - timeStart.getTime()) / 1000) % 60) +
-                's.',
+                  Math.floor(
+                    (timeEnd.getTime() - timeStart.getTime()) / 60000,
+                  ) +
+                  'm ' +
+                  (((timeEnd.getTime() - timeStart.getTime()) / 1000) % 60) +
+                  's.',
               );
               streams['StockUL'].close();
               console.log('Début de la mise à jour avec BAN.');
