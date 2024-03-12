@@ -21,6 +21,8 @@ import { SireneEntrepriseService } from './sirene-entreprise/services/sirene-ent
 import { ParameterService } from './parameter/service/parameter.service';
 import { ParameterEntity } from './parameter/entity/parameter.entity';
 import { ApiTags } from '@nestjs/swagger';
+import { EntrepriseEntity } from './entreprise/entities/entreprise.entity';
+import { SireneEntrepriseEntity } from './sirene-entreprise/entities/sirene-entreprise.entity';
 
 @Controller()
 @ApiTags('app')
@@ -60,46 +62,50 @@ export class AppController {
     @Res() res: Response,
   ) {}
 
+  /**
+   * 
+   * @param scrapSirenesDto list of sirets
+   * @returns {Promise<Promise<EntrepriseEntity>[]>} list of Entreprises Entities
+   */
   @Put('scraping/sirene')
-  async scrapSirenes(@Body() scrapSirenesDto: ScrapSirenesDto) {
+  async scrapSirenes(@Body() scrapSirenesDto: ScrapSirenesDto): Promise<Promise<EntrepriseEntity>[]> {
     return this._sireneService.getEntreprisesAPI(scrapSirenesDto.entreprises);
   }
 
   @Put('scraping/pappers')
-  async scrappingPappers(@Body() data: any): Promise<void> {
-    const entreprise = await this.entrepriseService.findBySiren(data.ids);
+  async scrappingPappers(@Body() scrapSirenesDto: ScrapSirenesDto): Promise<void> {
+    for (const siren of scrapSirenesDto.entreprises){
+      const entreprise = await this.entrepriseService.findBySiren(siren);
 
-    if (entreprise == undefined) {
-      await this._pappersService.scrap(data.ids);
+      if (entreprise == undefined) {
+        await this._pappersService.scrap(siren);
+      }
     }
+
   }
 
-  @Put('scraping/pappers/:siren')
-  async scrappingOneWithPappers(
-    @Param('siren') siren: string,
+  @Put('scraping/manyPappers')
+  async scrappingManyWithPappers(
+    @Body() scrapSirenesDto: ScrapSirenesDto,
     @Query('forceScraping') forceScraping: number,
   ): Promise<void> {
-    const entreprise = await this.entrepriseService.findBySiren(siren);
-
-    if (forceScraping == 1) {
-      await this._pappersService.scrap(siren);
-      return;
-    }
-
-    if (entreprise == undefined) {
-      await this._pappersService.scrap(siren);
-      return;
-    }
-
-    const data = await this._parameterService.findByParameterName(
-      'scrapingRefreshParam',
-    );
-    const updateTimestamp = entreprise.updated.getTime();
-    const currentTimestamp = new Date().getTime();
-    const diffInMilliseconds = currentTimestamp - updateTimestamp;
-
-    if (diffInMilliseconds > data.refreshFrequency) {
-      await this._pappersService.scrap(siren); // rescrap if the refresh frequency is passed
+    for (const siren of scrapSirenesDto.entreprises){
+      const entreprise = await this.entrepriseService.findBySiren(siren);
+      if (forceScraping == 1 || entreprise == null) {
+        await this._pappersService.scrap(siren);
+        continue;
+      }
+  
+      const data = await this._parameterService.findByParameterName(
+        'scrapingRefreshParam',
+      );
+      const updateTimestamp = entreprise.updated.getTime();
+      const currentTimestamp = new Date().getTime();
+      const diffInMilliseconds = currentTimestamp - updateTimestamp;
+  
+      if (diffInMilliseconds > data.refreshFrequency) {
+        await this._pappersService.scrap(siren); // rescrap if the refresh frequency is passed
+      }
     }
   }
 
@@ -118,18 +124,28 @@ export class AppController {
     }
   }
 
+  /**
+   * 
+   * @param address string of an address
+   * @param range range around the address
+   * @returns {Promise<SireneEntrepriseEntity[]>} all SireneEntreprise inside the range of the given address
+   */
   @Get('/search')
   async searchInRadius(
-    @Query('address') address: String,
+    @Query('address') address: string,
     @Query('range') range: number,
-  ) {
+  ): Promise<SireneEntrepriseEntity[]> {
     let pos = await this.banService.findByAddress(address);
     let res = this.banService.getInRadius(pos, range);
     return res;
   }
 
+  /**
+   * 
+   * @returns {Promise<SireneEntrepriseEntity[]>} list of limited SireneEntreprises
+   */
   @Get('/sireneEntreprises')
-  async getSireneEntreprises() {
+  async getSireneEntreprises(): Promise<SireneEntrepriseEntity[]> {
     return this._sirenEntrepriseService.findAll();
   }
 

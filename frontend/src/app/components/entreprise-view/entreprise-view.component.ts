@@ -36,11 +36,26 @@ export class EntrepriseViewComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.initializeMap();
-    L.marker([
-      this.entreprise.location[0].latitude,
-      this.entreprise.location[0].longitude,
-    ]).addTo(this.map);
+    if (
+      this.entreprise &&
+      this.entreprise.location &&
+      this.entreprise.location.length > 0
+    ) {
+      const latitude = this.entreprise.location[0].latitude;
+      const longitude = this.entreprise.location[0].longitude;
+      const customIcon = L.icon({
+        iconUrl:
+          'https://upload.wikimedia.org/wikipedia/commons/8/88/Map_marker.svg',
+        iconSize: [38, 38], // Taille de l'image du marqueur
+        iconAnchor: [19, 38], // Position de l'ancre du marqueur
+        popupAnchor: [0, -38], // Position du popup par rapport à l'ancre
+      });
+
+      // Créer le marqueur avec l'image personnalisée
+      L.marker([latitude, longitude], { icon: customIcon }).addTo(this.map);
+    }
   }
+
   get entreprise(): Entreprise {
     return this._entreprise;
   }

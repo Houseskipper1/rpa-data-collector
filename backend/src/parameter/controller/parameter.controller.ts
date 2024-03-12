@@ -38,7 +38,7 @@ export class ParameterController {
   async update(
     @Param('id') id: string,
     @Body() updatedParameterDto: UpdateParameterTimeDto,
-  ) : Promise<ParameterEntity | null> {
+  ): Promise<ParameterEntity | null> {
     return this.parameterService.update(id, updatedParameterDto);
   }
 
@@ -51,5 +51,4 @@ export class ParameterController {
   async create(@Body() parameter: ParameterEntity): Promise<ParameterEntity> {
     return this.parameterService.create(parameter);
   }
-
 }

@@ -15,7 +15,7 @@ import { ParameterModule } from 'src/parameter/parameter.module';
       { name: Entreprise.name, schema: EntrepriseSchema },
     ]),
     SireneEntrepriseModule,
-    ParameterModule
+    ParameterModule,
   ],
   controllers: [EntrepriseController],
   providers: [EntrepriseService, EntrepriseDao, PappersService, BanService],
